@@ -65,7 +65,7 @@ html {
     margin-right: 4rem;
 }
 
-/* Font sizes*/
+/* Font sizes */
 /* Common strings */
 .generic-size {
     font-size: 1rem;
@@ -133,5 +133,26 @@ html {
 }
 .add-button {
     margin-top: 2.5rem;
+}
+
+/* About Page */
+.about-paragraphs {
+    line-height: 2.5rem;
+    text-align: justify;
+}
+
+#about-container {
+    margin-right: 4rem;
+}
+
+#start-button-about {
+    text-align: end;
+    margin-right: 4rem;
+    margin-top: 5rem;
+}
+
+#catchphrase-3 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
