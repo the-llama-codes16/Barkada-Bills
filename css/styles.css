@@ -1,0 +1,166 @@
+/* Brand logo font */
+@import url("https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+
+/* Generic font */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+html {
+    font-size: 16px;
+}
+
+.generic-font{
+    font-family: "Noto Sans", sans-serif;
+}
+
+.heading-font{
+    font-family: "Averia Serif Libre", serif;
+}
+
+/* Header */
+.brand{
+    margin-top: 1.5rem;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+}
+
+#logo {
+    font-size: 4rem;
+    margin-left: 4rem;
+}
+
+#brand-name {
+    font-size: 1.5rem;
+    margin-left: 0.6rem;
+}
+
+#header {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#brand-container {
+    display: flex;
+    min-height: 4rem;
+    align-items: center;
+    flex-direction: row;
+}
+
+.brand-logo:link, .brand-logo:visited, .brand-logo:hover, .brand-logo:active {
+    text-decoration: none;
+    color: #000000;
+}
+
+#nav-container {
+    display: flex;
+    min-height: 5rem;
+    align-items: center;
+    flex-direction: row;
+}
+
+.nav-button:link, .nav-button:visited, .nav-button:hover, .nav-button:active {
+    font-weight: 400;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    color: #000000;
+}
+
+#get-started {
+    margin-left: 2rem;
+    margin-right: 4rem;
+}
+
+/* Font sizes */
+/* Common strings */
+.generic-size {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* Subheaders */
+.subheaders-size {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Others */
+.home-content-lead{
+    margin-left: 4rem;
+}
+
+#catch-phrase-1 {
+    font-size: 3.5rem;
+    font-weight: 500;
+    letter-spacing: 0.000005rem;
+    margin-top: 6rem;
+    margin-bottom: 1rem;
+    line-height: 4rem;
+}
+
+#catch-phrase-2 {
+    font-weight: 400;
+    margin-top: 0.075rem;
+    margin-bottom: 2.5rem;
+}
+
+#start-button {
+    margin-left: 1.15rem;
+}
+
+.home-buttons {
+    height: 4rem;
+    width: 12rem;
+}
+
+#splitter-title {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+#splitter-desc {
+    margin-top: 0.075rem;
+}
+
+/* Steps */
+.steps-container {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.step-header {
+    margin-bottom: 0.5rem;
+}
+
+.step-description {
+    margin-top: 0rem;
+    margin-bottom: 1rem;
+}
+
+/* About Page */
+.about-paragraphs {
+    line-height: 2.5rem;
+    text-align: justify;
+}
+
+#about-container {
+    margin-right: 4rem;
+}
+
+#start-button-about {
+    text-align: end;
+    margin-right: 4rem;
+    margin-top: 5rem;
+}
+
+#catchphrase-3 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Main Calculator Page */
+#open-add-member-button {
+
+}
