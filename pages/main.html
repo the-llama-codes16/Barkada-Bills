@@ -17,13 +17,13 @@
     <body>
         <!-- Header -->
         <div id="header">
-            <div id="brand-container">
+            <a href="../index.html" class="brand-logo"><div id="brand-container">
                 <h1 class="brand heading-font" id="logo">Bb</h1>
                 <h2 class="brand heading-font" id="brand-name">barkada bills</h2>
-            </div>
+            </div></a>
             <div id="nav-container">
-                <h3 class="generic-font nav-button generic-size">About</h3>
-                <h3 class="generic-font nav-button generic-size" id="get-started">Get started</h3>
+                <a href="about.html" class="generic-font nav-button generic-size">About</a>
+                <a href="#" class="generic-font nav-button generic-size" id="get-started">Get started</a>
             </div>
         </div>
 
@@ -37,14 +37,27 @@
         <div class="steps-container">
             <h1 class="home-content-lead generic-font subheaders-size step-header">Step 1: Barkada Members</h1>
             <h3 class="home-content-lead generic-font generic-size step-description">Add contributors to expenses.</h3>
-            <a href="pages/main.html" class="home-content-lead generic-font generic-size button-sub add-button">Add member</a>
+            <button id="open-add-member-button" class="home-content-lead generic-font generic-size button-sub button-padding">Add member</button>
+        </div>
+
+        <!-- Modal to Add members -->
+        <div id="add-member-modal" class="modal-bg">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Add barkada member</h3>
+                <form class="modal-form">
+                    <label for="member-name" class="modal-header generic-font generic-size">Name:</label>
+                    <input class="input-space" type="text" id="member-name">
+                </form>
+                <span id="close-add-member-modal-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding">Cancel</span>
+                <span id="add-member-modal-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal">OK</span>
+            </div>
         </div>
 
         <!-- Step 2: Add expenses -->
         <div class="steps-container">
             <h1 class="home-content-lead generic-font subheaders-size step-header">Step 2: Expenses</h1>
             <h3 class="home-content-lead generic-font generic-size step-description">Add expenses, customize who contributes to each.</h3>
-            <a href="pages/main.html" class="home-content-lead generic-font generic-size button-sub add-button">Add expense</a>
+            <a href="pages/main.html" class="home-content-lead generic-font generic-size button-sub button-padding add-button">Add expense</a>
         </div>
 
         <!-- Results -->
@@ -53,4 +66,7 @@
             <h3 class="home-content-lead generic-font generic-size step-description">Each member's contribution will display here as you add members and expenses.</h3>
         </div>
     </body>
+
+    <!-- Javascript -->
+    <script src="../scripts/main.js"></script>
 </html>

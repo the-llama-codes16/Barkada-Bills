@@ -47,6 +47,11 @@ html {
     flex-direction: row;
 }
 
+.brand-logo:link, .brand-logo:visited, .brand-logo:hover, .brand-logo:active {
+    text-decoration: none;
+    color: #000000;
+}
+
 #nav-container {
     display: flex;
     min-height: 5rem;
@@ -54,10 +59,12 @@ html {
     flex-direction: row;
 }
 
-.nav-button {
+.nav-button:link, .nav-button:visited, .nav-button:hover, .nav-button:active {
     font-weight: 400;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+    text-decoration: none;
+    color: #000000;
 }
 
 #get-started {
@@ -129,10 +136,7 @@ html {
 
 .step-description {
     margin-top: 0rem;
-    margin-bottom: 2rem;
-}
-.add-button {
-    margin-top: 2.5rem;
+    margin-bottom: 1rem;
 }
 
 /* About Page */
@@ -156,3 +160,7 @@ html {
     margin-bottom: 2rem;
 }
 
+/* Main Calculator Page */
+#open-add-member-button {
+
+}
