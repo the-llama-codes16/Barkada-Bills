@@ -5,6 +5,18 @@ var closeMemberModalButton = document.getElementById("close-add-member-modal-but
 var addMemberModalButton = document.getElementById("add-member-modal-button")
 
 
+// Learned about modals from w3schools.com. Code might be slightly similar as my use case is the same as with their example.s
+openMemberModalButton.addEventListener("click", () => {
+    openModal(addMemberModal);
+})
+closeMemberModalButton.addEventListener("click", () => {
+    closeModal(addMemberModal);
+})
+addMemberModalButton.addEventListener("click", () => {
+    closeModal(addMemberModal);
+})
+
+
 // Functions
 function closeModal(targetModal) {
     console.log("closing")
@@ -17,20 +29,7 @@ function openModal(targetModal) {
 }
 
 
-// Learned about modals from w3schools.com. Code might be slightly similar as my use case is the same as with their example.s
-openMemberModalButton.addEventListener("click", () => {
-    openModal(addMemberModal);
-})
-closeMemberModalButton.addEventListener("click", () => {
-    closeModal(addMemberModal);
-})
-addMemberModalButton.addEventListener("click", () => {
-    closeModal(addMemberModal);
-})
-// document.addEventListener("click", function(event) {
-//     if (!addMemberModal.contains(event.target)) {
-//         closeModal(addMemberModal);
-//     }
-// })
+
+//Note: Check here for text limit as well even tho maxlength has been set on the text input
 
 
