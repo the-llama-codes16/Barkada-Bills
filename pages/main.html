@@ -42,14 +42,14 @@
 
         <!-- Modal to Add members -->
         <div id="add-member-modal" class="modal-bg">
-            <div class="modal-content">
+            <div class="modal-content" tabindex="-1">
                 <h3 class="generic-font subheaders-size modal-header">Add barkada member</h3>
-                <form class="modal-form">
+                <form id="add-member-form" class="modal-form" autocomplete="off">
                     <label for="member-name" class="modal-header generic-font generic-size">Name:</label>
                     <input id="member-name" class="input-space generic-font generic-size" type="text" maxlength="20">
+                    <button id="close-add-member-modal-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Cancel</button>
+                    <input id="add-member-modal-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="submit" value="OK">
                 </form>
-                <button id="close-add-member-modal-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding">Cancel</button>
-                <button id="add-member-modal-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal">OK</button>
             </div>
         </div>
 
