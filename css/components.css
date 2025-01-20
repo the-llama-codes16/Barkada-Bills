@@ -19,28 +19,32 @@
     padding: 1.25rem 1.5rem;
 }
 
+/* END OF Buttons */
+
 /* 
    Modals 
    Learned about modals from w3schools.com. Code might be slightly similar as my use case is the same as with their example.
 */
-.modal-bg {
+.modal-wrapper {
     display: none;
     z-index: 1;
     position: fixed;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
     background-color: #000000;
     background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
+    display: flex;
+    flex-direction: column;
     background-color: #ffffff;
-    width: 20.5rem;
-    min-width: 20.5rem;
-    height: 14rem;
-    min-height: 14rem;
+    width: 26rem;
+    min-width: 26rem;
+    height: 14.5rem;
+    min-height: 14.5rem;
     margin: 15% auto;
     border-style: solid;
     border-color: #000000;
@@ -54,32 +58,43 @@
     padding-top: 0rem;
 }
 
-.modal-form {
+.modal-form-wrapper {
     padding-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .input-space {
     margin-left: 0.5rem;
     border: none;
     outline: none;
-    width: 11.7rem;
+    width: 17.5rem;
     border-bottom: 2px solid #000000;
-    font-size: 
 }
 
 .modal-button-padding {
     padding: 0.7rem 1.5rem;
 }
 
-.cancel-button-modal {
-    position: relative;
-    top: 3rem;
-    left: 2rem;
+.modal-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 1rem;
 }
 
-.ok-button-modal {
-    position: relative;
-    top: 3rem;
-    right: -7.5rem;
-    
+.error-message {
+    color: red;
+    visibility: hidden;
+    padding-left: 2rem;
+    margin-bottom: 0rem;
 }
+
+.error-message.error-visible {
+    visibility: visible;
+}
+
+
+/* END OF Error Messages */
