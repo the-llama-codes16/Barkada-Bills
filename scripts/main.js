@@ -20,6 +20,9 @@ addMemberOpenButton.addEventListener("click", () => {
 
     // Clear the error message placeholder and adjust buttons
     addMemberErrorMsg.classList.remove("error-visible");
+
+    // Start listening for tab key presses and trap focus
+    document.addEventListener("keydown", initAddMemberModalTrapFocus);
 })
 
 // =================================
@@ -29,7 +32,11 @@ addMemberOpenButton.addEventListener("click", () => {
 // =================================
 var addMemberModalCloseButton = document.getElementById("add-member-modal-close-button");
 addMemberModalCloseButton.addEventListener("click", (event) => {
+    // Close the modal
     closeModal(addMemberModalWrapper);
+
+    // Stop listening for tab key presses
+    document.removeEventListener("keydown", initAddMemberModalTrapFocus);
 })
 
 // =================================
@@ -51,8 +58,8 @@ addMemberModalForm.addEventListener("submit", (event) => {
 
     // Check if input is valid
     if (/\S/.test(name)) {
-        // Check if the name already exists
-        if (name in memberDict) {
+        // Check if the name already exists, case insensitive
+        if (hasKeyCaseInsensitive(memberDict, name)) {
             console.log(`Member name already exists: ${name}`)
             addMemberErrorMsg.textContent = "Member name already exists.";
             addMemberErrorMsg.classList.add("error-visible");
@@ -87,106 +94,58 @@ function closeModal(targetModal) {
     targetModal.style.display = "none";
 }
 
+// =================================
+// 
+// Function to check if key exists in a dictionary, case insensitive
+//
+// =================================
+function hasKeyCaseInsensitive(dictionary, targetKey) {
+    console.log("checking if key exists, case insensitive...");
+    const targetKeyLower = targetKey.toLowerCase();
+    for (key in dictionary) {
+        if (String(key).toLowerCase() === targetKeyLower) {
+            return true;
+        }
+    }
+    return false;
+}
 
+// =================================
+// 
+// Function to trap focus in a given modal
+//
+// =================================
+function trapFocus(event, modal) {
+    console.log("trapfocus called!")
+    // Check if the key pressed is the Tab key
+    const isTabPressed = event.key === `Tab` || event.keyCode === 9;
+    if (!isTabPressed) {
+      return;
+    }
 
-
-
-
-
-
-// // ADD MEMBER modal script
-// var openMemberModalButton = document.getElementById("open-add-member-button")
-// var addMemberModal = document.getElementById("add-member-modal")
-// var closeMemberModalButton = document.getElementById("close-add-member-modal-button")
-// // var addMemberModalButton = document.getElementById("add-member-modal-button")
-// var addMemberTextField = document.getElementById("member-name")
-// var addMemberForm = document.getElementById("add-member-form")
-
-
-// // TODO: FOCUS TRAPPING!
-// // Focus trapping for the Add Member modal
-// export function trapFocus(e, modalId) {
-//     const isTabPressed = e.key === `Tab` || e.keyCode === 9;
+    // Get the modal and its focusable elements
+    const focusableElements = `button, input, [tabindex]:not([tabindex="-1"])`;
+    const focusableContent = modal.querySelectorAll(focusableElements);
+    const firstFocusableElement = focusableContent[0];
+    const lastFocusableElement = focusableContent[focusableContent.length - 1];
   
-//     if (!isTabPressed) {
-//       return;
-//     }
-//     const focusableElements = `button, [href], input, select, textarea, iframe, [tabindex]:not([tabindex="-1"])`;
-//     const modal = document.getElementById(modalId);
-  
-//     // get focusable elements in modal
-//     const firstFocusableElement = modalId === 'mobile-nav-wrapper' ? document.querySelector(`.toggleMobileNav`) : modal.querySelectorAll(focusableElements)[0];
-//     const focusableContent = modal.querySelectorAll(focusableElements);
-//     const lastFocusableElement = focusableContent[focusableContent.length - 1];
-  
-//     if (e.shiftKey) {
-//       if (document.activeElement === firstFocusableElement) {
-//         lastFocusableElement.focus();
-//         e.preventDefault();
-//       }
-//     } else if (document.activeElement === lastFocusableElement) {
-//       firstFocusableElement.focus();
-//       e.preventDefault();
-//     }
-// }
+    if (event.shiftKey) {
+      if (document.activeElement === firstFocusableElement) {
+        lastFocusableElement.focus();
+        event.preventDefault();
+      }
+    } 
+    else if (document.activeElement === lastFocusableElement) {
+        firstFocusableElement.focus();
+        event.preventDefault();
+    }
+}
 
-
-// openMemberModalButton.addEventListener("click", () => {
-//     // Open the modal
-//     console.log("opening")
-//     addMemberModal.style.display = "block";
-
-//     // Ensure that text field is empty and set focus on it
-//     addMemberTextField.value = "";
-//     addMemberTextField.focus();
-
-//     // Listen for tab presses and trap focus to modal elements only
-//     document.addEventListener("keydown", initTrapFocus);
-// })
-// closeMemberModalButton.addEventListener("click", (event) => {
-//     closeModal(addMemberModal);
-// })
-// addMemberForm.addEventListener("submit", (event) => {
-//     // Prevent refresh
-//     event.preventDefault();
-
-//     // Add the member
-//     const name = String(document.getElementById("member-name").value);
-//     console.log(name);
-
-//     // Get the existing data of member list or create it if inexistent
-//     const memberDict = JSON.parse(sessionStorage.getItem("members")) || {};
-
-//     // Check if the name already exists
-//     if (name in memberDict) {
-//         console.log(`Member name already exists: ${name}`)
-
-//         // TODO: Raise a message here that name already exists then return
-//     }
-
-//     // Validate and add the name
-//     memberDict[name] = {};
-//     sessionStorage.setItem("members", JSON.stringify(memberDict));
-//     console.log(memberDict);
-//     // sessionStorage.clear();
-
-//     // Close
-//     closeModal(addMemberModal);
-// })
-
-
-// function closeModal(targetModal) {
-//     console.log("closing")
-//     targetModal.style.display = "none";
-
-//     // Stop listening for tabs when modal is closed
-//     document.removeEventListener("keydown", initTrapFocus);
-// }
-
-// function initTrapFocus(e) {
-//     return trapFocus(e, `modal-id`);
-// }
-
-// // Note: Check here for text limit as well even tho maxlength has been set on the text input
-
-
+// =================================
+// 
+// Function to wrap trapFocus for Add Member modal
+//
+// =================================
+function initAddMemberModalTrapFocus(event) {
+    trapFocus(event, addMemberModalWrapper);
+}
