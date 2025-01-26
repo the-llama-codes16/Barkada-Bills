@@ -76,9 +76,18 @@
     padding: 0.7rem 1.5rem;
 }
 
-.modal-button-container{
+.modal-button-container-with-cancel{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 1rem;
+}
+
+.modal-button-container{
+    display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
     margin-left: 2rem;
     margin-right: 2rem;
@@ -96,5 +105,11 @@
     visibility: visible;
 }
 
+#new-member-name {
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
-/* END OF Error Messages */
+#new-member-modal-form-wrapper {
+    padding-top: 0rem;
+}

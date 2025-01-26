@@ -1,4 +1,4 @@
-// ADD MEMBER modal script
+// ADD MEMBER modal
 var addMemberOpenButton = document.getElementById("add-member-open-button");
 var addMemberModalTextField = document.getElementById("add-member-modal-text-field");
 var addMemberModalWrapper = document.getElementById("add-member-modal-wrapper");
@@ -32,11 +32,21 @@ addMemberOpenButton.addEventListener("click", () => {
 // =================================
 var addMemberModalCloseButton = document.getElementById("add-member-modal-close-button");
 addMemberModalCloseButton.addEventListener("click", (event) => {
-    // Close the modal
-    closeModal(addMemberModalWrapper);
+    // Confirm cancel if there is an entry. Otherwise, close right away
+    const name = String(document.getElementById("add-member-modal-text-field").value);
+    if (name === "") {
+        // Close the modal
+        closeModal(addMemberModalWrapper);
 
-    // Stop listening for tab key presses
-    document.removeEventListener("keydown", initAddMemberModalTrapFocus);
+        // Stop listening for tab key presses
+        document.removeEventListener("keydown", initAddMemberModalTrapFocus);
+    }
+    else {
+        // Open confirm cancel modal
+        openDoYouWantToCancelModal();
+
+    }
+    
 })
 
 // =================================
@@ -71,8 +81,12 @@ addMemberModalForm.addEventListener("submit", (event) => {
             console.log(memberDict);
             // sessionStorage.clear();
 
-            // Close
+            // Close this modal
             closeModal(addMemberModalWrapper);
+
+            // Open the modal for confirming new member added
+            openConfirmNewMemberModal(name);
+
             return;
         }
     }
@@ -80,9 +94,87 @@ addMemberModalForm.addEventListener("submit", (event) => {
         // Raise error
         addMemberErrorMsg.textContent = "Member name must be at least 1 character.";
         addMemberErrorMsg.classList.add("error-visible");
-    }
-    
+    }    
 })
+
+
+// NEW MEMBER ADDED modal
+var newMemberModalWrapper = document.getElementById("new-member-modal-wrapper");
+var newMemberModalOKButton = document.getElementById("new-member-modal-ok-button");
+
+// =================================
+//
+// Function to display modal to confirm NEW MEMBER ADDED
+//
+// =================================
+function openConfirmNewMemberModal(name) {
+    // Set the name to be displayed
+    var newMemberAddedString = document.getElementById("new-member-name");
+    newMemberAddedString.textContent = name;
+
+    // Display the modal
+    newMemberModalWrapper.style.display = "block";
+
+    // Set focus on OK button
+    newMemberModalOKButton.focus();
+
+    // Start listening for tab key presses and trap focus
+    document.addEventListener("keydown", initNewMemberAddedModalTrapFocus);
+}
+
+
+// =================================
+//
+// Button to close NEW MEMBER ADDED modal
+//
+// =================================
+newMemberModalOKButton.addEventListener("submit", (event) => {
+    // Prevent refresh
+    event.preventDefault();
+
+    // Close the modal
+    closeModal(newMemberModalWrapper);
+
+    // Stop listening for tab key presses
+    document.removeEventListener("keydown", initNewMemberAddedModalTrapFocus);
+})
+
+
+// DO YOU WANT TO CANCEL modal
+var doYouWantToCancelModalWrapper = document.getElementById("do-you-want-to-cancel-modal-wrapper");
+var doYouWantToCancelModalCancelButton = document.getElementById("do-you-want-to-cancel-modal-cancel-button");
+
+// =================================
+//
+// Function to display DO YOU WANT TO CANCEL modal
+//
+// =================================
+function openDoYouWantToCancelModal() {
+    // Display the modal
+    doYouWantToCancelModalWrapper.style.display = "block";
+
+    // Set focus on Cancel button
+    doYouWantToCancelModalCancelButton.focus();
+
+    // Start listening for tab key presses and trap focus
+    document.addEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
+}
+
+
+// =================================
+//
+// Button to cancel DO YOU WANT TO CANCEL modal
+//
+// =================================
+doYouWantToCancelModalCancelButton.addEventListener("submit", () => {
+    // Return to Add Member Modal button
+    closeModal(doYouWantToCancelModalWrapper);
+    
+    // Stop listening for tab key presses
+    document.removeEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
+});
+
+// TODO: Figure out cancel loop thang
 
 // =================================
 // 
@@ -117,6 +209,7 @@ function hasKeyCaseInsensitive(dictionary, targetKey) {
 // =================================
 function trapFocus(event, modal) {
     console.log("trapfocus called!")
+
     // Check if the key pressed is the Tab key
     const isTabPressed = event.key === `Tab` || event.keyCode === 9;
     if (!isTabPressed) {
@@ -143,9 +236,27 @@ function trapFocus(event, modal) {
 
 // =================================
 // 
-// Function to wrap trapFocus for Add Member modal
+// Function to wrap trapFocus for ADD NEW MEMBER modal
 //
 // =================================
 function initAddMemberModalTrapFocus(event) {
     trapFocus(event, addMemberModalWrapper);
+}
+
+// =================================
+// 
+// Function to wrap trapFocus for NEW MEMBER ADDED modal
+//
+// =================================
+function initNewMemberAddedModalTrapFocus(event) {
+    trapFocus(event, newMemberModalWrapper);
+}
+
+// =================================
+// 
+// Function to wrap trapFocus for DO YOU WANT TO CANCEL modal
+//
+// =================================
+function initDoYouWantToCancelModalTrapFocus(event) {
+    trapFocus(event, doYouWantToCancelModalWrapper);
 }

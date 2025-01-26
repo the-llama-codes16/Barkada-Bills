@@ -42,18 +42,48 @@
 
         <!-- Modal to Add members -->
         <div id="add-member-modal-wrapper" class="modal-wrapper">
-            <div id="add-member-modal-content" class="modal-content">
-                <h3 id="add-member-modal-title" class="generic-font subheaders-size modal-header">Add barkada member</h3>
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Add barkada member</h3>
                 <div class="modal-form-wrapper">
-                    <form id="add-member-modal-form" class="modal-form" autocomplete="off">
-                        <div class="modal-input-form-container">
+                    <form id="add-member-modal-form" autocomplete="off">
+                        <div>
                             <label for="add-member-modal-text-field" class="modal-header generic-font generic-size">Name:</label>
                             <input id="add-member-modal-text-field" class="input-space generic-font generic-size" type="text" maxlength="20">
                         </div>
                         <p id="add-member-modal-error-message" class="error-message generic-font generic-size">Member name must be at least 1 character.</p>
-                        <div class="modal-button-container">
+                        <div class="modal-button-container-with-cancel">
                             <button id="add-member-modal-close-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Cancel</button>
                             <input id="add-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="submit" value="OK">    
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for New member added -->
+        <div id="new-member-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">New member added:</h3>
+                <div id="new-member-modal-form-wrapper" class="modal-form-wrapper">
+                    <form>
+                        <p id="new-member-name" class="generic-font generic-size">Yammerz</p>
+                        <div class="modal-button-container">
+                            <input id="new-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="submit" value="OK">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Canceling -->
+        <div id="do-you-want-to-cancel-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Do you want to cancel?</h3>
+                <div class="modal-form-wrapper">
+                    <form>
+                        <div class="modal-button-container">
+                            <input id="do-you-want-to-cancel-modal-cancel-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="submit" value="No">
+                            <button class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Yes</button>
                         </div>
                     </form>
                 </div>
