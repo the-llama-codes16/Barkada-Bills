@@ -1,8 +1,24 @@
-// ADD MEMBER modal
+// Main script for Main Expense Splitter Page
+
+// Import da goods
+import { initAddMemberModalTrapFocus } from "./modalAddMember.js";
+
+// =================================
+// 
+// DOM Queries 
+//
+// ================================= 
 var addMemberOpenButton = document.getElementById("add-member-open-button");
-var addMemberModalTextField = document.getElementById("add-member-modal-text-field");
-var addMemberModalWrapper = document.getElementById("add-member-modal-wrapper");
-var addMemberErrorMsg = document.getElementById("add-member-modal-error-message");
+
+// ADD MEMBER modal
+export var addMemberModalTextField = document.getElementById("add-member-modal-text-field");
+export var addMemberModalWrapper = document.getElementById("add-member-modal-wrapper");
+export var addMemberErrorMsg = document.getElementById("add-member-modal-error-message");
+
+// NEW MEMBER ADDED modal
+export var newMemberModalWrapper = document.getElementById("new-member-modal-wrapper");
+
+// DO YOU WANT TO CANCEL modal
 
 // =================================
 // 
@@ -25,238 +41,71 @@ addMemberOpenButton.addEventListener("click", () => {
     document.addEventListener("keydown", initAddMemberModalTrapFocus);
 })
 
-// =================================
-// 
-// Button to close ADD MEMBER modal
-//
-// =================================
-var addMemberModalCloseButton = document.getElementById("add-member-modal-close-button");
-addMemberModalCloseButton.addEventListener("click", (event) => {
-    // Confirm cancel if there is an entry. Otherwise, close right away
-    const name = String(document.getElementById("add-member-modal-text-field").value);
-    if (name === "") {
-        // Close the modal
-        closeModal(addMemberModalWrapper);
-
-        // Stop listening for tab key presses
-        document.removeEventListener("keydown", initAddMemberModalTrapFocus);
-    }
-    else {
-        // Open confirm cancel modal
-        openDoYouWantToCancelModal();
-
-    }
-    
-})
-
-// =================================
-// 
-// Submit ADD MEMBER modal
-//
-// =================================
-var addMemberModalForm = document.getElementById("add-member-modal-form");
-addMemberModalForm.addEventListener("submit", (event) => {
-    // Prevent refresh
-    event.preventDefault();
-
-    // Add the member
-    const name = String(document.getElementById("add-member-modal-text-field").value);
-    console.log(name);
-
-    // Get the existing data of member list or create it if inexistent
-    const memberDict = JSON.parse(sessionStorage.getItem("members")) || {};
-
-    // Check if input is valid
-    if (/\S/.test(name)) {
-        // Check if the name already exists, case insensitive
-        if (hasKeyCaseInsensitive(memberDict, name)) {
-            console.log(`Member name already exists: ${name}`)
-            addMemberErrorMsg.textContent = "Member name already exists.";
-            addMemberErrorMsg.classList.add("error-visible");
-        }
-        else {
-            // Add the name
-            memberDict[name] = {};
-            sessionStorage.setItem("members", JSON.stringify(memberDict));
-            console.log(memberDict);
-            // sessionStorage.clear();
-
-            // Close this modal
-            closeModal(addMemberModalWrapper);
-
-            // Open the modal for confirming new member added
-            openConfirmNewMemberModal(name);
-
-            return;
-        }
-    }
-    else {
-        // Raise error
-        addMemberErrorMsg.textContent = "Member name must be at least 1 character.";
-        addMemberErrorMsg.classList.add("error-visible");
-    }    
-})
 
 
-// NEW MEMBER ADDED modal
-var newMemberModalWrapper = document.getElementById("new-member-modal-wrapper");
-var newMemberModalOKButton = document.getElementById("new-member-modal-ok-button");
+// Exactly! You’ve got it! Here’s the breakdown:
 
-// =================================
-//
-// Function to display modal to confirm NEW MEMBER ADDED
-//
-// =================================
-function openConfirmNewMemberModal(name) {
-    // Set the name to be displayed
-    var newMemberAddedString = document.getElementById("new-member-name");
-    newMemberAddedString.textContent = name;
+// ---
 
-    // Display the modal
-    newMemberModalWrapper.style.display = "block";
-
-    // Set focus on OK button
-    newMemberModalOKButton.focus();
-
-    // Start listening for tab key presses and trap focus
-    document.addEventListener("keydown", initNewMemberAddedModalTrapFocus);
-}
-
-
-// =================================
-//
-// Button to close NEW MEMBER ADDED modal
-//
-// =================================
-newMemberModalOKButton.addEventListener("submit", (event) => {
-    // Prevent refresh
-    event.preventDefault();
-
-    // Close the modal
-    closeModal(newMemberModalWrapper);
-
-    // Stop listening for tab key presses
-    document.removeEventListener("keydown", initNewMemberAddedModalTrapFocus);
-})
-
-
-// DO YOU WANT TO CANCEL modal
-var doYouWantToCancelModalWrapper = document.getElementById("do-you-want-to-cancel-modal-wrapper");
-var doYouWantToCancelModalCancelButton = document.getElementById("do-you-want-to-cancel-modal-cancel-button");
-
-// =================================
-//
-// Function to display DO YOU WANT TO CANCEL modal
-//
-// =================================
-function openDoYouWantToCancelModal() {
-    // Display the modal
-    doYouWantToCancelModalWrapper.style.display = "block";
-
-    // Set focus on Cancel button
-    doYouWantToCancelModalCancelButton.focus();
-
-    // Start listening for tab key presses and trap focus
-    document.addEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
-}
-
-
-// =================================
-//
-// Button to cancel DO YOU WANT TO CANCEL modal
-//
-// =================================
-doYouWantToCancelModalCancelButton.addEventListener("submit", () => {
-    // Return to Add Member Modal button
-    closeModal(doYouWantToCancelModalWrapper);
-    
-    // Stop listening for tab key presses
-    document.removeEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
-});
-
-// TODO: Figure out cancel loop thang
-
-// =================================
-// 
-// Function to close modal
-//
-// =================================
-function closeModal(targetModal) {
-    console.log("closing...")
-    targetModal.style.display = "none";
-}
-
-// =================================
-// 
-// Function to check if key exists in a dictionary, case insensitive
-//
-// =================================
-function hasKeyCaseInsensitive(dictionary, targetKey) {
-    console.log("checking if key exists, case insensitive...");
-    const targetKeyLower = targetKey.toLowerCase();
-    for (key in dictionary) {
-        if (String(key).toLowerCase() === targetKeyLower) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// =================================
-// 
-// Function to trap focus in a given modal
-//
-// =================================
-function trapFocus(event, modal) {
-    console.log("trapfocus called!")
-
-    // Check if the key pressed is the Tab key
-    const isTabPressed = event.key === `Tab` || event.keyCode === 9;
-    if (!isTabPressed) {
-      return;
-    }
-
-    // Get the modal and its focusable elements
-    const focusableElements = `button, input, [tabindex]:not([tabindex="-1"])`;
-    const focusableContent = modal.querySelectorAll(focusableElements);
-    const firstFocusableElement = focusableContent[0];
-    const lastFocusableElement = focusableContent[focusableContent.length - 1];
+// ### **1. Element Used Only in One File (Call `getElementById` Directly)**
+// - If the element is **only used** by one specific file, **just call `getElementById` right before the `addEventListener`** inside that file. This ensures the element is accessed only when needed, and keeps everything localized and simple.
   
-    if (event.shiftKey) {
-      if (document.activeElement === firstFocusableElement) {
-        lastFocusableElement.focus();
-        event.preventDefault();
-      }
-    } 
-    else if (document.activeElement === lastFocusableElement) {
-        firstFocusableElement.focus();
-        event.preventDefault();
-    }
-}
+// **Example:**
+// ```js
+// // modalAddMember.js
+// document.addEventListener("DOMContentLoaded", () => {
+//     const addMemberModalCloseButton = document.getElementById("add-member-modal-close-button");
+    
+//     if (addMemberModalCloseButton) {
+//         addMemberModalCloseButton.addEventListener("click", () => {
+//             console.log("Close button clicked!");
+//         });
+//     } else {
+//         console.error("Button not found!");
+//     }
+// });
+// ```
+// - **Why?** It keeps the scope of the code limited to where the element is actually used, making it easier to maintain and avoiding unnecessary imports.
 
-// =================================
-// 
-// Function to wrap trapFocus for ADD NEW MEMBER modal
-//
-// =================================
-function initAddMemberModalTrapFocus(event) {
-    trapFocus(event, addMemberModalWrapper);
-}
+// ---
 
-// =================================
-// 
-// Function to wrap trapFocus for NEW MEMBER ADDED modal
-//
-// =================================
-function initNewMemberAddedModalTrapFocus(event) {
-    trapFocus(event, newMemberModalWrapper);
-}
+// ### **2. Element Used Across Multiple Files (Export from `main.js` and Use a Getter)**
+// - If the element needs to be accessed by **multiple files**, you can export it from a central file like `main.js` and use a **getter function** to ensure the element is available when needed.
 
-// =================================
-// 
-// Function to wrap trapFocus for DO YOU WANT TO CANCEL modal
-//
-// =================================
-function initDoYouWantToCancelModalTrapFocus(event) {
-    trapFocus(event, doYouWantToCancelModalWrapper);
-}
+// **Example:**
+
+// **In `main.js` (central file):**
+// ```js
+// // main.js
+// export function getAddMemberModalCloseButton() {
+//     return document.getElementById("add-member-modal-close-button");
+// }
+// ```
+
+// **In `modalAddMember.js` (or any other file):**
+// ```js
+// // modalAddMember.js
+// import { getAddMemberModalCloseButton } from "./main.js";
+
+// document.addEventListener("DOMContentLoaded", () => {
+//     const addMemberModalCloseButton = getAddMemberModalCloseButton();
+    
+//     if (addMemberModalCloseButton) {
+//         addMemberModalCloseButton.addEventListener("click", () => {
+//             console.log("Close button clicked!");
+//         });
+//     } else {
+//         console.error("Button not found!");
+//     }
+// });
+// ```
+
+// - **Why?** This approach works well when the element is **shared** across multiple files. By using a getter function, you're **deferring the DOM lookup** until the document is ready, preventing issues where the element may not exist when the script runs.
+
+// ---
+
+// ### **Summary:**
+// - **Use `getElementById` directly** in the file where the element is used **only** by that file (best for single-use elements).
+// - **Export a getter function** in `main.js` when the element is used across **multiple files** to centralize and manage shared elements.
+
+// This structure keeps everything organized and modular! 🚀 Let me know if you need more clarification or examples. 😃
