@@ -34,6 +34,11 @@ export function hasKeyCaseInsensitive(dictionary, targetKey) {
 export function trapFocus(event, modal) {
     console.log("trapfocus called!")
 
+    // Don't bother if no key is detected
+    if (event.key == null) {
+      return;
+    }
+
     // Check if the key pressed is the Tab key
     const isTabPressed = event.key === `Tab` || event.keyCode === 9;
     if (!isTabPressed) {

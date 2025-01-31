@@ -3,6 +3,12 @@
 var doYouWantToCancelModalWrapper = document.getElementById("do-you-want-to-cancel-modal-wrapper");
 var doYouWantToCancelModalCancelButton = document.getElementById("do-you-want-to-cancel-modal-cancel-button");
 
+// Import da goods
+import { modalManager } from "./modalManager.js";
+import { trapFocus, closeModal } from "./reusableFunctions.js";
+import { openAddMemberModal } from "./modalAddMember.js";
+
+
 // =================================
 //
 // Function to display DO YOU WANT TO CANCEL modal
@@ -24,14 +30,20 @@ export function openDoYouWantToCancelModal() {
 // Button to cancel DO YOU WANT TO CANCEL modal
 //
 // =================================
-doYouWantToCancelModalCancelButton.addEventListener("submit", () => {
+doYouWantToCancelModalCancelButton.addEventListener("click", (event) => {
+    // Prevent refresh
+    event.preventDefault();
+
     // Close this modal
     closeModal(doYouWantToCancelModalWrapper);
-    
-    // Stop listening for tab key presses
     document.removeEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
 
-    // Whoever is using this modal, return an answe
+    // Open the previous modal that called this Confirm Cancel modal
+    modalManager.displayActiveModal();
+
+    // Clear!
+    modalManager.clearActiveModalInfo();
+
 });
 
 // =================================

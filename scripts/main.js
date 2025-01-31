@@ -1,7 +1,7 @@
 // Main script for Main Expense Splitter Page
 
 // Import da goods
-import { initAddMemberModalTrapFocus } from "./modalAddMember.js";
+import { openAddMemberModal } from "./modalAddMember.js";
 
 // =================================
 // 
@@ -10,16 +10,6 @@ import { initAddMemberModalTrapFocus } from "./modalAddMember.js";
 // ================================= 
 var addMemberOpenButton = document.getElementById("add-member-open-button");
 
-// ADD MEMBER modal
-export var addMemberModalTextField = document.getElementById("add-member-modal-text-field");
-export var addMemberModalWrapper = document.getElementById("add-member-modal-wrapper");
-export var addMemberErrorMsg = document.getElementById("add-member-modal-error-message");
-
-// NEW MEMBER ADDED modal
-export var newMemberModalWrapper = document.getElementById("new-member-modal-wrapper");
-
-// DO YOU WANT TO CANCEL modal
-
 // =================================
 // 
 // Button to open ADD MEMBER modal
@@ -27,18 +17,7 @@ export var newMemberModalWrapper = document.getElementById("new-member-modal-wra
 // =================================
 addMemberOpenButton.addEventListener("click", () => {
     // Open the modal
-    console.log("opening...");
-    addMemberModalWrapper.style.display = "block";
-
-    // Ensure that text field is empty and set focus on it
-    addMemberModalTextField.value = "";
-    addMemberModalTextField.focus();
-
-    // Clear the error message placeholder and adjust buttons
-    addMemberErrorMsg.classList.remove("error-visible");
-
-    // Start listening for tab key presses and trap focus
-    document.addEventListener("keydown", initAddMemberModalTrapFocus);
+    openAddMemberModal();
 })
 
 

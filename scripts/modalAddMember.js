@@ -1,11 +1,38 @@
 // Script for Add Member modal, New Member Added modal
 
 // Import da goods
-import { 
-    addMemberModalTextField, addMemberModalWrapper, addMemberErrorMsg, 
-    newMemberModalWrapper } from "./main.js";
 import { trapFocus, hasKeyCaseInsensitive, closeModal } from "./reusableFunctions.js";
 import { openDoYouWantToCancelModal } from "./modalConfirmCancel.js";
+import { modalManager } from "./modalManager.js";
+
+// =================================
+// 
+// DOM Queries 
+//
+// ================================= 
+var addMemberModalTextField = document.getElementById("add-member-modal-text-field");
+var addMemberModalWrapper = document.getElementById("add-member-modal-wrapper");
+var addMemberErrorMsg = document.getElementById("add-member-modal-error-message");
+
+// =================================
+// 
+// Function to display ADD MEMBER modal
+//
+// =================================
+export function openAddMemberModal(memberName = "") {
+    console.log("opening Add Member Modal...");
+    addMemberModalWrapper.style.display = "block";
+
+    // Set focus on the text field and ensure that the entry, if there is any, is displayed
+    addMemberModalTextField.value = memberName;
+    addMemberModalTextField.focus();
+
+    // Clear the error message placeholder and adjust buttons
+    addMemberErrorMsg.classList.remove("error-visible");
+
+    // Start listening for tab key presses and trap focus
+    document.addEventListener("keydown", initAddMemberModalTrapFocus);
+}
 
 // =================================
 // 
@@ -14,26 +41,21 @@ import { openDoYouWantToCancelModal } from "./modalConfirmCancel.js";
 // =================================
 var addMemberModalCloseButton = document.getElementById("add-member-modal-close-button");
 addMemberModalCloseButton.addEventListener("click", () => {
-    // Confirm cancel if there is an entry. Otherwise, close right away
-    const name = String(addMemberModalTextField.value);
-    if (name === "") {
-        // Close the modal
-        closeModal(addMemberModalWrapper);
+    const name = String(addMemberModalTextField.value); 
 
-        // Stop listening for tab key presses
-        document.removeEventListener("keydown", initAddMemberModalTrapFocus);
-    }
-    else {
+    // Close this modal
+    closeModal(addMemberModalWrapper);
+    document.removeEventListener("keydown", initAddMemberModalTrapFocus);
+
+    // Confirm Cancel if there is an entry
+    if (name !== "") {
+        // Set this as the current active modal
+        console.log("Setting modal...")
+        modalManager.setActiveModalInfo(openAddMemberModal, name);
+
         // Open confirm cancel modal
         openDoYouWantToCancelModal();
-        // TODO
     }
-
-    // Close the modal
-    // closeModal(addMemberModalWrapper);
-
-    // // Stop listening for tab key presses
-    // document.removeEventListener("keydown", initAddMemberModalTrapFocus);
 })
 
 // =================================
@@ -70,6 +92,7 @@ addMemberModalForm.addEventListener("submit", (event) => {
 
             // Close this modal
             closeModal(addMemberModalWrapper);
+            document.removeEventListener("keydown", initAddMemberModalTrapFocus);
 
             // Open the modal for confirming new member added
             openConfirmNewMemberModal(name);
@@ -90,6 +113,7 @@ addMemberModalForm.addEventListener("submit", (event) => {
 // Function to display modal to confirm NEW MEMBER ADDED
 //
 // =================================
+var newMemberModalWrapper = document.getElementById("new-member-modal-wrapper");
 function openConfirmNewMemberModal(name) {
     // Set the name to be displayed
     var newMemberAddedString = document.getElementById("new-member-name");
