@@ -1,6 +1,6 @@
-// This ModalManager class is used to keep track of the modal that calls the Confirm Cancel functionality
-// so that when user cancels exit, the previous modal can be traced and displayed again
-// Note: With assistance from ChatGPT
+// This ModalManager class is used to keep track of the function that opens the calling modal
+// The calling modal is the modal that calls the Confirm Cancel modal, 
+// which happens when a modal's Cancel button is clicked and the user has unsaved changes
 
 export class ModalManager {
     constructor() {

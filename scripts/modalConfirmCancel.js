@@ -30,10 +30,7 @@ export function openDoYouWantToCancelModal() {
 // Button to cancel DO YOU WANT TO CANCEL modal
 //
 // =================================
-doYouWantToCancelModalCancelButton.addEventListener("click", (event) => {
-    // Prevent refresh
-    event.preventDefault();
-
+doYouWantToCancelModalCancelButton.addEventListener("click", () => {
     // Close this modal
     closeModal(doYouWantToCancelModalWrapper);
     document.removeEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
@@ -44,6 +41,21 @@ doYouWantToCancelModalCancelButton.addEventListener("click", (event) => {
     // Clear!
     modalManager.clearActiveModalInfo();
 
+});
+
+// =================================
+//
+// Button to confirm DO YOU WANT TO CANCEL modal
+//
+// =================================
+var doYouWantToCancelModalYesButton = document.getElementById("do-you-want-to-cancel-modal-yes-button");
+doYouWantToCancelModalYesButton.addEventListener("click", () => {
+    // Close this modal
+    closeModal(doYouWantToCancelModalWrapper);
+    document.removeEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
+
+    // Clear!
+    modalManager.clearActiveModalInfo();
 });
 
 // =================================

@@ -69,7 +69,7 @@ addMemberModalForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
     // Add the member
-    const name = String(addMemberModalTextField.value);
+    const name = String(addMemberModalTextField.value).trim();
     console.log(name);
 
     // Get the existing data of member list or create it if inexistent
