@@ -1,7 +1,7 @@
 // Script for Add Member modal, New Member Added modal
 
 // Import da goods
-import { trapFocus, hasKeyCaseInsensitive, closeModal } from "./reusableFunctions.js";
+import { trapFocus, hasKeyCaseInsensitive, closeModal, displayMembers } from "./reusableFunctions.js";
 import { openDoYouWantToCancelModal } from "./modalConfirmCancel.js";
 import { modalManager } from "./modalManager.js";
 
@@ -82,6 +82,9 @@ addMemberModalForm.addEventListener("submit", (event) => {
             console.log(`Member name already exists: ${name}`)
             addMemberErrorMsg.textContent = "Member name already exists.";
             addMemberErrorMsg.classList.add("error-visible");
+
+            // Set focus back again to the text field 
+            addMemberModalTextField.focus();
         }
         else {
             // Add the name
@@ -96,14 +99,15 @@ addMemberModalForm.addEventListener("submit", (event) => {
 
             // Open the modal for confirming new member added
             openConfirmNewMemberModal(name);
-
-            return;
         }
     }
     else {
         // Raise error
         addMemberErrorMsg.textContent = "Member name must be at least 1 character.";
         addMemberErrorMsg.classList.add("error-visible");
+
+        // Set focus back again to the text field 
+        addMemberModalTextField.focus();
     }    
 })
 
@@ -126,7 +130,7 @@ function openConfirmNewMemberModal(name) {
     newMemberModalOKButton.focus();
 
     // Start listening for tab key presses and trap focus
-    document.addEventListener("keydown", initNewMemberAddedModalTrapFocus);
+    document.addEventListener("keydown", initNewMemberAddedModalTrapFocus); 
 }
 
 // =================================
@@ -135,9 +139,11 @@ function openConfirmNewMemberModal(name) {
 //
 // =================================
 var newMemberModalOKButton = document.getElementById("new-member-modal-ok-button");
-newMemberModalOKButton.addEventListener("submit", (event) => {
-    // Prevent refresh
-    event.preventDefault();
+newMemberModalOKButton.addEventListener("click", () => {
+    console.log("okbutton clicked!");
+
+    // Display members
+    displayMembers();
 
     // Close the modal
     closeModal(newMemberModalWrapper);

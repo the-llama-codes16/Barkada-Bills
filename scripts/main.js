@@ -2,6 +2,7 @@
 
 // Import da goods
 import { openAddMemberModal } from "./modalAddMember.js";
+import { displayMembers } from "./reusableFunctions.js";
 
 // =================================
 // 
@@ -20,7 +21,15 @@ addMemberOpenButton.addEventListener("click", () => {
     openAddMemberModal();
 })
 
-
+// =================================
+// 
+// Load the data on the tables as soon as this page is loaded
+//
+// =================================
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("in DOMload")
+    displayMembers();
+})
 
 // Exactly! You’ve got it! Here’s the breakdown:
 

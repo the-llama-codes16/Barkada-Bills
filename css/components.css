@@ -19,6 +19,21 @@
     padding: 1.25rem 1.5rem;
 }
 
+.button-delete {
+    background-color: transparent;
+    border: none;
+    text-decoration: none;
+}
+
+.button-edit-table-padding {
+    padding: 0.3rem 2rem;
+}
+
+.x-button {
+    font-size: 2rem;
+    font-weight: 250;
+}
+
 /* END OF Buttons */
 
 /* 
@@ -112,4 +127,31 @@
 
 #new-member-modal-form-wrapper {
     padding-top: 0rem;
+}
+/* END of Modals */
+
+
+/* Main Page - Tables */
+.data-table {
+    display: none;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.data-table.table-header-visible {
+    display: block;
+}
+
+.first-col-element {
+    padding-left: 2rem;
+    padding-right: 8rem;
+}
+
+th, td {
+    border-bottom: 1px solid #000000;
+    padding: 0.1rem;
+}
+
+.item-total-string {
+    margin-bottom: 1rem;
 }
