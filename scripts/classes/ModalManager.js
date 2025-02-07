@@ -2,6 +2,7 @@
 // The calling modal is the modal that calls the Confirm Cancel modal, 
 // which happens when a modal's Cancel button is clicked and the user has unsaved changes
 
+
 export class ModalManager {
     constructor() {
         this.activeModalOpeningFunction = null;

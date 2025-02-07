@@ -4,9 +4,8 @@ var doYouWantToCancelModalWrapper = document.getElementById("do-you-want-to-canc
 var doYouWantToCancelModalCancelButton = document.getElementById("do-you-want-to-cancel-modal-cancel-button");
 
 // Import da goods
-import { modalManager } from "./modalManager.js";
-import { trapFocus, closeModal } from "./reusableFunctions.js";
-import { openAddMemberModal } from "./modalAddMember.js";
+import { modalManager } from "./classes/ModalManager.js";
+import { trapFocus, closeModal } from "./reusable-functions.js";
 
 
 // =================================

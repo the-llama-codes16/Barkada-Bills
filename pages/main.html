@@ -39,9 +39,9 @@
             <h3 class="home-content-lead generic-font generic-size step-description">Add contributors to expenses.</h3>
             <!-- Dynamic Table for Members -->
             <table id="member-table" class="data-table home-content-lead">
-                <thead class="generic-font generic-size table-header-weight">
+                <thead>
                     <tr>
-                        <th class="first-col-element">Name</th>
+                        <th class="first-col-header generic-font generic-size table-header-weight">Name</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -86,7 +86,7 @@
         <div id="new-member-modal-wrapper" class="modal-wrapper">
             <div class="modal-content">
                 <h3 class="generic-font subheaders-size modal-header">New member added:</h3>
-                <div id="new-member-modal-form-wrapper" class="modal-form-wrapper">
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
                     <form>
                         <p id="new-member-name" class="generic-font generic-size"></p>
                         <div class="modal-button-container">
@@ -110,7 +110,42 @@
                     </form>
                 </div>
             </div>
-        </div>        
+        </div>
+        
+        <!-- Modal to Edit members -->
+        <div id="edit-member-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Edit barkada member</h3>
+                <div class="modal-form-wrapper">
+                    <form id="edit-member-modal-form" autocomplete="off">
+                        <div>
+                            <label for="edit-member-modal-text-field" class="modal-header generic-font generic-size">Name:</label>
+                            <input id="edit-member-modal-text-field" class="input-space generic-font generic-size" type="text" maxlength="20">
+                        </div>
+                        <p id="edit-member-modal-error-message" class="error-message generic-font generic-size">Member name must be at least 1 character.</p>
+                        <div class="modal-button-container-with-cancel">
+                            <button id="edit-member-modal-close-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Cancel</button>
+                            <input id="edit-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="submit" value="OK">    
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Edited Member -->
+        <div id="edited-member-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Edited member:</h3>
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
+                    <form>
+                        <p id="edited-member-name" class="generic-font generic-size"></p>
+                        <div class="modal-button-container">
+                            <button id="edited-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <!-- Step 2: Add expenses -->
         <div class="steps-container">
@@ -128,8 +163,8 @@
 
     <!-- Javascript -->
     <script type="module" src="../scripts/main.js"></script>
-    <script type="module" src="../scripts/modalAddMember.js"></script>
-    <script type="module" src="../scripts/modalConfirmCancel.js"></script>
-    <script type="module" src="../scripts/modalManager.js"></script>
-    <script type="module" src="../scripts/reusableFunctions.js"></script>
+    <script type="module" src="../scripts/modal-add-member.js"></script>
+    <script type="module" src="../scripts/modal-confirm-cancel.js"></script>
+    <script type="module" src="../scripts/classes/ModalManager.js"></script>
+    <script type="module" src="../scripts/reusable-functions.js"></script>
 </html>

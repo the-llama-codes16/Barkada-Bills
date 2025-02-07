@@ -1,9 +1,10 @@
 // Script for Add Member modal, New Member Added modal
 
 // Import da goods
-import { trapFocus, hasKeyCaseInsensitive, closeModal, displayMembers } from "./reusableFunctions.js";
-import { openDoYouWantToCancelModal } from "./modalConfirmCancel.js";
-import { modalManager } from "./modalManager.js";
+import { trapFocus, closeModal, hasMemberNameCaseInsensitive, getMemberData, setMemberData } from "./reusable-functions.js";
+import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
+import { modalManager } from "./classes/ModalManager.js";
+import { displayMembers } from "./main.js";
 
 // =================================
 // 
@@ -73,13 +74,13 @@ addMemberModalForm.addEventListener("submit", (event) => {
     console.log(name);
 
     // Get the existing data of member list or create it if inexistent
-    const memberDict = JSON.parse(sessionStorage.getItem("members")) || {};
+    const memberData = getMemberData();
 
-    // Check if input is valid
+    // Check if input is not just whitespace
     if (/\S/.test(name)) {
-        // Check if the name already exists, case insensitive
-        if (hasKeyCaseInsensitive(memberDict, name)) {
-            console.log(`Member name already exists: ${name}`)
+        // Check if name already exists, case insensitive
+        if (hasMemberNameCaseInsensitive(memberData.members, name)) {
+            console.log(`Member name already exists: ${name}`);
             addMemberErrorMsg.textContent = "Member name already exists.";
             addMemberErrorMsg.classList.add("error-visible");
 
@@ -87,11 +88,10 @@ addMemberModalForm.addEventListener("submit", (event) => {
             addMemberModalTextField.focus();
         }
         else {
-            // Add the name
-            memberDict[name] = {};
-            sessionStorage.setItem("members", JSON.stringify(memberDict));
-            console.log(memberDict);
-            // sessionStorage.clear();
+            // Add the name and save
+            memberData.members.push(name);
+            setMemberData(memberData);
+            console.log(memberData);
 
             // Close this modal
             closeModal(addMemberModalWrapper);
@@ -157,7 +157,7 @@ newMemberModalOKButton.addEventListener("click", () => {
 // Function to wrap trapFocus for ADD NEW MEMBER modal
 //
 // =================================
-export function initAddMemberModalTrapFocus(event) {
+function initAddMemberModalTrapFocus(event) {
     trapFocus(event, addMemberModalWrapper);
 }
 
