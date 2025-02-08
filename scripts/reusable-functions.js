@@ -18,7 +18,10 @@ export function closeModal(targetModal) {
 export function hasMemberNameCaseInsensitive(memberList, nameToCheck) {
   console.log(`Checking if ${nameToCheck} already exists...`);
   const nameToCheckLower = nameToCheck.toLowerCase();
-  for (let name in memberList) {
+  console.log(`Using ${nameToCheckLower}...`);
+  for (let i = 0; i < memberList.length; i++) {
+    let name = memberList[i];
+    console.log(`Checking ${name}...`);
     if (name.toLowerCase() === nameToCheckLower) {
       return true;
     }

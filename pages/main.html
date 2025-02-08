@@ -57,12 +57,12 @@
         <template id="member-row-template">
             <tr class="table-item-row generic-font generic-size">
                 <td class="member-name first-col-element"></td>
-                <td><button class="member-edit-button generic-font generic-size button-sub button-edit-table-padding">Edit</button></td>
-                <td><button class="member-delete-button generic-font generic-size button-delete x-button">X</button></td>
+                <td><button class="member-edit-button generic-font generic-size button-sub button-edit-table-padding" title="Edit member name">Edit</button></td>
+                <td><button class="member-delete-button generic-font generic-size button-delete x-button" title="Delete member">X</button></td>
             </tr>
         </template>
 
-        <!-- Modal to Add members -->
+        <!-- Modal to Add Member -->
         <div id="add-member-modal-wrapper" class="modal-wrapper">
             <div class="modal-content">
                 <h3 class="generic-font subheaders-size modal-header">Add barkada member</h3>
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <!-- Modal for New member added -->
+        <!-- Modal for New Member added -->
         <div id="new-member-modal-wrapper" class="modal-wrapper">
             <div class="modal-content">
                 <h3 class="generic-font subheaders-size modal-header">New member added:</h3>
@@ -112,7 +112,7 @@
             </div>
         </div>
         
-        <!-- Modal to Edit members -->
+        <!-- Modal to Edit Members -->
         <div id="edit-member-modal-wrapper" class="modal-wrapper">
             <div class="modal-content">
                 <h3 class="generic-font subheaders-size modal-header">Edit barkada member</h3>
@@ -146,6 +146,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal to Delete Item -->
+        <div id="delete-item-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Delete <span id="delete-item-category"></span>?</h3>
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
+                    <form id="delete-item-modal-form" autocomplete="off">
+                        <p id="delete-item-name" class="generic-font generic-size"></p>
+                        <div class="modal-button-container">
+                            <button id="delete-item-modal-cancel-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">No</button>
+                            <button id="delete-item-modal-yes-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Deleted Item -->
+        <div id="deleted-item-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Deleted <span id="deleted-item-category"></span>:</h3>
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
+                    <form>
+                        <p id="deleted-item-name" class="generic-font generic-size"></p>
+                        <div class="modal-button-container">
+                            <button id="deleted-item-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Step 2: Add expenses -->
         <div class="steps-container">

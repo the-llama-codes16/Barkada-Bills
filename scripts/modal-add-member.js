@@ -4,7 +4,7 @@
 import { trapFocus, closeModal, hasMemberNameCaseInsensitive, getMemberData, setMemberData } from "./reusable-functions.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
-import { displayMembers } from "./main.js";
+import { displayMembers, addMemberOpenButton } from "./main.js";
 
 // =================================
 // 
@@ -56,6 +56,10 @@ addMemberModalCloseButton.addEventListener("click", () => {
 
         // Open confirm cancel modal
         openDoYouWantToCancelModal();
+    }
+    else {
+        // Return focus to Add Member button
+        addMemberOpenButton.focus();
     }
 })
 
@@ -150,6 +154,9 @@ newMemberModalOKButton.addEventListener("click", () => {
 
     // Stop listening for tab key presses
     document.removeEventListener("keydown", initNewMemberAddedModalTrapFocus);
+
+    // Return focus to Add Member button
+    addMemberOpenButton.focus();
 })
 
 // =================================

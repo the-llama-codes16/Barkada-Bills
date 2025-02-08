@@ -4,7 +4,7 @@
 import { trapFocus, closeModal, getMemberData, setMemberData, hasMemberNameCaseInsensitive } from "./reusable-functions.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
-import { memberNameManager } from "./classes/MemberNameManager.js";
+import { itemManager } from "./classes/ItemManager.js";
 import { displayMembers } from "./main.js";
 
 // =================================
@@ -50,13 +50,17 @@ editMemberModalCloseButton.addEventListener("click", () => {
     document.removeEventListener("keydown", initEditMemberModalTrapFocus);
 
     // Confirm Cancel if there is a change with the name
-    if (name !== memberNameManager.getOriginalMemberName()) {
+    if (name !== itemManager.getItemName()) {
         // Set this as the current active modal
         console.log("Setting modal...")
         modalManager.setActiveModalInfo(openEditMemberModal, name);
 
         // Open confirm cancel modal
         openDoYouWantToCancelModal();
+    }
+    else {
+        // Clear data on current item selected
+        itemManager.clearItemInfo();
     }
 })
 
@@ -79,7 +83,7 @@ editMemberModalForm.addEventListener("submit", (event) => {
     // Check if input is valid
     if (/\S/.test(name)) {
         // Check if name is unchanged
-        let originalName = memberNameManager.getOriginalMemberName();
+        let originalName = itemManager.getItemName();
 
         if (name === originalName){
             // No warning needed, close this modal right away
@@ -106,8 +110,8 @@ editMemberModalForm.addEventListener("submit", (event) => {
                 console.log(memberData.members);
                 setMemberData(memberData);
 
-                // Clear original name data
-                memberNameManager.clearOriginalMemberName();
+                // Clear original member data
+                itemManager.clearItemInfo();
 
                 // Reload the displayed members
                 displayMembers();
@@ -129,7 +133,7 @@ editMemberModalForm.addEventListener("submit", (event) => {
         // Set focus back again to the text field 
         editMemberModalTextField.focus();
     }    
-})
+});
 
 // =================================
 // 
@@ -167,7 +171,7 @@ editedMemberModalOKButton.addEventListener("click", () => {
 
     // Stop listening for tab key presses
     document.removeEventListener("keydown", initEditedMemberModalTrapFocus);
-})
+});
 
 // =================================
 // 

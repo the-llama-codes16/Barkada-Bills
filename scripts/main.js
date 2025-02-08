@@ -5,15 +5,17 @@
 // Import da goods
 import { openAddMemberModal } from "./modal-add-member.js";
 import { openEditMemberModal } from "./modal-edit-member.js";
-import { memberNameManager } from "./classes/MemberNameManager.js";
-import { getMemberData, setMemberData } from "./reusable-functions.js";
+import { itemManager } from "./classes/ItemManager.js";
+import { getMemberData } from "./reusable-functions.js";
+import { MEMBER_CATEGORY } from "./modal-delete-item.js";
+import { openDeleteItemModal } from "./modal-delete-item.js";
 
 // =================================
 // 
 // DOM Queries 
 //
 // ================================= 
-var addMemberOpenButton = document.getElementById("add-member-open-button");
+export var addMemberOpenButton = document.getElementById("add-member-open-button");
 
 // =================================
 // 
@@ -48,20 +50,26 @@ export function displayMembers() {
 
     // Display if there is any
     let memberCount = memberData.members.length;
+    console.log(`COUNT: ${memberCount}`);
+
+    // Prepare the elements to be accessed
+    const memberTable = document.getElementById("member-table");
+    const memberTotalCountString = document.getElementById("member-total-count-string");
+    const memberTotalCount = document.getElementById("member-total-count");
+
+    // Clean the table
+    let memberTableBody = memberTable.getElementsByTagName("tbody")[0];
+    memberTableBody.innerHTML = "";
 
     if (memberCount > 0) {    
         // Display the table
-        const memberTable = document.getElementById("member-table");
         memberTable.classList.add("table-header-visible");
 
         // Clean the table 
-        let memberTableBody = memberTable.getElementsByTagName("tbody")[0];
         memberTableBody.innerHTML = "";
-
+        
         // Display the total count
-        const memberTotalCountString = document.getElementById("member-total-count-string");
         memberTotalCountString.classList.add("total-visible");
-        const memberTotalCount = document.getElementById("member-total-count");
         memberTotalCount.textContent = String(memberCount);
 
         // Update the table to display the names
@@ -91,6 +99,12 @@ export function displayMembers() {
             memberTableBody.appendChild(newMemberRow);
         }
     }
+    else {
+        // Ensure that the table and other related elements are not displayed
+        memberTable.classList.remove("table-header-visible");
+        memberTotalCountString.classList.remove("total-visible");
+        memberTotalCount.textContent = String(memberCount);
+    }
   }
   
   function editMember(memberRow) {
@@ -98,7 +112,7 @@ export function displayMembers() {
     console.log(`Edit Member button clicked for ${memberName}!`);
 
     // Save the original name
-    memberNameManager.setOriginalMemberName(memberName);
+    itemManager.setItemName(memberName);
 
     // Open Edit Member modal
     openEditMemberModal(memberName);
@@ -107,4 +121,11 @@ export function displayMembers() {
   function deleteMember(memberRow) {
     let memberName = memberRow.querySelector(".member-name").textContent;
     console.log(`Delete Member button clicked for ${memberName}!`);
+
+    // Save the member data
+    itemManager.setItemName(memberName);
+    itemManager.setItemCategory(MEMBER_CATEGORY);
+
+    // Open Delete Member modal
+    openDeleteItemModal();
   }
