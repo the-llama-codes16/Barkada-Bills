@@ -1,35 +1,131 @@
-// Add member modal script
-var openMemberModalButton = document.getElementById("open-add-member-button")
-var addMemberModal = document.getElementById("add-member-modal")
-var closeMemberModalButton = document.getElementById("close-add-member-modal-button")
-var addMemberModalButton = document.getElementById("add-member-modal-button")
+// Main script for Main Expense Splitter Page
+// Note: ChatGPT has been used to help with learning the language and with some specific issues/confusions encountered while coding, as allowed for the Final Project.
+// However, the entire essence of the code is mine, and I took care that my use of ChatGPT is only as a helping tool, not replacing my work.
 
+// Import da goods
+import { openAddMemberModal } from "./modal-add-member.js";
+import { openEditMemberModal } from "./modal-edit-member.js";
+import { itemManager } from "./classes/ItemManager.js";
+import { getMemberData } from "./reusable-functions.js";
+import { MEMBER_CATEGORY } from "./modal-delete-item.js";
+import { openDeleteItemModal } from "./modal-delete-item.js";
 
-// Learned about modals from w3schools.com. Code might be slightly similar as my use case is the same as with their example.s
-openMemberModalButton.addEventListener("click", () => {
-    openModal(addMemberModal);
+// =================================
+// 
+// DOM Queries 
+//
+// ================================= 
+export var addMemberOpenButton = document.getElementById("add-member-open-button");
+
+// =================================
+// 
+// Button to open ADD MEMBER modal
+//
+// =================================
+addMemberOpenButton.addEventListener("click", () => {
+    // Open the modal
+    openAddMemberModal();
 })
-closeMemberModalButton.addEventListener("click", () => {
-    closeModal(addMemberModal);
+
+// =================================
+// 
+// Load the data on the tables as soon as this page is loaded
+//
+// =================================
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("in DOMload")
+    displayMembers();
 })
-addMemberModalButton.addEventListener("click", () => {
-    closeModal(addMemberModal);
-})
 
+// =================================
+// 
+// Function to reload and display members on a table
+//
+// =================================
+export function displayMembers() {
+    console.log("displayMembers called!");
 
-// Functions
-function closeModal(targetModal) {
-    console.log("closing")
-    targetModal.style.display = "none";
-}
+    // Get the existing data of member list or create it if inexistent
+    const memberData = getMemberData();
 
-function openModal(targetModal) {
-    console.log("opening")
-    targetModal.style.display = "block";
-}
+    // Display if there is any
+    let memberCount = memberData.members.length;
+    console.log(`COUNT: ${memberCount}`);
 
+    // Prepare the elements to be accessed
+    const memberTable = document.getElementById("member-table");
+    const memberTotalCountString = document.getElementById("member-total-count-string");
+    const memberTotalCount = document.getElementById("member-total-count");
 
+    // Clean the table
+    let memberTableBody = memberTable.getElementsByTagName("tbody")[0];
+    memberTableBody.innerHTML = "";
 
-//Note: Check here for text limit as well even tho maxlength has been set on the text input
+    if (memberCount > 0) {    
+        // Display the table
+        memberTable.classList.add("table-header-visible");
 
+        // Clean the table 
+        memberTableBody.innerHTML = "";
+        
+        // Display the total count
+        memberTotalCountString.classList.add("total-visible");
+        memberTotalCount.textContent = String(memberCount);
 
+        // Update the table to display the names
+        memberData.members.forEach(updateTableRow);
+
+        function updateTableRow(memberName) {
+            console.log(`memberName: ${memberName}`);
+
+            // Clone the template
+            let memberRowTemplate = document.getElementById("member-row-template");
+            let newMemberRow = memberRowTemplate.content.cloneNode(true);
+
+            // Populate our new row with the current member data
+            newMemberRow.querySelector(".member-name").textContent = memberName;
+
+            // Add event listeners for this row's buttons
+            newMemberRow.querySelector(".member-edit-button").addEventListener("click", (event) => {
+                let rowRef = event.currentTarget.closest("tr");
+                editMember(rowRef);
+            });
+            newMemberRow.querySelector(".member-delete-button").addEventListener("click", (event) => {
+                let rowRef = event.currentTarget.closest("tr");
+                deleteMember(rowRef);
+            });
+
+            // Add this to the table!
+            memberTableBody.appendChild(newMemberRow);
+        }
+    }
+    else {
+        // Ensure that the table and other related elements are not displayed
+        memberTable.classList.remove("table-header-visible");
+        memberTotalCountString.classList.remove("total-visible");
+        memberTotalCount.textContent = String(memberCount);
+    }
+  }
+  
+  function editMember(memberRow) {
+    let memberName = memberRow.querySelector(".member-name").textContent;
+    console.log(`Edit Member button clicked for ${memberName}!`);
+
+    // Save the original name
+    itemManager.setItemName(memberName);
+
+    // Open Edit Member modal
+    openEditMemberModal(memberName);
+  }
+  
+  function deleteMember(memberRow) {
+    let memberName = memberRow.querySelector(".member-name").textContent;
+    console.log(`Delete Member button clicked for ${memberName}!`);
+
+    // Save the member data
+    itemManager.setItemName(memberName);
+    itemManager.setItemCategory(MEMBER_CATEGORY);
+
+    // Open Delete Member modal
+    openDeleteItemModal();
+  }

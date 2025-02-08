@@ -8,6 +8,16 @@ html {
     font-size: 16px;
 }
 
+/* Fonts */
+.generic-size {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.table-header-weight {
+    font-weight: bold;
+}
+
 .generic-font{
     font-family: "Noto Sans", sans-serif;
 }
@@ -72,13 +82,6 @@ html {
     margin-right: 4rem;
 }
 
-/* Font sizes */
-/* Common strings */
-.generic-size {
-    font-size: 1rem;
-    font-weight: 400;
-}
-
 /* Subheaders */
 .subheaders-size {
     font-size: 1.5rem;
@@ -124,7 +127,7 @@ html {
     margin-top: 0.075rem;
 }
 
-/* Steps */
+/* Main Page - Steps */
 .steps-container {
     margin-top: 2rem;
     margin-bottom: 4rem;
@@ -137,6 +140,18 @@ html {
 .step-description {
     margin-top: 0rem;
     margin-bottom: 1rem;
+}
+
+.item-total-string {
+    display: none;
+}
+
+.item-total-string.total-visible {
+    display: block;
+}
+
+.item-total-count {
+    margin-left: 0.7rem;
 }
 
 /* About Page */
@@ -160,7 +175,3 @@ html {
     margin-bottom: 2rem;
 }
 
-/* Main Calculator Page */
-#open-add-member-button {
-
-}

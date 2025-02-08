@@ -37,21 +37,147 @@
         <div class="steps-container">
             <h1 class="home-content-lead generic-font subheaders-size step-header">Step 1: Barkada Members</h1>
             <h3 class="home-content-lead generic-font generic-size step-description">Add contributors to expenses.</h3>
-            <button id="open-add-member-button" class="home-content-lead generic-font generic-size button-sub button-padding">Add member</button>
+            <!-- Dynamic Table for Members -->
+            <table id="member-table" class="data-table home-content-lead">
+                <thead>
+                    <tr>
+                        <th class="first-col-header generic-font generic-size table-header-weight">Name</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <p id="member-total-count-string" class="item-total-string generic-font generic-size home-content-lead">Total members:<span id="member-total-count" class="item-total-count table-header-weight"></span></p>
+            <button id="add-member-open-button" class="home-content-lead generic-font generic-size button-sub button-padding">Add member</button>
         </div>
 
-        <!-- Modal to Add members -->
-        <div id="add-member-modal" class="modal-bg">
+        <!-- Row Template for Members -->
+        <template id="member-row-template">
+            <tr class="table-item-row generic-font generic-size">
+                <td class="member-name first-col-element"></td>
+                <td><button class="member-edit-button generic-font generic-size button-sub button-edit-table-padding" title="Edit member name">Edit</button></td>
+                <td><button class="member-delete-button generic-font generic-size button-delete x-button" title="Delete member">X</button></td>
+            </tr>
+        </template>
+
+        <!-- Modal to Add Member -->
+        <div id="add-member-modal-wrapper" class="modal-wrapper">
             <div class="modal-content">
                 <h3 class="generic-font subheaders-size modal-header">Add barkada member</h3>
-                <form class="modal-form">
-                    <label for="member-name" class="modal-header generic-font generic-size">Name:</label>
-                    <input id="member-name" class="input-space generic-font generic-size" type="text" maxlength="20">
-                </form>
-                <button id="close-add-member-modal-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding">Cancel</button>
-                <button id="add-member-modal-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal">OK</button>
+                <div class="modal-form-wrapper">
+                    <form id="add-member-modal-form" autocomplete="off">
+                        <div>
+                            <label for="add-member-modal-text-field" class="modal-header generic-font generic-size">Name:</label>
+                            <input id="add-member-modal-text-field" class="input-space generic-font generic-size" type="text" maxlength="20">
+                        </div>
+                        <p id="add-member-modal-error-message" class="error-message generic-font generic-size">Member name must be at least 1 character.</p>
+                        <div class="modal-button-container-with-cancel">
+                            <button id="add-member-modal-close-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Cancel</button>
+                            <input id="add-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="submit" value="OK">    
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+
+        <!-- Modal for New Member added -->
+        <div id="new-member-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">New member added:</h3>
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
+                    <form>
+                        <p id="new-member-name" class="generic-font generic-size"></p>
+                        <div class="modal-button-container">
+                            <button id="new-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Canceling -->
+        <div id="do-you-want-to-cancel-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Do you want to cancel?</h3>
+                <div class="modal-form-wrapper">
+                    <form>
+                        <div class="modal-button-container">
+                            <button id="do-you-want-to-cancel-modal-cancel-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">No</button>
+                            <button id="do-you-want-to-cancel-modal-yes-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal to Edit Members -->
+        <div id="edit-member-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Edit barkada member</h3>
+                <div class="modal-form-wrapper">
+                    <form id="edit-member-modal-form" autocomplete="off">
+                        <div>
+                            <label for="edit-member-modal-text-field" class="modal-header generic-font generic-size">Name:</label>
+                            <input id="edit-member-modal-text-field" class="input-space generic-font generic-size" type="text" maxlength="20">
+                        </div>
+                        <p id="edit-member-modal-error-message" class="error-message generic-font generic-size">Member name must be at least 1 character.</p>
+                        <div class="modal-button-container-with-cancel">
+                            <button id="edit-member-modal-close-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Cancel</button>
+                            <input id="edit-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="submit" value="OK">    
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Edited Member -->
+        <div id="edited-member-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Edited member:</h3>
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
+                    <form>
+                        <p id="edited-member-name" class="generic-font generic-size"></p>
+                        <div class="modal-button-container">
+                            <button id="edited-member-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal to Delete Item -->
+        <div id="delete-item-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Delete <span id="delete-item-category"></span>?</h3>
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
+                    <form id="delete-item-modal-form" autocomplete="off">
+                        <p id="delete-item-name" class="generic-font generic-size"></p>
+                        <div class="modal-button-container">
+                            <button id="delete-item-modal-cancel-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">No</button>
+                            <button id="delete-item-modal-yes-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Deleted Item -->
+        <div id="deleted-item-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content">
+                <h3 class="generic-font subheaders-size modal-header">Deleted <span id="deleted-item-category"></span>:</h3>
+                <div class="modal-form-wrapper confirmation-modal-form-wrapper">
+                    <form>
+                        <p id="deleted-item-name" class="generic-font generic-size"></p>
+                        <div class="modal-button-container">
+                            <button id="deleted-item-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Step 2: Add expenses -->
         <div class="steps-container">
@@ -68,5 +194,9 @@
     </body>
 
     <!-- Javascript -->
-    <script src="../scripts/main.js"></script>
+    <script type="module" src="../scripts/main.js"></script>
+    <script type="module" src="../scripts/modal-add-member.js"></script>
+    <script type="module" src="../scripts/modal-confirm-cancel.js"></script>
+    <script type="module" src="../scripts/classes/ModalManager.js"></script>
+    <script type="module" src="../scripts/reusable-functions.js"></script>
 </html>
