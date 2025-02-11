@@ -20,12 +20,17 @@ var addMemberErrorMsg = document.getElementById("add-member-modal-error-message"
 // Function to display ADD MEMBER modal
 //
 // =================================
-export function openAddMemberModal(memberName = "") {
+export function openAddMemberModal(memberName = []) {
     console.log("opening Add Member Modal...");
     addMemberModalWrapper.style.display = "block";
 
     // Set focus on the text field and ensure that the entry, if there is any, is displayed
-    addMemberModalTextField.value = memberName;
+    if (memberName.length > 0) {
+        addMemberModalTextField.value = memberName[0];
+    }
+    else {
+        addMemberModalTextField.value = "";
+    }
     addMemberModalTextField.focus();
 
     // Clear the error message placeholder and adjust buttons
@@ -52,7 +57,7 @@ addMemberModalCloseButton.addEventListener("click", () => {
     if (name !== "") {
         // Set this as the current active modal
         console.log("Setting modal...")
-        modalManager.setActiveModalInfo(openAddMemberModal, name);
+        modalManager.setActiveModalInfo(openAddMemberModal, [name]);
 
         // Open confirm cancel modal
         openDoYouWantToCancelModal();

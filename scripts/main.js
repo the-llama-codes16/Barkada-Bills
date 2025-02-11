@@ -7,15 +7,15 @@ import { openAddMemberModal } from "./modal-add-member.js";
 import { openEditMemberModal } from "./modal-edit-member.js";
 import { itemManager } from "./classes/ItemManager.js";
 import { getMemberData } from "./reusable-functions.js";
-import { MEMBER_CATEGORY } from "./modal-delete-item.js";
-import { openDeleteItemModal } from "./modal-delete-item.js";
-
+import { MEMBER_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
+import { openAddExpenseModal } from "./modal-add-expense.js";
 // =================================
 // 
 // DOM Queries 
 //
 // ================================= 
 export var addMemberOpenButton = document.getElementById("add-member-open-button");
+export var addExpenseOpenButton = document.getElementById("add-expense-open-button");
 
 // =================================
 // 
@@ -105,9 +105,14 @@ export function displayMembers() {
         memberTotalCountString.classList.remove("total-visible");
         memberTotalCount.textContent = String(memberCount);
     }
-  }
-  
-  function editMember(memberRow) {
+}
+
+// =================================
+// 
+// Function to edit a member name
+//
+// =================================
+function editMember(memberRow) {
     let memberName = memberRow.querySelector(".member-name").textContent;
     console.log(`Edit Member button clicked for ${memberName}!`);
 
@@ -116,9 +121,14 @@ export function displayMembers() {
 
     // Open Edit Member modal
     openEditMemberModal(memberName);
-  }
-  
-  function deleteMember(memberRow) {
+}
+
+// =================================
+// 
+// Function to delete a member
+//
+// =================================
+function deleteMember(memberRow) {
     let memberName = memberRow.querySelector(".member-name").textContent;
     console.log(`Delete Member button clicked for ${memberName}!`);
 
@@ -128,4 +138,13 @@ export function displayMembers() {
 
     // Open Delete Member modal
     openDeleteItemModal();
-  }
+}
+
+// =================================
+// 
+// Button to open ADD EXPENSE modal
+//
+// =================================
+addExpenseOpenButton.addEventListener("click", () => {
+    openAddExpenseModal();
+});

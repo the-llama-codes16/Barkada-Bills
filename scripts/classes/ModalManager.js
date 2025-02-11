@@ -5,24 +5,26 @@
 
 export class ModalManager {
     constructor() {
+        // The function that opens the modal
         this.activeModalOpeningFunction = null;
-        this.activeModalOpeningFunctionParam = null;
+        // The list of parameters for the opening function
+        this.activeModalOpeningFunctionParams = null;
     }
 
-    setActiveModalInfo(activeModalOpeningFunction, activeModalOpeningFunctionParam) {
+    setActiveModalInfo(activeModalOpeningFunction, activeModalOpeningFunctionParams) {
         this.activeModalOpeningFunction = activeModalOpeningFunction;
-        this.activeModalOpeningFunctionParam = activeModalOpeningFunctionParam;
+        this.activeModalOpeningFunctionParams = activeModalOpeningFunctionParams;
     }
 
     displayActiveModal() {
         console.log("Displaying modal...")
-        this.activeModalOpeningFunction(this.activeModalOpeningFunctionParam);
+        this.activeModalOpeningFunction(this.activeModalOpeningFunctionParams);
     }
 
     clearActiveModalInfo() {
         console.log("Clearing active modal info!")
         this.activeModalOpeningFunction = null;
-        this.activeModalOpeningFunctionParam = null;
+        this.activeModalOpeningFunctionParams = null;
     }
 }
 

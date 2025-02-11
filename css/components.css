@@ -53,13 +53,18 @@
 }
 
 .modal-content {
+    background-color: #ffffff;
+    margin: 15% auto;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 2px;
+    border-radius: 0.5rem;
+}
+
+.modal-content-flex {
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
-    width: 26rem;
-    min-width: 26rem;
-    height: 14.5rem;
-    min-height: 14.5rem;
     margin: 15% auto;
     border-style: solid;
     border-color: #000000;
@@ -68,15 +73,44 @@
     overflow: auto;
 }
 
+.small-modal-size {
+    width: 26rem;
+    min-width: 26rem;
+    height: 14.5rem;
+    min-height: 14.5rem;
+}
+
+.big-modal-size {
+    width: 30.5rem;
+    min-width: 30.5rem;
+    height: 24rem;
+    min-height: 24rem;
+}
+
 .modal-header {
     padding-left: 2rem;
     padding-top: 0rem;
 }
 
+.modal-header-big-modal {
+    padding-left: 2rem;
+    margin-bottom: 0rem;
+}
+
 .modal-form-wrapper {
+    padding-top: 0.5rem;
+    flex-direction: column;
+}
+
+.modal-form-wrapper-flex {
     padding-top: 0.5rem;
     display: flex;
     flex-direction: column;
+}
+
+.modal-form-item {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .input-space {
@@ -85,6 +119,20 @@
     outline: none;
     width: 17.5rem;
     border-bottom: 2px solid #000000;
+}
+
+.input-space-big-modal-name {
+    margin-left: 5rem;
+}
+
+.input-space-big-modal-amount {
+    margin-left: 4.05rem;
+}
+
+.input-space-dropdown-list {
+    margin-left: 1.65rem;
+    width: 17.75rem;
+    height: 2rem;
 }
 
 .modal-button-padding {
@@ -109,6 +157,10 @@
     margin-top: 1rem;
 }
 
+.modal-members-button {
+    margin-left: 10.35rem;
+}
+
 .error-message {
     color: red;
     visibility: hidden;
@@ -125,8 +177,14 @@
     text-align: center;
     margin-bottom: 2rem;
 }
-/* END of Modals */
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* END of Modals */
 
 /* Main Page - Tables */
 .data-table {
@@ -157,3 +215,4 @@ th, td {
 .item-total-string {
     margin-bottom: 1rem;
 }
+/* END OF Main Page - Tables */

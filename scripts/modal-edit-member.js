@@ -21,12 +21,17 @@ var editMemberErrorMsg = document.getElementById("edit-member-modal-error-messag
 // Function to display EDIT MEMBER modal
 //
 // =================================
-export function openEditMemberModal(memberName) {
+export function openEditMemberModal(memberName = []) {
     console.log("opening Edit Member Modal...");
     editMemberModalWrapper.style.display = "block";
 
     // Set focus on the text field and ensure that the selected name is displayed
-    editMemberModalTextField.value = memberName;
+    if (memberName.length > 0) {
+        editMemberModalTextField.value = memberName[0];
+    }
+    else {
+        editMemberModalTextField.value = "";
+    }
     editMemberModalTextField.focus();
 
     // Clear the error message placeholder and adjust buttons
@@ -53,7 +58,7 @@ editMemberModalCloseButton.addEventListener("click", () => {
     if (name !== itemManager.getItemName()) {
         // Set this as the current active modal
         console.log("Setting modal...")
-        modalManager.setActiveModalInfo(openEditMemberModal, name);
+        modalManager.setActiveModalInfo(openEditMemberModal, [name]);
 
         // Open confirm cancel modal
         openDoYouWantToCancelModal();
