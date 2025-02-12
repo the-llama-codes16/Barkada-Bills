@@ -87,6 +87,19 @@
     min-height: 24rem;
 }
 
+.member-list-modal-size {
+    width: auto;
+    min-width: 30.5rem;
+    max-width: max-content;
+    height: auto;
+    min-height: 13rem;
+    max-height: max-content;    
+}
+
+.flexible-modal {
+    text-align: center;
+}
+
 .modal-header {
     padding-left: 2rem;
     padding-top: 0rem;
@@ -146,6 +159,7 @@
     margin-left: 2rem;
     margin-right: 2rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .modal-button-container{
@@ -182,6 +196,21 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+input[type="checkbox"] {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-right: 0.75rem;
+}
+
+.checkbox-label-pair {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 /* END of Modals */

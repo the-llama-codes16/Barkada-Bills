@@ -198,7 +198,7 @@
                         </div>
                         <div class="modal-form-item">
                             <label for="add-expense-modal-amount-num-field" class="modal-header generic-font generic-size">Amount:</label>
-                            <input id="add-expense-modal-amount-num-field" class="input-space input-space-big-modal-amount generic-font generic-size" type="text">
+                            <input id="add-expense-modal-amount-num-field" class="input-space input-space-big-modal-amount generic-font generic-size" type="text" maxlength="10">
                         </div>
                         <div class="modal-form-item">
                             <label for="add-expense-modal-payors-filter" class="modal-header generic-font generic-size">To be paid by:</label>
@@ -223,24 +223,24 @@
 
         <!-- Modal to Modify Payors -->
         <div id="modify-payors-modal-wrapper" class="modal-wrapper">
-            <div class="modal-content big-modal-size">
-                <h3><span id="modify-payors-modal-expense-amount"></span> expense for <span id="modify-payors-modal-expense-name"></span> to be paid by <span id="modify-payors-modal-expense-filter"></span>:</h3>
-                <h6>Click boxes to edit selected members.</h6>
+            <div id="modify-payors-modal-content" class="modal-content member-list-modal-size flexible-modal">
+                <p class="generic-font generic-size">$<span id="modify-payors-modal-expense-amount" class="table-header-weight"></span> expense for <span id="modify-payors-modal-expense-name" class="table-header-weight"></span> to be paid by <span id="modify-payors-modal-expense-filter" class="table-header-weight"></span>:</p>
+                <p class="generic-font generic-size">(Click boxes to add/remove applicable members.)</p>
+                <div id="payor-list"></div>
+                <div class="modal-button-container-with-cancel">
+                    <button id="modify-payors-modal-close-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Cancel</button>
+                    <button id="modify-payors-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                </div>
             </div>
         </div>
 
         <!-- Checkbox Template for Payors -->
         <template id="payor-checkbox-template">
-            <input 
-
-            <tr class="table-item-row generic-font generic-size">
-                <td class="member-name first-col-element"></td>
-                <td><button class="member-edit-button generic-font generic-size button-sub button-edit-table-padding" title="Edit member name">Edit</button></td>
-                <td><button class="member-delete-button generic-font generic-size button-delete x-button" title="Delete member">X</button></td>
-            </tr>
+            <div class="checkbox-label-pair">
+                <input type="checkbox" name="payor" class="payor-checkbox">
+                <label class="generic-font generic-size payor-label"></label>
+            </div>
         </template>
-
-
 
         <!-- Item Template for Payor in Dropdown List -->
         <template id="payor-item-template">

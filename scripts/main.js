@@ -120,7 +120,7 @@ function editMember(memberRow) {
     itemManager.setItemName(memberName);
 
     // Open Edit Member modal
-    openEditMemberModal(memberName);
+    openEditMemberModal([memberName]);
 }
 
 // =================================

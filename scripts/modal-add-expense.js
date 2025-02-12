@@ -6,7 +6,6 @@ import { addExpenseOpenButton } from "./main.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
 
-
 // =================================
 // 
 // DOM Queries 
@@ -16,6 +15,7 @@ let addExpenseModalTextField = document.getElementById("add-expense-modal-text-f
 let addExpenseModalWrapper = document.getElementById("add-expense-modal-wrapper");
 let addExpenseModalErrorMsg = document.getElementById("add-expense-modal-error-message");
 let addExpenseModalAmountNumField = document.getElementById("add-expense-modal-amount-num-field");
+let addExpenseModalPayorsFilter = document.getElementById("add-expense-modal-payors-filter");
 
 // =================================
 // 
@@ -30,12 +30,18 @@ export function openAddExpenseModal(expenseInfo = []) {
     if (expenseInfo.length > 0) {
         addExpenseModalTextField.value = expenseInfo[0];
         addExpenseModalAmountNumField.value = expenseInfo[1];
-        // TODO: add modifier for filter and payorList
+        addExpenseModalPayorsFilter.value = expenseInfo[2];
+        // TODO: add modifier for payorList
     }
     else {
-        addExpenseModalTextField.value = "";
-        addExpenseModalAmountNumField.value = "";
-        // TODO: add modifier for filter and payorList
+        // addExpenseModalTextField.value = "";
+        // addExpenseModalAmountNumField.value = "";
+        // addExpenseModalPayorsFilter.value = "selected-members"
+
+        addExpenseModalTextField.value = "Bread";
+        addExpenseModalAmountNumField.value = "25";
+        addExpenseModalPayorsFilter.value = "selected-members"
+        // TODO: add modifier for payorList
     }
     addExpenseModalTextField.focus();
 
@@ -113,7 +119,8 @@ var addExpenseModalCloseButton = document.getElementById("add-expense-modal-clos
 addExpenseModalCloseButton.addEventListener("click", () => {
     const name = String(addExpenseModalTextField.value); 
     const amount = String(addExpenseModalAmountNumField.value);
-    // TODO: add getting info of filter and contributors
+    const filter = String(addExpenseModalPayorsFilter.value);
+    // TODO: add getting info of contributors
 
     // Close this modal
     closeModal(addExpenseModalWrapper);
@@ -139,40 +146,103 @@ addExpenseModalCloseButton.addEventListener("click", () => {
 
 // =================================
 // 
+// Function to display MODIFY PAYORS modal
+//
+// =================================
+let modifyPayorsModalWrapper = document.getElementById("modify-payors-modal-wrapper");
+function openModifyPayorsModal(expenseInfo) {
+    console.log("opening Modify Payors modal...");
+
+    console.log("EXPENSE INFO");
+    console.log(expenseInfo);
+    modifyPayorsModalWrapper.style.display = "block";
+
+    // Ensure that any existing entry is displayed
+    // TODO: Check any previously selected entries
+
+    // Update the missing entries
+    document.getElementById("modify-payors-modal-expense-amount").textContent = expenseInfo[1];
+    document.getElementById("modify-payors-modal-expense-name").textContent = expenseInfo[0];
+    document.getElementById("modify-payors-modal-expense-filter").textContent = expenseInfo[2].replace("-", " ");
+
+    // Populate the list
+    populatePayorList();
+
+    // Start listening for tab key presses and trap focus
+    document.addEventListener("keydown", initModifyPayorsModalTrapFocus);
+}
+
+// =================================
+// 
+// Button to open MODIFY PAYORS modal
+//
+// =================================
+let addExpenseModalMemberListButton = document.getElementById("add-expense-modal-member-list-button");
+addExpenseModalMemberListButton.addEventListener("click", () => {
+    // Save info on Add Expense modal
+    let expenseInfo = [];
+    expenseInfo[0] = addExpenseModalTextField.value;
+    expenseInfo[1] = addExpenseModalAmountNumField.value;
+    expenseInfo[2] = addExpenseModalPayorsFilter.value;
+
+    // Close this button's modal
+    closeModal(addExpenseModalWrapper);
+    document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
+
+    // Open the Modify Payors modal
+    openModifyPayorsModal(expenseInfo);
+});
+
+// =================================
+// 
 // Function to populate payors list in  modal
 //
 // =================================
-let payorList = document.getElementById("add-expense-payors-modal-dropdown");
 function populatePayorList() {
     console.log("Populating payor list...");
-
+    
     // Get the member data and its length
     let memberData = getMemberData();
     let memberCount = memberData.members.length;
 
-    // Get the payor dropdown list
-    let payorList = document.getElementById("add-expense-payors-modal-dropdown");
+    // Get the parent element and clean it
+    let payorList = document.getElementById("payor-list");
+    payorList.innerHTML = "";
 
+    // Populate!
     if (memberCount > 0) {
-        // Populate the dropdown list
-        memberData.members.forEach(addPayor);
+        memberData.members.forEach(addPayorOption)
 
-        function addPayor(payorName) {
-            console.log(`Adding option: ${payorName}...`);
+        function addPayorOption(payorName) {
+            console.log(`Adding option: ${payorName}`);
 
             // Clone the template
-            let payorItemTemplate = document.getElementById("payor-item-template");
+            let payorItemTemplate = document.getElementById("payor-checkbox-template");
             let newPayorItem = payorItemTemplate.content.cloneNode(true);
 
             // Populate this new option with our current data
-            newPayorItem.querySelector("payor-item-option-name").textContent = payorName;
-            newPayorItem.querySelector("payor-item-option-name").value = payorName;
+            newPayorItem.querySelector(".payor-checkbox").id = payorName;
+            newPayorItem.querySelector(".payor-checkbox").value = payorName;
+            newPayorItem.querySelector(".payor-label").htmlFor = payorName;
+            newPayorItem.querySelector(".payor-label").textContent = payorName;
 
-            // Add to the dropdown list!
+            // Add to the list!
             payorList.appendChild(newPayorItem);
         }
-    }    
+    }
 }
+
+// =================================
+// 
+// Button to close MODIFY PAYORS modal
+//
+// =================================
+var modifyPayorsModalCloseButton = document.getElementById("modify-payors-modal-close-button");
+modifyPayorsModalCloseButton.addEventListener("click", () => {
+    // Close this modal
+    closeModal(modifyPayorsModalWrapper);
+    document.removeEventListener("keydown", initModifyPayorsModalTrapFocus);
+});
 
 // =================================
 // 
@@ -181,4 +251,13 @@ function populatePayorList() {
 // =================================
 function initAddExpenseModalTrapFocus(event) {
     trapFocus(event, addExpenseModalWrapper);
+}
+
+// =================================
+// 
+// Function to wrap trapFocus for MODIFY PAYORS modal
+//
+// =================================
+function initModifyPayorsModalTrapFocus(event) {
+    trapFocus(event, modifyPayorsModalWrapper);
 }
