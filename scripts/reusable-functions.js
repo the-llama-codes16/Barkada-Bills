@@ -49,6 +49,24 @@ export function setMemberData(memberData) {
 
 // =================================
 // 
+// Function to get expenses data from sessionStorage or create it if inexistent
+//
+// =================================
+export function getExpenseData() {
+  return JSON.parse(sessionStorage.getItem("expenseData")) || { "expenses": {} };
+}
+
+// =================================
+// 
+// Function to store member data to sessionStorage
+//
+// =================================
+export function setExpenseData(expenseData) {
+  sessionStorage.setItem("expenseData", JSON.stringify(expenseData));
+}
+
+// =================================
+// 
 // Function to trap focus in a given modal
 //
 // =================================

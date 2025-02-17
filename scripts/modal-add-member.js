@@ -118,7 +118,7 @@ addMemberModalForm.addEventListener("submit", (event) => {
         // Set focus back again to the text field 
         addMemberModalTextField.focus();
     }    
-})
+});
 
 
 // =================================

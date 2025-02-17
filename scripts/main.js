@@ -9,6 +9,7 @@ import { itemManager } from "./classes/ItemManager.js";
 import { getMemberData } from "./reusable-functions.js";
 import { MEMBER_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
+import { currentExpenseInfo, originalExpenseInfo } from "./classes/ExpenseInfo.js";
 // =================================
 // 
 // DOM Queries 
@@ -146,5 +147,9 @@ function deleteMember(memberRow) {
 //
 // =================================
 addExpenseOpenButton.addEventListener("click", () => {
-    openAddExpenseModal();
+    // Provide a clean slate to the Add Expense modal
+    originalExpenseInfo.clearExpenseInfo();
+    currentExpenseInfo.clearExpenseInfo();
+
+    openAddExpenseModal(originalExpenseInfo);
 });

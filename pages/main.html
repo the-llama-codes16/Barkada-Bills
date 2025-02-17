@@ -224,8 +224,12 @@
         <!-- Modal to Modify Payors -->
         <div id="modify-payors-modal-wrapper" class="modal-wrapper">
             <div id="modify-payors-modal-content" class="modal-content member-list-modal-size flexible-modal">
-                <p class="generic-font generic-size">$<span id="modify-payors-modal-expense-amount" class="table-header-weight"></span> expense for <span id="modify-payors-modal-expense-name" class="table-header-weight"></span> to be paid by <span id="modify-payors-modal-expense-filter" class="table-header-weight"></span>:</p>
+                <p id="modify-payors-modal-header" class="generic-font generic-size">$<span id="modify-payors-modal-expense-amount" class="table-header-weight"></span> expense for <span id="modify-payors-modal-expense-name" class="table-header-weight"></span> to be paid by <span id="modify-payors-modal-expense-filter" class="table-header-weight"></span>:</p>
                 <p class="generic-font generic-size">(Click boxes to add/remove applicable members.)</p>
+                <div class="checkbox-label-pair select-all-checkbox-label-pair">
+                    <input type="checkbox" id="modify-payors-modal-select-all-checkbox" name="select-all" class="payor-checkbox">
+                    <label class="generic-font generic-size">All</label>
+                </div>
                 <div id="payor-list"></div>
                 <div class="modal-button-container-with-cancel">
                     <button id="modify-payors-modal-close-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Cancel</button>
@@ -236,7 +240,7 @@
 
         <!-- Checkbox Template for Payors -->
         <template id="payor-checkbox-template">
-            <div class="checkbox-label-pair">
+            <div class="checkbox-label-pair payors-checkbox-label-pair">
                 <input type="checkbox" name="payor" class="payor-checkbox">
                 <label class="generic-font generic-size payor-label"></label>
             </div>
@@ -260,4 +264,5 @@
     <script type="module" src="../scripts/modal-confirm-cancel.js"></script>
     <script type="module" src="../scripts/classes/ModalManager.js"></script>
     <script type="module" src="../scripts/reusable-functions.js"></script>
+    <script type="module" src="../scripts/modal-add-expense.js"></script>
 </html>

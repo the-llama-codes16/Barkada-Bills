@@ -2,47 +2,52 @@
 
 // Import da goods
 import { getMemberData, trapFocus, closeModal } from "./reusable-functions.js";
-import { addExpenseOpenButton } from "./main.js";
+import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
+import { addExpenseOpenButton } from "./main.js";
 
 // =================================
 // 
 // DOM Queries 
 //
-// ================================= 
-let addExpenseModalTextField = document.getElementById("add-expense-modal-text-field");
+// =================================
 let addExpenseModalWrapper = document.getElementById("add-expense-modal-wrapper");
-let addExpenseModalErrorMsg = document.getElementById("add-expense-modal-error-message");
+let addExpenseModalTextField = document.getElementById("add-expense-modal-text-field");
 let addExpenseModalAmountNumField = document.getElementById("add-expense-modal-amount-num-field");
 let addExpenseModalPayorsFilter = document.getElementById("add-expense-modal-payors-filter");
+let addExpenseModalMemberListButton = document.getElementById("add-expense-modal-member-list-button");
+let addExpenseModalErrorMsg = document.getElementById("add-expense-modal-error-message");
+let addExpenseModalCloseButton = document.getElementById("add-expense-modal-close-button");
 
 // =================================
 // 
 // Function to display ADD EXPENSE modal
 //
 // =================================
-export function openAddExpenseModal(expenseInfo = []) {
-    console.log("opening Add Expense Modal...");
+
+export function openAddExpenseModal(expenseInfo) {
+    console.log("Opening Add Expense modal...");
+
     addExpenseModalWrapper.style.display = "block";
 
-    // Set focus on the first text field and ensure that any existing entry is displayed
-    if (expenseInfo.length > 0) {
-        addExpenseModalTextField.value = expenseInfo[0];
-        addExpenseModalAmountNumField.value = expenseInfo[1];
-        addExpenseModalPayorsFilter.value = expenseInfo[2];
-        // TODO: add modifier for payorList
+    // Prepare the fields
+    addExpenseModalTextField.value = expenseInfo.getExpenseName();
+    addExpenseModalAmountNumField.value = expenseInfo.getExpenseAmount();
+    addExpenseModalPayorsFilter.value = expenseInfo.getExpenseFilter();
+
+    // Enable Member List button if there is at least one member
+    let memberData = getMemberData();
+    if (memberData.members.length > 0) {
+        addExpenseModalMemberListButton.disabled = false;
+        addExpenseModalMemberListButton.title = "";
     }
     else {
-        // addExpenseModalTextField.value = "";
-        // addExpenseModalAmountNumField.value = "";
-        // addExpenseModalPayorsFilter.value = "selected-members"
-
-        addExpenseModalTextField.value = "Bread";
-        addExpenseModalAmountNumField.value = "25";
-        addExpenseModalPayorsFilter.value = "selected-members"
-        // TODO: add modifier for payorList
+        addExpenseModalMemberListButton.disabled = true;
+        addExpenseModalMemberListButton.title = "No members to display. Please add members in Step 1 first."
     }
+
+    // Set focus on Name field
     addExpenseModalTextField.focus();
 
     // Clear the error message placeholder and adjust buttons
@@ -69,7 +74,7 @@ addExpenseModalAmountNumField.addEventListener("paste", (event) => {
 
 // =================================
 // 
-// Function to restric input of Amount field
+// Function to restrict input of Amount field
 //
 // =================================
 function restrictNumCharInput(event) {
@@ -115,33 +120,50 @@ function restrictNumCharPaste(event) {
 // Button to close ADD EXPENSE modal
 //
 // =================================
-var addExpenseModalCloseButton = document.getElementById("add-expense-modal-close-button");
 addExpenseModalCloseButton.addEventListener("click", () => {
-    const name = String(addExpenseModalTextField.value); 
-    const amount = String(addExpenseModalAmountNumField.value);
-    const filter = String(addExpenseModalPayorsFilter.value);
-    // TODO: add getting info of contributors
+    closeAddExpenseModal();
+});
+
+// =================================
+// 
+// Function to close ADD EXPENSE modal
+//
+// =================================
+function closeAddExpenseModal() {
+    // Record current input
+    currentExpenseInfo.setExpenseName(addExpenseModalTextField.value);
+    currentExpenseInfo.setExpenseAmount(addExpenseModalAmountNumField.value);
+    currentExpenseInfo.setExpenseFilter(addExpenseModalPayorsFilter.value);
+    // Selected members must be set when closing MODIFY PAYORS modal
+
+    // Check original info for changes
+    let isEqual = originalExpenseInfo.isEqual(currentExpenseInfo);
 
     // Close this modal
     closeModal(addExpenseModalWrapper);
     document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
 
-    // Confirm Cancel if there is an entry
-    if (name !== "" || amount != "") {
-        // TODO: add checking for filter and contributors
-        // Set this as the current active modal
-        console.log("Setting modal...")
-        let currentExpenseInfo = [name, amount];
-        // TODO: include filter and contributor info
+    // Display Confirm Cancel dialog if necessary
+    if (!isEqual) {
+        // Save this as the current dialog
         modalManager.setActiveModalInfo(openAddExpenseModal, currentExpenseInfo);
-
-        // Open confirm cancel modal
+        
+        // Open the Cancel Confirmation modal
         openDoYouWantToCancelModal();
     }
     else {
-        // Return focus to Add Expense button
+        // Return focus to the Add Expense button
         addExpenseOpenButton.focus();
     }
+}
+
+// =================================
+// 
+// Button to display MODIFY PAYORS modal
+//
+// =================================
+addExpenseModalMemberListButton.addEventListener("click", () => {
+    openModifyPayorsModal(currentExpenseInfo);
 });
 
 // =================================
@@ -151,62 +173,45 @@ addExpenseModalCloseButton.addEventListener("click", () => {
 // =================================
 let modifyPayorsModalWrapper = document.getElementById("modify-payors-modal-wrapper");
 function openModifyPayorsModal(expenseInfo) {
-    console.log("opening Modify Payors modal...");
+    // Save the existing entries
+    currentExpenseInfo.setExpenseName(document.getElementById("add-expense-modal-text-field").value);
+    currentExpenseInfo.setExpenseAmount(document.getElementById("add-expense-modal-amount-num-field").value);
+    currentExpenseInfo.setExpenseFilter(document.getElementById("add-expense-modal-payors-filter").value);
 
-    console.log("EXPENSE INFO");
-    console.log(expenseInfo);
+    // Close the ADD EXPENSE modal
+    closeModal(addExpenseModalWrapper);
+    document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
+
+    // Open the MODIFY PAYORS modal
     modifyPayorsModalWrapper.style.display = "block";
+    document.addEventListener("keydown", initModifyPayorsModalTrapFocus);
 
-    // Ensure that any existing entry is displayed
-    // TODO: Check any previously selected entries
+    // Update the missing entries, use default placeholders for missing entries
+    document.getElementById("modify-payors-modal-expense-amount").textContent = currentExpenseInfo.getExpenseAmount() || "0";
+    document.getElementById("modify-payors-modal-expense-name").textContent = currentExpenseInfo.getExpenseName() || "unnamed item"
+    document.getElementById("modify-payors-modal-expense-filter").textContent = currentExpenseInfo.getExpenseFilter().replace("-", " ");
 
-    // Update the missing entries
-    document.getElementById("modify-payors-modal-expense-amount").textContent = expenseInfo[1];
-    document.getElementById("modify-payors-modal-expense-name").textContent = expenseInfo[0];
-    document.getElementById("modify-payors-modal-expense-filter").textContent = expenseInfo[2].replace("-", " ");
-
-    // Populate the list
+    // Populate the payors list
     populatePayorList();
 
-    // Start listening for tab key presses and trap focus
-    document.addEventListener("keydown", initModifyPayorsModalTrapFocus);
+    // Update selected payors if applicable
+    updateCheckedStatusPayors(expenseInfo.getExpenseMembers());
 }
 
 // =================================
 // 
-// Button to open MODIFY PAYORS modal
+// Function to populate members list in MODIFY PAYORS modal
 //
 // =================================
-let addExpenseModalMemberListButton = document.getElementById("add-expense-modal-member-list-button");
-addExpenseModalMemberListButton.addEventListener("click", () => {
-    // Save info on Add Expense modal
-    let expenseInfo = [];
-    expenseInfo[0] = addExpenseModalTextField.value;
-    expenseInfo[1] = addExpenseModalAmountNumField.value;
-    expenseInfo[2] = addExpenseModalPayorsFilter.value;
-
-    // Close this button's modal
-    closeModal(addExpenseModalWrapper);
-    document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
-
-    // Open the Modify Payors modal
-    openModifyPayorsModal(expenseInfo);
-});
-
-// =================================
-// 
-// Function to populate payors list in  modal
-//
-// =================================
+let payorList = document.getElementById("payor-list");
 function populatePayorList() {
     console.log("Populating payor list...");
-    
+
     // Get the member data and its length
     let memberData = getMemberData();
     let memberCount = memberData.members.length;
 
     // Get the parent element and clean it
-    let payorList = document.getElementById("payor-list");
     payorList.innerHTML = "";
 
     // Populate!
@@ -221,10 +226,17 @@ function populatePayorList() {
             let newPayorItem = payorItemTemplate.content.cloneNode(true);
 
             // Populate this new option with our current data
-            newPayorItem.querySelector(".payor-checkbox").id = payorName;
-            newPayorItem.querySelector(".payor-checkbox").value = payorName;
-            newPayorItem.querySelector(".payor-label").htmlFor = payorName;
-            newPayorItem.querySelector(".payor-label").textContent = payorName;
+            let newItemCheckbox = newPayorItem.querySelector(".payor-checkbox");
+            let newItemLabel = newPayorItem.querySelector(".payor-label");
+            newItemCheckbox.id = payorName;
+            newItemCheckbox.value = payorName;
+            newItemLabel.htmlFor = payorName;
+            newItemLabel.textContent = payorName;
+
+            // Add its event listener
+            newItemCheckbox.addEventListener("click", () => {
+                updateSelectUnselectCheckbox();
+            });
 
             // Add to the list!
             payorList.appendChild(newPayorItem);
@@ -234,15 +246,209 @@ function populatePayorList() {
 
 // =================================
 // 
+// Function to update checked status of members in MODIFY PAYORS modal
+//
+// =================================
+function updateCheckedStatusPayors(selectedPayors) {
+    console.log("Selecting applicable payors...");
+
+    // Get all the payor checkboxes
+    let payorCheckboxes = payorList.querySelectorAll(".payor-checkbox");
+
+    // Select member if applicable
+    payorCheckboxes.forEach(selectPayors);
+    function selectPayors(payorCheckbox) {
+        if (selectedPayors.includes(payorCheckbox.value)) {
+            payorCheckbox.checked = true;
+        }
+    }
+
+    updateSelectUnselectCheckbox();
+}
+
+// =================================
+// 
+// Checkbox to SELECT/DESELECT ALL PAYORS
+//
+// =================================
+let modifyPayorsModalSelectAllCheckbox = document.getElementById("modify-payors-modal-select-all-checkbox");
+modifyPayorsModalSelectAllCheckbox.addEventListener("click", () => {
+    selectUnselectAllPayors();
+});
+
+// =================================
+// 
+// Function to SELECT/DESELECT ALL PAYORS
+//
+// =================================
+function selectUnselectAllPayors() {
+    console.log("Selecting/unselecting all!");
+
+    // Get all the payor checkboxes
+    let payorCheckboxes = payorList.querySelectorAll(".payor-checkbox");
+
+    // Get the previous state of this checkbox
+    let isAllChecked = modifyPayorsModalSelectAllCheckbox.checked;
+
+    // Check/uncheck all items as applicable
+    payorCheckboxes.forEach(checkUncheckAllItems);
+    function checkUncheckAllItems(item) {
+        console.log(`Updating ${item}`);
+        item.checked = isAllChecked;
+    }
+}
+
+// =================================
+// 
+// Function to update SELECT/DESELECT ALL PAYORS checkbox based on status of payor checkboxes
+//
+// =================================
+function updateSelectUnselectCheckbox() {
+    console.log("Checking if All checkbox has to be updated...");
+
+    // Get all payor checkboxes
+    let payorCheckboxes = payorList.querySelectorAll(".payor-checkbox");
+    let allItemsChecked = true;
+
+    // Check if all checkboxes have the same status, update the All checkbox if applicable
+    payorCheckboxes.forEach(checkAllCheckboxStatus);
+    function checkAllCheckboxStatus(payorCheckbox) {
+        if (!payorCheckbox.checked) {
+            allItemsChecked = false;
+        }
+    }
+
+    console.log("Updating All Checkbox...");
+    modifyPayorsModalSelectAllCheckbox.checked = allItemsChecked;
+}
+
+// =================================
+// 
 // Button to close MODIFY PAYORS modal
 //
 // =================================
-var modifyPayorsModalCloseButton = document.getElementById("modify-payors-modal-close-button");
+let modifyPayorsModalCloseButton = document.getElementById("modify-payors-modal-close-button");
 modifyPayorsModalCloseButton.addEventListener("click", () => {
+    closeModifyPayorsModal();
+});
+
+// =================================
+/**
+ * Function to close MODIFY PAYORS modal
+ */
+// =================================
+function closeModifyPayorsModal() {
+    // Record current entries
+    temporaryExpenseInfo.setExpenseMembers(getSelectedPayors());
+
+    // Compare with previous entries
+    let isPayorsEqual = currentExpenseInfo.isExpenseMembersEqual(temporaryExpenseInfo);
+
     // Close this modal
     closeModal(modifyPayorsModalWrapper);
     document.removeEventListener("keydown", initModifyPayorsModalTrapFocus);
-});
+
+    // Display Confirm Cancel dialog if necessary
+    if (!isPayorsEqual) {
+        // Save this as the current dialog
+        modalManager.setActiveModalInfo(openModifyPayorsModal, temporaryExpenseInfo, openAddExpenseModal, currentExpenseInfo);
+        
+        // Open the Cancel Confirmation modal
+        openDoYouWantToCancelModal();
+    }
+    else {
+        // Open Add Expense modal
+        openAddExpenseModal(currentExpenseInfo);
+    }
+}
+
+// =================================
+/**
+ * Submit MODIFY PAYORS modal
+*/
+// =================================
+var
+
+var addMemberModalForm = document.getElementById("add-member-modal-form");
+addMemberModalForm.addEventListener("submit", (event) => {
+    // Prevent refresh
+    event.preventDefault();
+
+    // Add the member
+    const name = String(addMemberModalTextField.value).trim();
+    console.log(name);
+
+    // Get the existing data of member list or create it if inexistent
+    const memberData = getMemberData();
+
+    // Check if input is not just whitespace
+    if (/\S/.test(name)) {
+        // Check if name already exists, case insensitive
+        if (hasMemberNameCaseInsensitive(memberData.members, name)) {
+            console.log(`Member name already exists: ${name}`);
+            addMemberErrorMsg.textContent = "Member name already exists.";
+            addMemberErrorMsg.classList.add("error-visible");
+
+            // Set focus back again to the text field 
+            addMemberModalTextField.focus();
+        }
+        else {
+            // Add the name and save
+            memberData.members.push(name);
+            setMemberData(memberData);
+            console.log(memberData);
+
+            // Close this modal
+            closeModal(addMemberModalWrapper);
+            document.removeEventListener("keydown", initAddMemberModalTrapFocus);
+
+            // Open the modal for confirming new member added
+            openConfirmNewMemberModal(name);
+        }
+    }
+    else {
+        // Raise error
+        addMemberErrorMsg.textContent = "Member name must be at least 1 character.";
+        addMemberErrorMsg.classList.add("error-visible");
+
+        // Set focus back again to the text field 
+        addMemberModalTextField.focus();
+    }    
+})
+
+
+
+
+
+
+
+
+
+// =================================
+/**
+ * Function to get selected members in MODIFY PAYORS modal
+ * @returns {selectedPayorNames} The list of the names of selected payors
+*/
+// =================================
+
+function getSelectedPayors() {
+    // Get all the payor checkboxes
+    let payorCheckboxes = payorList.querySelectorAll(".payor-checkbox");
+
+    let selectedPayorNames = [];
+
+    // Record the names of the selected checkboxes
+    payorCheckboxes.forEach(getSelectedPayorNames);
+    function getSelectedPayorNames(payorCheckbox) {
+        if (payorCheckbox.checked) {
+            selectedPayorNames.push(payorCheckbox.value);
+        }
+    }
+
+    return selectedPayorNames;
+}
+
+
 
 // =================================
 // 

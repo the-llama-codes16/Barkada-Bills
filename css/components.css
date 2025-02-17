@@ -7,6 +7,16 @@
     text-decoration: none;
 }
 
+.button-sub:disabled {
+    background-color: #E6E6E6; 
+    color: #A0A0A0; 
+    border: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
 .button-main {
     background-color: #000000;
     color: #ffffff;
@@ -110,6 +120,11 @@
     margin-bottom: 0rem;
 }
 
+#modify-payors-modal-header {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+
 .modal-form-wrapper {
     padding-top: 0.5rem;
     flex-direction: column;
@@ -209,7 +224,15 @@ input[type="checkbox"] {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+}
+
+.select-all-checkbox-label-pair {
     padding-left: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.payors-checkbox-label-pair {
+    padding-left: 4.25rem;
     margin-bottom: 0.5rem;
 }
 

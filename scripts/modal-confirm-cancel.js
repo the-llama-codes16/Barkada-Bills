@@ -53,6 +53,14 @@ doYouWantToCancelModalYesButton.addEventListener("click", () => {
     closeModal(doYouWantToCancelModalWrapper);
     document.removeEventListener("keydown", initDoYouWantToCancelModalTrapFocus);
 
+    console.log(`${modalManager.hasParentModal()}`);
+
+    // If there is a parent modal, open it
+    if (modalManager.hasParentModal()){
+        console.log("has parent modal");
+        modalManager.displayParentModal();
+    }
+
     // Clear!
     modalManager.clearActiveModalInfo();
 });
