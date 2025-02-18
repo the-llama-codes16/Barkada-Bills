@@ -1,7 +1,7 @@
 // Script for Edit Member modal
 
 // Import da goods
-import { trapFocus, closeModal, getMemberData, setMemberData, hasMemberNameCaseInsensitive } from "./reusable-functions.js";
+import { trapFocus, closeModal, getMemberData, setMemberData, hasNameCaseInsensitive } from "./reusable-functions.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
 import { itemManager } from "./classes/ItemManager.js";
@@ -97,7 +97,7 @@ editMemberModalForm.addEventListener("submit", (event) => {
         }
         else {
             // Check if the updated name already exists, case insensitive
-            if (hasMemberNameCaseInsensitive(memberData.members, name)) {
+            if (hasNameCaseInsensitive(memberData.members, name)) {
                 console.log(`Member name already exists: ${name}`)
                 editMemberErrorMsg.textContent = "Member name already exists.";
                 editMemberErrorMsg.classList.add("error-visible");

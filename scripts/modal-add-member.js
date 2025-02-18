@@ -1,7 +1,7 @@
 // Script for Add Member modal, New Member Added modal
 
 // Import da goods
-import { trapFocus, closeModal, hasMemberNameCaseInsensitive, getMemberData, setMemberData } from "./reusable-functions.js";
+import { trapFocus, closeModal, hasNameCaseInsensitive, getMemberData, setMemberData } from "./reusable-functions.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
 import { displayMembers, addMemberOpenButton } from "./main.js";
@@ -88,7 +88,7 @@ addMemberModalForm.addEventListener("submit", (event) => {
     // Check if input is not just whitespace
     if (/\S/.test(name)) {
         // Check if name already exists, case insensitive
-        if (hasMemberNameCaseInsensitive(memberData.members, name)) {
+        if (hasNameCaseInsensitive(memberData.members, name)) {
             console.log(`Member name already exists: ${name}`);
             addMemberErrorMsg.textContent = "Member name already exists.";
             addMemberErrorMsg.classList.add("error-visible");

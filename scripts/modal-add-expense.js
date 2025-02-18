@@ -1,7 +1,7 @@
 // Script for Add expense modal, New Expense Added modal
 
 // Import da goods
-import { getMemberData, trapFocus, closeModal } from "./reusable-functions.js";
+import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, hasNameCaseInsensitive } from "./reusable-functions.js";
 import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
@@ -131,9 +131,8 @@ addExpenseModalCloseButton.addEventListener("click", () => {
 // =================================
 function closeAddExpenseModal() {
     // Record current input
-    currentExpenseInfo.setExpenseName(addExpenseModalTextField.value);
-    currentExpenseInfo.setExpenseAmount(addExpenseModalAmountNumField.value);
-    currentExpenseInfo.setExpenseFilter(addExpenseModalPayorsFilter.value);
+    recordInputAddExpenseModal();
+
     // Selected members must be set when closing MODIFY PAYORS modal
 
     // Check original info for changes
@@ -155,6 +154,113 @@ function closeAddExpenseModal() {
         // Return focus to the Add Expense button
         addExpenseOpenButton.focus();
     }
+}
+
+// =================================
+/**
+ * Submit ADD EXPENSE modal
+*/
+// =================================
+let addExpenseModalForm = document.getElementById("add-expense-modal-form");
+addExpenseModalForm.addEventListener("submit", (event) => {
+    submitAddExpenseModal(event);
+});
+
+// =================================
+/**
+ * Function to submit ADD EXPENSE modal
+*/
+// =================================
+function submitAddExpenseModal(event) {
+    // ISSUE: CANNOT DETECT EXPENSE NAMES PROPERLY
+
+    // Prevent refresh
+    event.preventDefault();
+
+    // Record the current input
+    recordInputAddExpenseModal();
+
+    // Get the existing data of expenses or create if inexistent
+    let expenseData = getExpenseData();
+    console.log("Expense data starting value:");
+    console.log(expenseData);
+    console.log("in expenseData.expenses:");
+    console.log(expenseData["expenses"]);
+    let expenseNames = Object.keys(expenseData.expenses);
+
+    // Check if expense name is not just whitespace
+    let expenseName = currentExpenseInfo.getExpenseName();
+    if (expenseName) {
+        // Check if name already exists, case insensitive
+        if (hasNameCaseInsensitive(expenseNames, expenseName)) {
+            console.log(`Expense name already exists: ${expenseName}`);
+            addExpenseModalErrorMsg.textContent = "Expense name already exists.";
+            addExpenseModalErrorMsg.classList.add("error-visible");
+
+            // Set focus back to name field
+            addExpenseModalTextField.focus();
+            return;
+        }
+    }
+    else {
+        // Raise error
+        addExpenseModalErrorMsg.textContent = "Name must be at least 1 character.";
+        addExpenseModalErrorMsg.classList.add("error-visible");
+
+        // Set focus back again to the Name field 
+        addExpenseModalTextField.focus();
+        return;
+    }
+
+    // Check if expense amount is not just whitespace or zero
+    let expenseAmount = currentExpenseInfo.getExpenseAmount();
+    if ((expenseAmount && Number(expenseAmount) == 0) || !expenseAmount) {
+        // Raise error
+        console.log(`Amount: ${expenseAmount}`);
+        addExpenseModalErrorMsg.textContent = "Amount must be greater than 0.";
+        addExpenseModalErrorMsg.classList.add("error-visible");
+
+        // Set focus back again to the Amount field 
+        addExpenseModalAmountNumField.focus();
+        return;
+    }
+
+    // Check for appropriate member count for the filter
+    let expenseMembers = currentExpenseInfo.getExpenseMembers();
+    let expenseMemberCount = expenseMembers.length;
+    let expenseFilter = currentExpenseInfo.getExpenseFilter();
+    if (expenseFilter != "all" && expenseMemberCount === 0) {
+        // Raise error
+        console.log(`${expenseFilter}: ${expenseMemberCount}`);
+        addExpenseModalErrorMsg.textContent = "Select at least one member.";
+        addExpenseModalErrorMsg.classList.add("error-visible");
+
+        // Set focus back again to the Member list button
+        addExpenseModalMemberListButton.focus();
+        return;
+    }
+
+    // If we made it here, add the expense
+    expenseData[expenseName] = { "amount": Number(expenseAmount), "filter": expenseFilter, "members": expenseMembers};
+    console.log("Updated expenseData variable:");
+    console.log(expenseData);
+    setExpenseData(expenseData);
+    console.log(getExpenseData());
+
+    // Close the modal
+    closeModal(addExpenseModalWrapper);
+    document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
+}
+
+// =================================
+/**
+ * Function to record current input in ADD EXPENSE modal
+*/
+// =================================
+function recordInputAddExpenseModal() {
+    currentExpenseInfo.setExpenseName(addExpenseModalTextField.value.trim());
+    currentExpenseInfo.setExpenseAmount(addExpenseModalAmountNumField.value.trim());
+    currentExpenseInfo.setExpenseFilter(addExpenseModalPayorsFilter.value);
 }
 
 // =================================
@@ -367,62 +473,33 @@ function closeModifyPayorsModal() {
  * Submit MODIFY PAYORS modal
 */
 // =================================
-var
+var modifyPayorsModalOKButton = document.getElementById("modify-payors-modal-ok-button");
+modifyPayorsModalOKButton.addEventListener("click", () => {
+    submitModifyPayorsModal();
+});
 
-var addMemberModalForm = document.getElementById("add-member-modal-form");
-addMemberModalForm.addEventListener("submit", (event) => {
-    // Prevent refresh
-    event.preventDefault();
+// =================================
+/**
+ * Function to submit MODIFY PAYORS modal
+*/
+// =================================
+function submitModifyPayorsModal() {
+    console.log("Closing modify payors modal...");
 
-    // Add the member
-    const name = String(addMemberModalTextField.value).trim();
-    console.log(name);
+    // Get selected payors
+    let selectedPayors = getSelectedPayors();
 
-    // Get the existing data of member list or create it if inexistent
-    const memberData = getMemberData();
+    // Save the data
+    currentExpenseInfo.setExpenseMembers(selectedPayors);
 
-    // Check if input is not just whitespace
-    if (/\S/.test(name)) {
-        // Check if name already exists, case insensitive
-        if (hasMemberNameCaseInsensitive(memberData.members, name)) {
-            console.log(`Member name already exists: ${name}`);
-            addMemberErrorMsg.textContent = "Member name already exists.";
-            addMemberErrorMsg.classList.add("error-visible");
+    // Close this dialog
+    closeModal(modifyPayorsModalWrapper);
+    document.removeEventListener("keydown", initModifyPayorsModalTrapFocus);
 
-            // Set focus back again to the text field 
-            addMemberModalTextField.focus();
-        }
-        else {
-            // Add the name and save
-            memberData.members.push(name);
-            setMemberData(memberData);
-            console.log(memberData);
-
-            // Close this modal
-            closeModal(addMemberModalWrapper);
-            document.removeEventListener("keydown", initAddMemberModalTrapFocus);
-
-            // Open the modal for confirming new member added
-            openConfirmNewMemberModal(name);
-        }
-    }
-    else {
-        // Raise error
-        addMemberErrorMsg.textContent = "Member name must be at least 1 character.";
-        addMemberErrorMsg.classList.add("error-visible");
-
-        // Set focus back again to the text field 
-        addMemberModalTextField.focus();
-    }    
-})
-
-
-
-
-
-
-
-
+    // Open the Add Expense dialog
+    addExpenseModalWrapper.style.display = "block";
+    document.addEventListener("keydown", initAddExpenseModalTrapFocus);
+}
 
 // =================================
 /**
@@ -430,7 +507,6 @@ addMemberModalForm.addEventListener("submit", (event) => {
  * @returns {selectedPayorNames} The list of the names of selected payors
 */
 // =================================
-
 function getSelectedPayors() {
     // Get all the payor checkboxes
     let payorCheckboxes = payorList.querySelectorAll(".payor-checkbox");
@@ -447,6 +523,15 @@ function getSelectedPayors() {
 
     return selectedPayorNames;
 }
+
+
+
+
+
+
+
+
+
 
 
 
