@@ -4,7 +4,7 @@
 import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, hasNameCaseInsensitive } from "./reusable-functions.js";
 import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
-import { modalManager } from "./classes/ModalManager.js";
+import { ModalManager, modalManager } from "./classes/ModalManager.js";
 import { addExpenseOpenButton } from "./main.js";
 
 // =================================
@@ -37,15 +37,7 @@ export function openAddExpenseModal(expenseInfo) {
     addExpenseModalPayorsFilter.value = expenseInfo.getExpenseFilter();
 
     // Enable Member List button if there is at least one member
-    let memberData = getMemberData();
-    if (memberData.members.length > 0) {
-        addExpenseModalMemberListButton.disabled = false;
-        addExpenseModalMemberListButton.title = "";
-    }
-    else {
-        addExpenseModalMemberListButton.disabled = true;
-        addExpenseModalMemberListButton.title = "No members to display. Please add members in Step 1 first."
-    }
+    enableDisableMemberListButton();
 
     // Set focus on Name field
     addExpenseModalTextField.focus();
@@ -86,12 +78,10 @@ function restrictNumCharInput(event) {
     }
 
     // Do not allow if input is invalid
-    if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== ".") {
+    if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== "." && event.key !== "Tab") {
         event.preventDefault();
         console.log(`Skipped ${event.key}`);
     }
-
-    // ISSUE: Tab presses to navigate through the modal does not move after Amount because of this
 }
 
 // =================================
@@ -113,6 +103,41 @@ function restrictNumCharPaste(event) {
 
     // Return the data to be pasted
     return toPasteData;
+}
+
+// =================================
+// 
+// Behavior of Member List button according to Filter
+//
+// =================================
+addExpenseModalPayorsFilter.addEventListener("change", () => {
+    enableDisableMemberListButton();
+});
+
+// =================================
+// 
+// Function to enable/disable Member List button according to Filter
+//
+// =================================
+function enableDisableMemberListButton() {
+    // Hide this button if the selected filter is All
+    if (addExpenseModalPayorsFilter.value === "all") {
+        addExpenseModalMemberListButton.style.visibility = "hidden";
+    }
+    else {
+        addExpenseModalMemberListButton.style.visibility = "visible";
+    }
+
+    // Disable this button if there are no available members
+    let memberData = getMemberData();
+    if (memberData.members.length > 0) {
+        addExpenseModalMemberListButton.disabled = false;
+        addExpenseModalMemberListButton.title = "";
+    }
+    else {
+        addExpenseModalMemberListButton.disabled = true;
+        addExpenseModalMemberListButton.title = "No members to display. Please add members in Step 1 first."
+    }
 }
 
 // =================================
@@ -172,8 +197,6 @@ addExpenseModalForm.addEventListener("submit", (event) => {
 */
 // =================================
 function submitAddExpenseModal(event) {
-    // ISSUE: CANNOT DETECT EXPENSE NAMES PROPERLY
-
     // Prevent refresh
     event.preventDefault();
 
@@ -182,10 +205,6 @@ function submitAddExpenseModal(event) {
 
     // Get the existing data of expenses or create if inexistent
     let expenseData = getExpenseData();
-    console.log("Expense data starting value:");
-    console.log(expenseData);
-    console.log("in expenseData.expenses:");
-    console.log(expenseData["expenses"]);
     let expenseNames = Object.keys(expenseData.expenses);
 
     // Check if expense name is not just whitespace
@@ -226,22 +245,23 @@ function submitAddExpenseModal(event) {
     }
 
     // Check for appropriate member count for the filter
+    // NOTE: Removing this validation check since user can create an expense and delete all members from Step 1 anyway
     let expenseMembers = currentExpenseInfo.getExpenseMembers();
-    let expenseMemberCount = expenseMembers.length;
+    // let expenseMemberCount = expenseMembers.length;
     let expenseFilter = currentExpenseInfo.getExpenseFilter();
-    if (expenseFilter != "all" && expenseMemberCount === 0) {
-        // Raise error
-        console.log(`${expenseFilter}: ${expenseMemberCount}`);
-        addExpenseModalErrorMsg.textContent = "Select at least one member.";
-        addExpenseModalErrorMsg.classList.add("error-visible");
+    // if (expenseFilter != "all" && expenseMemberCount === 0) {
+    //     // Raise error
+    //     console.log(`${expenseFilter}: ${expenseMemberCount}`);
+    //     addExpenseModalErrorMsg.textContent = "Select at least one member.";
+    //     addExpenseModalErrorMsg.classList.add("error-visible");
 
-        // Set focus back again to the Member list button
-        addExpenseModalMemberListButton.focus();
-        return;
-    }
+    //     // Set focus back again to the Member list button
+    //     addExpenseModalMemberListButton.focus();
+    //     return;
+    // }
 
     // If we made it here, add the expense
-    expenseData[expenseName] = { "amount": Number(expenseAmount), "filter": expenseFilter, "members": expenseMembers};
+    expenseData.expenses[expenseName] = { "amount": Number(expenseAmount), "filter": expenseFilter, "members": expenseMembers};
     console.log("Updated expenseData variable:");
     console.log(expenseData);
     setExpenseData(expenseData);
