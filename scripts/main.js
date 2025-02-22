@@ -11,17 +11,17 @@ import { MEMBER_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
 import { currentExpenseInfo, originalExpenseInfo } from "./classes/ExpenseInfo.js";
 // =================================
-// 
-// DOM Queries 
-//
-// ================================= 
+/**
+ * DOM Queries
+*/
+// =================================
 export var addMemberOpenButton = document.getElementById("add-member-open-button");
 export var addExpenseOpenButton = document.getElementById("add-expense-open-button");
 
 // =================================
-// 
-// Button to open ADD MEMBER modal
-//
+/**
+ * Button to open ADD MEMBER modal
+*/
 // =================================
 addMemberOpenButton.addEventListener("click", () => {
     // Open the modal
@@ -29,9 +29,9 @@ addMemberOpenButton.addEventListener("click", () => {
 })
 
 // =================================
-// 
-// Load the data on the tables as soon as this page is loaded
-//
+/**
+ * Load the data on the tables as soon as this page is loaded
+*/
 // =================================
 document.addEventListener("DOMContentLoaded", () => {
     console.log("in DOMload")
@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 // =================================
-// 
-// Function to reload and display members on a table
-//
+/**
+ * Function to reload and display members on a table
+*/
 // =================================
 export function displayMembers() {
     console.log("displayMembers called!");
@@ -109,9 +109,9 @@ export function displayMembers() {
 }
 
 // =================================
-// 
-// Function to edit a member name
-//
+/**
+ * Function to edit a member name
+*/
 // =================================
 function editMember(memberRow) {
     let memberName = memberRow.querySelector(".member-name").textContent;
@@ -125,9 +125,9 @@ function editMember(memberRow) {
 }
 
 // =================================
-// 
-// Function to delete a member
-//
+/**
+ * Function to delete a member
+*/
 // =================================
 function deleteMember(memberRow) {
     let memberName = memberRow.querySelector(".member-name").textContent;
@@ -142,9 +142,9 @@ function deleteMember(memberRow) {
 }
 
 // =================================
-// 
-// Button to open ADD EXPENSE modal
-//
+/**
+ * Button to open ADD EXPENSE modal
+*/
 // =================================
 addExpenseOpenButton.addEventListener("click", () => {
     // Provide a clean slate to the Add Expense modal

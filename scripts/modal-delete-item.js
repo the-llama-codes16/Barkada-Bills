@@ -7,27 +7,27 @@ import { getMemberData } from "./reusable-functions.js";
 import { displayMembers } from "./main.js";
 
 // =================================
-// 
-// DOM Queries 
-//
-// ================================= 
+/**
+ * DOM Queries 
+*/
+// =================================
 const deleteItemModalWrapper = document.getElementById("delete-item-modal-wrapper");
 const deleteItemModalCancelButton = document.getElementById("delete-item-modal-cancel-button");
 const deleteItemCategory = document.getElementById("delete-item-category");
 const deleteItemName = document.getElementById("delete-item-name");
 
 // =================================
-// 
-// Category names
-//
-// ================================= 
+/**
+ * Category names 
+*/
+// =================================
 export const MEMBER_CATEGORY = "member";
 export const EXPENSE_CATEGORY = "expense";
 
 // =================================
-// 
-// Function to display DELETE ITEM modal
-//
+/**
+ * Function to display DELETE ITEM modal
+*/
 // =================================
 export function openDeleteItemModal() {
     console.log("opening Delete Item Modal...");
@@ -45,9 +45,9 @@ export function openDeleteItemModal() {
 }
 
 // =================================
-//
-// Button to cancel DELETE ITEM modal
-//
+/**
+ * Button to cancel DELETE ITEM modal
+*/
 // =================================
 deleteItemModalCancelButton.addEventListener("click", () => {
     // Close this modal
@@ -59,9 +59,9 @@ deleteItemModalCancelButton.addEventListener("click", () => {
 });
 
 // =================================
-//
-// Button to confirm DELETE ITEM modal
-//
+/**
+ * Button to confirm DELETE ITEM modal
+*/
 // =================================
 const deleteItemModalYesButton = document.getElementById("delete-item-modal-yes-button");
 deleteItemModalYesButton.addEventListener("click", () => {
@@ -87,9 +87,9 @@ deleteItemModalYesButton.addEventListener("click", () => {
 });
 
 // =================================
-//
-// Function to display DELETED ITEM modal
-//
+/**
+ * Function to display DELETED ITEM modal
+*/
 // =================================
 const deletedItemModalWrapper = document.getElementById("deleted-item-modal-wrapper");
 const deletedItemModalOKButton = document.getElementById("deleted-item-modal-ok-button");
@@ -114,9 +114,9 @@ function openDeletedItemModal() {
 }
 
 // =================================
-//
-// Button to close DELETED ITEM modal
-//
+/**
+ * Button to close DELETED ITEM modal
+*/
 // =================================
 deletedItemModalOKButton.addEventListener("click", () => {
     // Close the modal
@@ -131,9 +131,9 @@ deletedItemModalOKButton.addEventListener("click", () => {
 });
 
 // =================================
-// 
-// Function to delete member and its existence from expenses
-//
+/**
+ * Function to delete member and its existence from expenses
+*/
 // =================================
 function deleteMember(memberName) {
     // Get the latest member names
@@ -151,27 +151,27 @@ function deleteMember(memberName) {
 }
 
 // =================================
-// 
-// Function to delete expenses 
-//
+/**
+ * Function to delete expenses 
+*/
 // =================================
 function deleteExpense(expenseName) {
     console.log(`deleteExpense called for ${expenseName}`);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for DELETE ITEM modal
-//
+/**
+ * Function to wrap trapFocus for DELETE ITEM modal
+*/
 // =================================
 function initDeleteItemModalTrapFocus(event) {
     trapFocus(event, deleteItemModalWrapper);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for DELETED ITEM modal
-//
+/**
+ * Function to wrap trapFocus for DELETED ITEM modal
+*/
 // =================================
 function initDeletedItemModalTrapFocus(event) {
     trapFocus(event, deletedItemModalWrapper);

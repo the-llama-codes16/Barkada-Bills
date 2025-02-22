@@ -8,18 +8,18 @@ import { itemManager } from "./classes/ItemManager.js";
 import { displayMembers } from "./main.js";
 
 // =================================
-// 
-// DOM Queries 
-//
-// ================================= 
+/**
+ * DOM Queries 
+*/
+// =================================
 var editMemberModalTextField = document.getElementById("edit-member-modal-text-field");
 var editMemberModalWrapper = document.getElementById("edit-member-modal-wrapper");
 var editMemberErrorMsg = document.getElementById("edit-member-modal-error-message");
 
 // =================================
-// 
-// Function to display EDIT MEMBER modal
-//
+/**
+ * Function to display EDIT MEMBER modal
+*/
 // =================================
 export function openEditMemberModal(memberName = []) {
     console.log("opening Edit Member Modal...");
@@ -42,9 +42,9 @@ export function openEditMemberModal(memberName = []) {
 }
 
 // =================================
-// 
-// Button to close EDIT MEMBER modal
-//
+/**
+ * Button to close EDIT MEMBER modal
+*/
 // =================================
 var editMemberModalCloseButton = document.getElementById("edit-member-modal-close-button");
 editMemberModalCloseButton.addEventListener("click", () => {
@@ -70,9 +70,9 @@ editMemberModalCloseButton.addEventListener("click", () => {
 })
 
 // =================================
-// 
-// Submit EDIT MEMBER modal
-//
+/**
+ * Submit EDIT MEMBER modal
+*/
 // =================================
 var editMemberModalForm = document.getElementById("edit-member-modal-form");
 editMemberModalForm.addEventListener("submit", (event) => {
@@ -141,9 +141,9 @@ editMemberModalForm.addEventListener("submit", (event) => {
 });
 
 // =================================
-// 
-// Function to display EDITED MEMBER modal
-//
+/**
+ * Function to display EDITED MEMBER modal
+*/
 // =================================
 var editedMemberModalWrapper = document.getElementById("edited-member-modal-wrapper");
 var editedMemberModalOKButton = document.getElementById("edited-member-modal-ok-button");
@@ -163,9 +163,9 @@ function openConfirmEditedMemberModal(name) {
 }
 
 // =================================
-//
-// Button to close EDITED MEMBER modal
-//
+/**
+ * Button to close EDITED MEMBER modal
+*/
 // =================================
 editedMemberModalOKButton.addEventListener("click", () => {
     // Display members
@@ -179,18 +179,18 @@ editedMemberModalOKButton.addEventListener("click", () => {
 });
 
 // =================================
-// 
-// Function to wrap trapFocus for EDIT MEMBER modal
-//
+/**
+ * Function to wrap trapFocus for EDIT MEMBER modal
+*/
 // =================================
 function initEditMemberModalTrapFocus(event) {
     trapFocus(event, editMemberModalWrapper);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for EDITED MEMBER modal
-//
+/**
+ * Function to wrap trapFocus for EDITED MEMBER modal
+*/
 // =================================
 function initEditedMemberModalTrapFocus(event) {
     trapFocus(event, editedMemberModalWrapper);

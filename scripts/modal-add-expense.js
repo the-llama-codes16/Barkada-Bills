@@ -8,9 +8,9 @@ import { ModalManager, modalManager } from "./classes/ModalManager.js";
 import { addExpenseOpenButton } from "./main.js";
 
 // =================================
-// 
-// DOM Queries 
-//
+/**
+ * DOM Queries
+*/
 // =================================
 let addExpenseModalWrapper = document.getElementById("add-expense-modal-wrapper");
 let addExpenseModalTextField = document.getElementById("add-expense-modal-text-field");
@@ -20,12 +20,12 @@ let addExpenseModalMemberListButton = document.getElementById("add-expense-modal
 let addExpenseModalErrorMsg = document.getElementById("add-expense-modal-error-message");
 let addExpenseModalCloseButton = document.getElementById("add-expense-modal-close-button");
 
-// =================================
-// 
-// Function to display ADD EXPENSE modal
-//
-// =================================
 
+// =================================
+/**
+ * Function to display ADD EXPENSE modal
+*/
+// =================================
 export function openAddExpenseModal(expenseInfo) {
     console.log("Opening Add Expense modal...");
 
@@ -50,11 +50,10 @@ export function openAddExpenseModal(expenseInfo) {
 }
 
 // =================================
-// 
-// Behavior of Amount number input field
-//
+/**
+ * Behavior of Amount number input field
+*/
 // =================================
-
 addExpenseModalAmountNumField.addEventListener("keydown", (event) => {
     restrictNumCharInput(event);
 });
@@ -65,9 +64,9 @@ addExpenseModalAmountNumField.addEventListener("paste", (event) => {
 });
 
 // =================================
-// 
-// Function to restrict input of Amount field
-//
+/**
+ * Function to restrict input of Amount field
+*/
 // =================================
 function restrictNumCharInput(event) {
     console.log("Restricting input in Amount field!");
@@ -85,9 +84,9 @@ function restrictNumCharInput(event) {
 }
 
 // =================================
-// 
-// Function to restrict character pasted in Amount field
-//
+/**
+ * Function to restrict character pasted in Amount field
+*/
 // =================================
 function restrictNumCharPaste(event) {
     console.log("Restricting paste in Amount field!");
@@ -106,18 +105,18 @@ function restrictNumCharPaste(event) {
 }
 
 // =================================
-// 
-// Behavior of Member List button according to Filter
-//
+/**
+ * Behavior of Member List button according to Filter
+*/
 // =================================
 addExpenseModalPayorsFilter.addEventListener("change", () => {
     enableDisableMemberListButton();
 });
 
 // =================================
-// 
-// Function to enable/disable Member List button according to Filter
-//
+/**
+ * Function to enable/disable Member List button according to Filter
+*/
 // =================================
 function enableDisableMemberListButton() {
     // Hide this button if the selected filter is All
@@ -141,18 +140,18 @@ function enableDisableMemberListButton() {
 }
 
 // =================================
-// 
-// Button to close ADD EXPENSE modal
-//
+/**
+ * Button to close ADD EXPENSE modal
+*/
 // =================================
 addExpenseModalCloseButton.addEventListener("click", () => {
     closeAddExpenseModal();
 });
 
 // =================================
-// 
-// Function to close ADD EXPENSE modal
-//
+/**
+ * Function to close ADD EXPENSE modal
+*/
 // =================================
 function closeAddExpenseModal() {
     // Record current input
@@ -284,18 +283,18 @@ function recordInputAddExpenseModal() {
 }
 
 // =================================
-// 
-// Button to display MODIFY PAYORS modal
-//
+/**
+ * Button to display MODIFY PAYORS modal
+*/
 // =================================
 addExpenseModalMemberListButton.addEventListener("click", () => {
     openModifyPayorsModal(currentExpenseInfo);
 });
 
 // =================================
-// 
-// Function to display MODIFY PAYORS modal
-//
+/**
+ * Function to display MODIFY PAYORS modal
+*/
 // =================================
 let modifyPayorsModalWrapper = document.getElementById("modify-payors-modal-wrapper");
 function openModifyPayorsModal(expenseInfo) {
@@ -325,9 +324,9 @@ function openModifyPayorsModal(expenseInfo) {
 }
 
 // =================================
-// 
-// Function to populate members list in MODIFY PAYORS modal
-//
+/**
+ * Function to populate members list in MODIFY PAYORS modal
+*/
 // =================================
 let payorList = document.getElementById("payor-list");
 function populatePayorList() {
@@ -371,9 +370,9 @@ function populatePayorList() {
 }
 
 // =================================
-// 
-// Function to update checked status of members in MODIFY PAYORS modal
-//
+/**
+ * Function to update checked status of members in MODIFY PAYORS modal
+*/
 // =================================
 function updateCheckedStatusPayors(selectedPayors) {
     console.log("Selecting applicable payors...");
@@ -393,9 +392,9 @@ function updateCheckedStatusPayors(selectedPayors) {
 }
 
 // =================================
-// 
-// Checkbox to SELECT/DESELECT ALL PAYORS
-//
+/**
+ * Checkbox to SELECT/DESELECT ALL PAYORS
+*/
 // =================================
 let modifyPayorsModalSelectAllCheckbox = document.getElementById("modify-payors-modal-select-all-checkbox");
 modifyPayorsModalSelectAllCheckbox.addEventListener("click", () => {
@@ -403,9 +402,9 @@ modifyPayorsModalSelectAllCheckbox.addEventListener("click", () => {
 });
 
 // =================================
-// 
-// Function to SELECT/DESELECT ALL PAYORS
-//
+/**
+ * Function to SELECT/DESELECT ALL PAYORS
+*/
 // =================================
 function selectUnselectAllPayors() {
     console.log("Selecting/unselecting all!");
@@ -425,9 +424,9 @@ function selectUnselectAllPayors() {
 }
 
 // =================================
-// 
-// Function to update SELECT/DESELECT ALL PAYORS checkbox based on status of payor checkboxes
-//
+/**
+ * Function to update SELECT/DESELECT ALL PAYORS checkbox based on status of payor checkboxes
+*/
 // =================================
 function updateSelectUnselectCheckbox() {
     console.log("Checking if All checkbox has to be updated...");
@@ -449,9 +448,9 @@ function updateSelectUnselectCheckbox() {
 }
 
 // =================================
-// 
-// Button to close MODIFY PAYORS modal
-//
+/**
+ * Button to close MODIFY PAYORS modal
+*/
 // =================================
 let modifyPayorsModalCloseButton = document.getElementById("modify-payors-modal-close-button");
 modifyPayorsModalCloseButton.addEventListener("click", () => {
@@ -544,30 +543,19 @@ function getSelectedPayors() {
     return selectedPayorNames;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // =================================
-// 
-// Function to wrap trapFocus for ADD EXPENSE modal
-//
+/**
+ * Function to wrap trapFocus for ADD EXPENSE modal
+*/
 // =================================
 function initAddExpenseModalTrapFocus(event) {
     trapFocus(event, addExpenseModalWrapper);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for MODIFY PAYORS modal
-//
+/**
+ * Function to wrap trapFocus for MODIFY PAYORS modal
+*/
 // =================================
 function initModifyPayorsModalTrapFocus(event) {
     trapFocus(event, modifyPayorsModalWrapper);

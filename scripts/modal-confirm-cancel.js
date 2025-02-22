@@ -7,11 +7,10 @@ var doYouWantToCancelModalCancelButton = document.getElementById("do-you-want-to
 import { modalManager } from "./classes/ModalManager.js";
 import { trapFocus, closeModal } from "./reusable-functions.js";
 
-
 // =================================
-//
-// Function to display DO YOU WANT TO CANCEL modal
-//
+/**
+ * Function to display DO YOU WANT TO CANCEL modal
+*/
 // =================================
 export function openDoYouWantToCancelModal() {
     // Display the modal
@@ -25,9 +24,9 @@ export function openDoYouWantToCancelModal() {
 }
 
 // =================================
-//
-// Button to cancel DO YOU WANT TO CANCEL modal
-//
+/**
+ * Button to cancel DO YOU WANT TO CANCEL modal
+*/
 // =================================
 doYouWantToCancelModalCancelButton.addEventListener("click", () => {
     // Close this modal
@@ -43,9 +42,9 @@ doYouWantToCancelModalCancelButton.addEventListener("click", () => {
 });
 
 // =================================
-//
-// Button to confirm DO YOU WANT TO CANCEL modal
-//
+/**
+ * Button to confirm DO YOU WANT TO CANCEL modal
+*/
 // =================================
 var doYouWantToCancelModalYesButton = document.getElementById("do-you-want-to-cancel-modal-yes-button");
 doYouWantToCancelModalYesButton.addEventListener("click", () => {
@@ -66,9 +65,9 @@ doYouWantToCancelModalYesButton.addEventListener("click", () => {
 });
 
 // =================================
-// 
-// Function to wrap trapFocus for DO YOU WANT TO CANCEL modal
-//
+/**
+ * Function to wrap trapFocus for DO YOU WANT TO CANCEL modal
+*/
 // =================================
 function initDoYouWantToCancelModalTrapFocus(event) {
     trapFocus(event, doYouWantToCancelModalWrapper);

@@ -7,18 +7,18 @@ import { modalManager } from "./classes/ModalManager.js";
 import { displayMembers, addMemberOpenButton } from "./main.js";
 
 // =================================
-// 
-// DOM Queries 
-//
-// ================================= 
+/**
+ * DOM Queries 
+*/
+// =================================
 var addMemberModalTextField = document.getElementById("add-member-modal-text-field");
 var addMemberModalWrapper = document.getElementById("add-member-modal-wrapper");
 var addMemberErrorMsg = document.getElementById("add-member-modal-error-message");
 
 // =================================
-// 
-// Function to display ADD MEMBER modal
-//
+/**
+ * Function to display ADD MEMBER modal
+*/
 // =================================
 export function openAddMemberModal(memberName = []) {
     console.log("opening Add Member Modal...");
@@ -41,9 +41,9 @@ export function openAddMemberModal(memberName = []) {
 }
 
 // =================================
-// 
-// Button to close ADD MEMBER modal
-//
+/**
+ * Button to close ADD MEMBER modal
+*/
 // =================================
 var addMemberModalCloseButton = document.getElementById("add-member-modal-close-button");
 addMemberModalCloseButton.addEventListener("click", () => {
@@ -69,9 +69,9 @@ addMemberModalCloseButton.addEventListener("click", () => {
 })
 
 // =================================
-// 
-// Submit ADD MEMBER modal
-//
+/**
+ * Submit ADD MEMBER modal
+*/
 // =================================
 var addMemberModalForm = document.getElementById("add-member-modal-form");
 addMemberModalForm.addEventListener("submit", (event) => {
@@ -120,11 +120,10 @@ addMemberModalForm.addEventListener("submit", (event) => {
     }    
 });
 
-
 // =================================
-//
-// Function to display modal to confirm NEW MEMBER ADDED
-//
+/**
+ * Function to display modal to confirm NEW MEMBER ADDED
+*/
 // =================================
 var newMemberModalWrapper = document.getElementById("new-member-modal-wrapper");
 function openConfirmNewMemberModal(name) {
@@ -143,9 +142,9 @@ function openConfirmNewMemberModal(name) {
 }
 
 // =================================
-//
-// Button to close NEW MEMBER ADDED modal
-//
+/**
+ * Button to close NEW MEMBER ADDED modal
+*/
 // =================================
 var newMemberModalOKButton = document.getElementById("new-member-modal-ok-button");
 newMemberModalOKButton.addEventListener("click", () => {
@@ -165,18 +164,18 @@ newMemberModalOKButton.addEventListener("click", () => {
 })
 
 // =================================
-// 
-// Function to wrap trapFocus for ADD NEW MEMBER modal
-//
+/**
+ * Function to wrap trapFocus for ADD NEW MEMBER modal
+*/
 // =================================
 function initAddMemberModalTrapFocus(event) {
     trapFocus(event, addMemberModalWrapper);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for NEW MEMBER ADDED modal
-//
+/**
+ * Function to wrap trapFocus for NEW MEMBER ADDED modal
+*/
 // =================================
 function initNewMemberAddedModalTrapFocus(event) {
     trapFocus(event, newMemberModalWrapper);

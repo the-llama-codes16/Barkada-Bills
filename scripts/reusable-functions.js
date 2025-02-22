@@ -1,9 +1,9 @@
 // Reusable Functions
 
 // =================================
-// 
-// Function to close modal
-//
+/**
+ * Function to close modal
+*/
 // =================================
 export function closeModal(targetModal) {
   console.log("closing...")
@@ -11,9 +11,9 @@ export function closeModal(targetModal) {
 }
 
 // =================================
-// 
-// Function to check if a member or expense name already exists, case insensitive
-//
+/**
+ * Function to check if a member or expense name already exists, case insensitive
+*/
 // =================================
 export function hasNameCaseInsensitive(itemList, nameToCheck) {
   console.log(`Checking if ${nameToCheck} already exists...`);
@@ -31,45 +31,45 @@ export function hasNameCaseInsensitive(itemList, nameToCheck) {
 }
 
 // =================================
-// 
-// Function to get member data from sessionStorage or create it if inexistent
-//
+/**
+ * Function to get member data from sessionStorage or create it if inexistent
+*/
 // =================================
 export function getMemberData() {
   return JSON.parse(sessionStorage.getItem("memberData")) || { "members": [] };
 }
 
 // =================================
-// 
-// Function to store member data to sessionStorage
-//
+/**
+ * Function to store member data to sessionStorage
+*/
 // =================================
 export function setMemberData(memberData) {
   sessionStorage.setItem("memberData", JSON.stringify(memberData));
 }
 
 // =================================
-// 
-// Function to get expenses data from sessionStorage or create it if inexistent
-//
+/**
+ * Function to get expenses data from sessionStorage or create it if inexistent
+*/
 // =================================
 export function getExpenseData() {
   return JSON.parse(sessionStorage.getItem("expenseData")) || { "expenses": {} };
 }
 
 // =================================
-// 
-// Function to store member data to sessionStorage
-//
+/**
+ * Function to store member data to sessionStorage
+*/
 // =================================
 export function setExpenseData(expenseData) {
   sessionStorage.setItem("expenseData", JSON.stringify(expenseData));
 }
 
 // =================================
-// 
-// Function to trap focus in a given modal
-//
+/**
+ * Function to trap focus in a given modal
+*/
 // =================================
 export function trapFocus(event, modal) {
   console.log("trapfocus called!")
