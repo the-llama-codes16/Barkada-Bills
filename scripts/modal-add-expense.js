@@ -269,6 +269,9 @@ function submitAddExpenseModal(event) {
     // Close the modal
     closeModal(addExpenseModalWrapper);
     document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
+
+    // Display the new info
+    openConfirmNewExpenseModal();
 }
 
 // =================================
@@ -339,6 +342,7 @@ function populatePayorList() {
     // Get the parent element and clean it
     payorList.innerHTML = "";
 
+    let payorItemTemplate = document.getElementById("payor-checkbox-template");
     // Populate!
     if (memberCount > 0) {
         memberData.members.forEach(addPayorOption)
@@ -347,7 +351,6 @@ function populatePayorList() {
             console.log(`Adding option: ${payorName}`);
 
             // Clone the template
-            let payorItemTemplate = document.getElementById("payor-checkbox-template");
             let newPayorItem = payorItemTemplate.content.cloneNode(true);
 
             // Populate this new option with our current data
@@ -518,6 +521,7 @@ function submitModifyPayorsModal() {
     // Open the Add Expense dialog
     addExpenseModalWrapper.style.display = "block";
     document.addEventListener("keydown", initAddExpenseModalTrapFocus);
+    // ISSUE: Not working!
 }
 
 // =================================
@@ -545,6 +549,130 @@ function getSelectedPayors() {
 
 // =================================
 /**
+ * Function to display modal to confirm NEW EXPENSE ADDED
+*/
+// =================================
+let newExpenseModalWrapper = document.getElementById("new-expense-modal-wrapper");
+function openConfirmNewExpenseModal() {
+    // Set the information to be displayed
+    let newExpenseName = document.getElementById("new-expense-name");
+    let newExpenseAmount  = document.getElementById("new-expense-amount");
+    let newExpenseFilter = document.getElementById("new-expense-filter");
+    newExpenseName.innerHTML = currentExpenseInfo.getExpenseName();
+    newExpenseAmount.innerHTML = currentExpenseInfo.getExpenseAmount();
+    newExpenseFilter.innerHTML = capitalizeFirstletter(currentExpenseInfo.getExpenseFilter().replace("-", " "));
+
+    function capitalizeFirstletter(word) {
+        return word[0].toUpperCase() + word.slice(1);
+    }
+
+    // Display the modal
+    newExpenseModalWrapper.style.display = "block";
+    document.addEventListener("keydown", initNewExpenseModalTrapFocus);
+}
+
+// =================================
+/**
+ * Button to close modal to confirm NEW EXPENSE ADDED
+*/
+// =================================
+var newExpenseModalOKButton = document.getElementById("new-expense-modal-ok-button");
+newExpenseModalOKButton.addEventListener("click", () => {
+    closeNewExpenseModal();
+});
+
+// =================================
+/**
+ * Function to close modal to confirm NEW EXPENSE ADDED
+*/
+// =================================
+function closeNewExpenseModal() {
+    // Close this modal
+    closeModal(newExpenseModalWrapper);
+    document.removeEventListener("keydown", initNewExpenseModalTrapFocus);
+
+    // Clear all existing info to prepare for user's next action
+    currentExpenseInfo.clearExpenseInfo();
+    temporaryExpenseInfo.clearExpenseInfo();
+    originalExpenseInfo.clearExpenseInfo();
+}
+
+// =================================
+/**
+ * Button to display modal to confirm payors for NEW EXPENSE ADDED
+*/
+// =================================
+var newExpenseModalMemberListButton = document.getElementById("new-expense-modal-member-list-button");
+newExpenseModalMemberListButton.addEventListener("click", () => {
+    openNewExpensePayorsModal();
+});
+
+// =================================
+/**
+ * Function to display modal to confirm payors for NEW EXPENSE ADDED
+*/
+// =================================
+let newExpensePayorsModalWrapper = document.getElementById("new-expense-payors-modal-wrapper");
+function openNewExpensePayorsModal() {
+    // Close the previous modal
+    closeModal(newExpenseModalWrapper);
+    document.removeEventListener("keydown", initNewExpenseModalTrapFocus);
+
+    // Get the list and clean it
+    let newExpensePayorsList = document.getElementById("new-expense-payor-list");
+    newExpensePayorsList.innerHTML = "";
+
+    // Get the template and the official list of selected payors
+    let newExpensePayorItemTemplate = document.getElementById("new-expense-payor-template");
+    let payors = currentExpenseInfo.getExpenseMembers();
+
+    // Populate the list with the official payors
+    console.log("Payors:");
+    console.log(payors);
+    payors.forEach(addNewExpensePayor);
+    function addNewExpensePayor(payorName){
+        let newExpensePayorItem = newExpensePayorItemTemplate.content.cloneNode(true);
+        let newExpensePayorListItem = newExpensePayorItem.querySelector(".new-expense-payor");
+        newExpensePayorListItem.textContent = payorName;
+        newExpensePayorsList.appendChild(newExpensePayorItem);
+    }
+
+    // Update the missing entries, use default placeholders for missing entries
+    document.getElementById("new-expense-payors-modal-expense-amount").textContent = currentExpenseInfo.getExpenseAmount() || "0";
+    document.getElementById("new-expense-payors-modal-expense-name").textContent = currentExpenseInfo.getExpenseName();
+    document.getElementById("new-expense-payors-modal-expense-filter").textContent = currentExpenseInfo.getExpenseFilter().replace("-", " ");
+    
+    // Open this modal
+    newExpensePayorsModalWrapper.style.display = "block";
+    document.addEventListener("keydown", initNewExpensePayorsModalTrapFocus);
+}
+
+// =================================
+/**
+ * Button to close modal to confirm payors for NEW EXPENSE ADDED
+*/
+// =================================
+var newExpensePayorsModalOKButton = document.getElementById("new-expense-payors-modal-ok-button");
+newExpensePayorsModalOKButton.addEventListener("click", () => {
+    closeNewExpensePayorsModal();
+});
+
+// =================================
+/**
+ * Function to close modal to confirm payors for NEW EXPENSE ADDED
+*/
+// =================================
+function closeNewExpensePayorsModal() {
+    // Close this modal
+    closeModal(newExpensePayorsModalWrapper);
+    document.removeEventListener("keydown", initNewExpensePayorsModalTrapFocus);
+
+    // Open the calling modal
+    openConfirmNewExpenseModal();
+}
+
+// =================================
+/**
  * Function to wrap trapFocus for ADD EXPENSE modal
 */
 // =================================
@@ -559,4 +687,22 @@ function initAddExpenseModalTrapFocus(event) {
 // =================================
 function initModifyPayorsModalTrapFocus(event) {
     trapFocus(event, modifyPayorsModalWrapper);
+}
+
+// =================================
+/**
+ * Function to wrap trapFocus for NEW EXPENSE ADDED modal
+*/
+// =================================
+function initNewExpenseModalTrapFocus(event) {
+    trapFocus(event, newExpenseModalWrapper);
+}
+
+// =================================
+/**
+ * Function to wrap trapFocus for NEW EXPENSE PAYORS modal
+*/
+// =================================
+function initNewExpensePayorsModalTrapFocus(event) {
+    trapFocus(event, newExpensePayorsModalWrapper);
 }

@@ -223,9 +223,9 @@
 
         <!-- Modal to Modify Payors -->
         <div id="modify-payors-modal-wrapper" class="modal-wrapper">
-            <div id="modify-payors-modal-content" class="modal-content member-list-modal-size flexible-modal">
-                <p id="modify-payors-modal-header" class="generic-font generic-size">$<span id="modify-payors-modal-expense-amount" class="table-header-weight"></span> expense for <span id="modify-payors-modal-expense-name" class="table-header-weight"></span> to be paid by <span id="modify-payors-modal-expense-filter" class="table-header-weight"></span>:</p>
-                <p class="generic-font generic-size">(Click boxes to add/remove applicable members.)</p>
+            <div id="modify-payors-modal-content" class="modal-content member-list-modal-size">
+                <p id="modify-payors-modal-header" class="generic-font generic-size payor-list-header">$<span id="modify-payors-modal-expense-amount" class="table-header-weight"></span> expense for <span id="modify-payors-modal-expense-name" class="table-header-weight"></span> to be paid by <span id="modify-payors-modal-expense-filter" class="table-header-weight"></span>:</p>
+                <p class="generic-font generic-size payor-list-header">(Click boxes to add/remove applicable members.)</p>
                 <div class="checkbox-label-pair select-all-checkbox-label-pair">
                     <input type="checkbox" id="modify-payors-modal-select-all-checkbox" name="select-all" class="payor-checkbox">
                     <label class="generic-font generic-size">All</label>
@@ -246,10 +246,53 @@
             </div>
         </template>
 
-        <!-- Item Template for Payor in Dropdown List -->
-        <template id="payor-item-template">
-            <option class="payor-item-option-name"></option>
+        <!-- Modal for New Expense added -->
+        <div id="new-expense-modal-wrapper" class="modal-wrapper">
+            <div class="modal-content big-modal-size">
+                <h3 class="generic-font subheaders-size modal-header-big-modal">New expense added:</h3>
+                <div class="modal-form-wrapper">
+                    <form>
+                        <div class="new-expense-item">
+                            <p class="modal-header generic-font generic-size new-expense-info-fields">Name:</p>
+                            <p id="new-expense-name" class="generic-font generic-size input-space-big-modal-name new-expense-info-fields"></p>
+                        </div>
+                        <div class="new-expense-item">
+                            <p class="modal-header generic-font generic-size new-expense-info-fields">Amount:</p>
+                            <p id="new-expense-amount" class="generic-font generic-size input-space-big-modal-amount new-expense-info-fields"></p>
+                        </div>
+                        <div class="new-expense-item">
+                            <p class="modal-header generic-font generic-size new-expense-info-fields">To be paid by:</p>
+                            <p id="new-expense-filter" class="generic-font generic-size input-space-big-modal-filter new-expense-info-fields"></p>
+                        </div>
+                        <div class="modal-members-button">
+                            <button id="new-expense-modal-member-list-button" class="generic-font generic-size button-sub cancel-button-modal modal-button-padding" type="button">Member list</button>
+                        </div>  
+                        <div class="modal-button-container">
+                            <button id="new-expense-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for payors for New Expense Added -->
+        <div id="new-expense-payors-modal-wrapper" class="modal-wrapper">
+            <div id="new-expense-payors-modal-content" class="modal-content member-list-modal-size">
+                <p id="new-expense-payors-modal-header" class="generic-font generic-size payor-list-header">$<span id="new-expense-payors-modal-expense-amount" class="table-header-weight"></span> expense for <span id="new-expense-payors-modal-expense-name" class="table-header-weight"></span> to be paid by <span id="new-expense-payors-modal-expense-filter" class="table-header-weight"></span>:</p>
+                <div class="">
+                    <ul id="new-expense-payor-list"></ul>
+                </div>
+                <div class="modal-button-container">
+                    <button id="new-expense-payors-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Template for Payors for New Expense Added -->
+        <template id="new-expense-payor-template">
+            <li class="generic-font generic-size new-expense-payor"></li>
         </template>
+
 
         <!-- Results -->
         <div class="steps-container">

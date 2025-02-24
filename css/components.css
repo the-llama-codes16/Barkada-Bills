@@ -103,10 +103,11 @@
     max-width: max-content;
     height: auto;
     min-height: 13rem;
-    max-height: max-content;    
+    max-height: max-content;   
+    padding: 0.5rem; 
 }
 
-.flexible-modal {
+.payor-list-header {
     text-align: center;
 }
 
@@ -157,10 +158,28 @@
     margin-left: 4.05rem;
 }
 
+.input-space-big-modal-filter {
+    margin-left: 1.65rem;
+}
+
 .input-space-dropdown-list {
     margin-left: 1.65rem;
     width: 17.75rem;
     height: 2rem;
+}
+
+.new-expense-info-fields {
+    display: inline;
+}
+
+.new-expense-item {
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+}
+
+.new-expense-payor {
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 .modal-button-padding {
@@ -188,6 +207,14 @@
 
 .modal-members-button {
     margin-left: 10.35rem;
+}
+
+#new-expense-modal-ok-button {
+    margin-top: 2rem;
+}
+
+#new-expense-modal-member-list-button {
+    margin-top: 0rem;
 }
 
 .error-message {
