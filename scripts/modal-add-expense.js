@@ -4,7 +4,7 @@
 import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, hasNameCaseInsensitive } from "./reusable-functions.js";
 import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
-import { ModalManager, modalManager } from "./classes/ModalManager.js";
+import { modalManager } from "./classes/ModalManager.js";
 import { addExpenseOpenButton } from "./main.js";
 
 // =================================
@@ -37,7 +37,7 @@ export function openAddExpenseModal(expenseInfo) {
     addExpenseModalPayorsFilter.value = expenseInfo.getExpenseFilter();
 
     // Enable Member List button if there is at least one member
-    enableDisableMemberListButton();
+    enableDisableAddMemberListButton();
 
     // Set focus on Name field
     addExpenseModalTextField.focus();
@@ -110,7 +110,7 @@ function restrictNumCharPaste(event) {
 */
 // =================================
 addExpenseModalPayorsFilter.addEventListener("change", () => {
-    enableDisableMemberListButton();
+    enableDisableAddMemberListButton();
 });
 
 // =================================
@@ -118,7 +118,7 @@ addExpenseModalPayorsFilter.addEventListener("change", () => {
  * Function to enable/disable Member List button according to Filter
 */
 // =================================
-function enableDisableMemberListButton() {
+function enableDisableAddMemberListButton() {
     // Hide this button if the selected filter is All
     if (addExpenseModalPayorsFilter.value === "all") {
         addExpenseModalMemberListButton.style.visibility = "hidden";
@@ -291,6 +291,7 @@ function recordInputAddExpenseModal() {
 */
 // =================================
 addExpenseModalMemberListButton.addEventListener("click", () => {
+    prepForModifyPayorsModal();
     openModifyPayorsModal(currentExpenseInfo);
 });
 
@@ -301,15 +302,6 @@ addExpenseModalMemberListButton.addEventListener("click", () => {
 // =================================
 let modifyPayorsModalWrapper = document.getElementById("modify-payors-modal-wrapper");
 function openModifyPayorsModal(expenseInfo) {
-    // Save the existing entries
-    currentExpenseInfo.setExpenseName(document.getElementById("add-expense-modal-text-field").value);
-    currentExpenseInfo.setExpenseAmount(document.getElementById("add-expense-modal-amount-num-field").value);
-    currentExpenseInfo.setExpenseFilter(document.getElementById("add-expense-modal-payors-filter").value);
-
-    // Close the ADD EXPENSE modal
-    closeModal(addExpenseModalWrapper);
-    document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
-
     // Open the MODIFY PAYORS modal
     modifyPayorsModalWrapper.style.display = "block";
     document.addEventListener("keydown", initModifyPayorsModalTrapFocus);
@@ -324,6 +316,25 @@ function openModifyPayorsModal(expenseInfo) {
 
     // Update selected payors if applicable
     updateCheckedStatusPayors(expenseInfo.getExpenseMembers());
+
+    // Get a copy of the selected payors at this point
+    temporaryExpenseInfo.setExpenseMembers(expenseInfo.getExpenseMembers());
+}
+
+// =================================
+/**
+ * Function to prepare data before opening MODIFY PAYORS modal
+*/
+// =================================
+function prepForModifyPayorsModal() {
+    // Save the existing entries
+    currentExpenseInfo.setExpenseName(document.getElementById("add-expense-modal-text-field").value);
+    currentExpenseInfo.setExpenseAmount(document.getElementById("add-expense-modal-amount-num-field").value);
+    currentExpenseInfo.setExpenseFilter(document.getElementById("add-expense-modal-payors-filter").value);
+
+    // Close the ADD EXPENSE modal
+    closeModal(addExpenseModalWrapper);
+    document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
 }
 
 // =================================
@@ -457,6 +468,7 @@ function updateSelectUnselectCheckbox() {
 // =================================
 let modifyPayorsModalCloseButton = document.getElementById("modify-payors-modal-close-button");
 modifyPayorsModalCloseButton.addEventListener("click", () => {
+    console.log("CLOSING PAYORS MODAL!")
     closeModifyPayorsModal();
 });
 
@@ -468,6 +480,11 @@ modifyPayorsModalCloseButton.addEventListener("click", () => {
 function closeModifyPayorsModal() {
     // Record current entries
     temporaryExpenseInfo.setExpenseMembers(getSelectedPayors());
+
+    console.log("Current:");
+    console.log(currentExpenseInfo.getExpenseMembers());
+    console.log("Temp:");
+    console.log(temporaryExpenseInfo.getExpenseMembers());
 
     // Compare with previous entries
     let isPayorsEqual = currentExpenseInfo.isExpenseMembersEqual(temporaryExpenseInfo);
@@ -569,6 +586,35 @@ function openConfirmNewExpenseModal() {
     // Display the modal
     newExpenseModalWrapper.style.display = "block";
     document.addEventListener("keydown", initNewExpenseModalTrapFocus);
+
+    // Disable/enable the Member list
+    enableDisableViewMemberListButton();
+}
+
+// =================================
+/**
+ * Disable/enable Members List button in modal to confirm NEW EXPENSE ADDED
+*/
+// =================================
+var newExpenseModalMemberListButton = document.getElementById("new-expense-modal-member-list-button");
+function enableDisableViewMemberListButton() {
+    // Hide this button if the selected filter is All
+    if (currentExpenseInfo.getExpenseFilter() === "all") {
+        newExpenseModalMemberListButton.style.visibility = "hidden";
+    }
+    else {
+        newExpenseModalMemberListButton.style.visibility = "visible";
+
+        // Disable this button if there are no selected members
+        if (currentExpenseInfo.getExpenseMembers().length > 0) {
+            newExpenseModalMemberListButton.disabled = false;
+            newExpenseModalMemberListButton.title = "";
+        }
+        else {
+            newExpenseModalMemberListButton.disabled = true;
+            newExpenseModalMemberListButton.title = "No members selected. You may add members for this expense using the Edit feature."
+        }
+    }
 }
 
 // =================================
@@ -602,7 +648,6 @@ function closeNewExpenseModal() {
  * Button to display modal to confirm payors for NEW EXPENSE ADDED
 */
 // =================================
-var newExpenseModalMemberListButton = document.getElementById("new-expense-modal-member-list-button");
 newExpenseModalMemberListButton.addEventListener("click", () => {
     openNewExpensePayorsModal();
 });

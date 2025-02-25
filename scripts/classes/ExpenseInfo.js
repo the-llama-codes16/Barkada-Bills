@@ -62,10 +62,12 @@ export class ExpenseInfo {
 
     isExpenseMembersEqual(otherExpenseInfo) {
         if (otherExpenseInfo.getExpenseMembers().length != this.expenseMembers.length) {
+            console.log("Length not equal");
             return false;
         }
         for (let i = 0; i < this.expenseMembers.length; i++) {
-            if (otherExpenseInfo.getExpenseMembers[i] !== this.expenseMembers[i]) {
+            if (otherExpenseInfo.getExpenseMembers()[i] !== this.expenseMembers[i]) {
+                console.log(`Not the same: ${otherExpenseInfo.getExpenseMembers()[i]} vs ${this.expenseMembers[i]}`)
                 return false;
             }
         }
