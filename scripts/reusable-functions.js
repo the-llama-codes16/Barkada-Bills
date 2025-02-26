@@ -102,3 +102,13 @@ export function trapFocus(event, modal) {
       event.preventDefault();
   }
 }
+
+// =================================
+/**
+ * Function to capitalize the first letter of the input string
+ * @returns A new string with the first letter capitalized
+*/
+// =================================
+export function capitalizeFirstletter(word) {
+  return word[0].toUpperCase() + word.slice(1);
+}

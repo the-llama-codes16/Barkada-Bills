@@ -1,11 +1,11 @@
 // Script for Add expense modal, New Expense Added modal
 
 // Import da goods
-import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, hasNameCaseInsensitive } from "./reusable-functions.js";
+import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, hasNameCaseInsensitive, capitalizeFirstletter } from "./reusable-functions.js";
 import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
-import { addExpenseOpenButton } from "./main.js";
+import { addExpenseOpenButton, displayExpenses } from "./main.js";
 
 // =================================
 /**
@@ -188,6 +188,7 @@ function closeAddExpenseModal() {
 let addExpenseModalForm = document.getElementById("add-expense-modal-form");
 addExpenseModalForm.addEventListener("submit", (event) => {
     submitAddExpenseModal(event);
+    displayExpenses();
 });
 
 // =================================
@@ -579,10 +580,6 @@ function openConfirmNewExpenseModal() {
     newExpenseAmount.innerHTML = currentExpenseInfo.getExpenseAmount();
     newExpenseFilter.innerHTML = capitalizeFirstletter(currentExpenseInfo.getExpenseFilter().replace("-", " "));
 
-    function capitalizeFirstletter(word) {
-        return word[0].toUpperCase() + word.slice(1);
-    }
-
     // Display the modal
     newExpenseModalWrapper.style.display = "block";
     document.addEventListener("keydown", initNewExpenseModalTrapFocus);
@@ -751,3 +748,8 @@ function initNewExpenseModalTrapFocus(event) {
 function initNewExpensePayorsModalTrapFocus(event) {
     trapFocus(event, newExpensePayorsModalWrapper);
 }
+
+
+// ISSUE: Modal to confirm payors not enough bottom padding on OK button
+// If user selects "selected-members" but selects all members, option must change to all, but if new member is added, option must revert to selected members
+// Maybe save members and compare?

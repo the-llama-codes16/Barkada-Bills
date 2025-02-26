@@ -278,12 +278,14 @@ input[type="checkbox"] {
 
 .first-col-element {
     padding-left: 2rem;
-    padding-right: 8rem;
 }
 
 .first-col-header {
     padding-left: 2rem;
-    text-align: left;
+}
+
+.member-last-column-element {
+    padding-right: 2rem;
 }
 
 th, td {
@@ -294,4 +296,19 @@ th, td {
 .item-total-string {
     margin-bottom: 1rem;
 }
+
+.col-element {
+    text-align: left;
+    padding-right: 8.5rem;
+}
+
+.filter-col-element {
+    text-align: left;
+    padding-right: 0.75rem;
+}
+
+.member-list-button-col-element {
+    padding-left: 0;
+}
+
 /* END OF Main Page - Tables */

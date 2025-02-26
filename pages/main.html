@@ -41,9 +41,9 @@
             <table id="member-table" class="data-table home-content-lead">
                 <thead>
                     <tr>
-                        <th class="first-col-header generic-font generic-size table-header-weight">Name</th>
+                        <th class="first-col-header col-element generic-font generic-size table-header-weight">Name</th>
                         <th></th>
-                        <th></th>
+                        <th class="member-last-column-element"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,7 +58,7 @@
             <tr class="table-item-row generic-font generic-size">
                 <td class="member-name first-col-element"></td>
                 <td><button class="member-edit-button generic-font generic-size button-sub button-edit-table-padding" title="Edit member name">Edit</button></td>
-                <td><button class="member-delete-button generic-font generic-size button-delete x-button" title="Delete member">X</button></td>
+                <td><button class="member-delete-button member-last-column-element generic-font generic-size button-delete x-button" title="Delete member">X</button></td>
             </tr>
         </template>
 
@@ -182,9 +182,36 @@
         <div class="steps-container">
             <h1 class="home-content-lead generic-font subheaders-size step-header">Step 2: Expenses</h1>
             <h3 class="home-content-lead generic-font generic-size step-description">Add expenses, customize who contributes to each.</h3>
-            <p id="expense-total-count-string" class="item-total-string generic-font generic-size home-content-lead">Total expenses:<span id="expense-total-count" class="item-total-count table-header-weight"></span></p>
+            <!-- Dynamic Table for Expenses -->
+            <table id="expense-table" class="data-table home-content-lead">
+                <thead>
+                    <tr>
+                        <th class="first-col-header col-element generic-font generic-size table-header-weight">Name</th>
+                        <th class="col-element generic-font generic-size table-header-weight">Amount</th>
+                        <th class="filter-col-element generic-font generic-size table-header-weight">Contributors</th>
+                        <th></th>
+                        <th></th>
+                        <th class="member-last-column-element"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <p id="expense-total-count-string" class="item-total-string generic-font generic-size home-content-lead">Total expense items:<span id="expense-total-count" class="item-total-count table-header-weight"></span></p>
             <button id="add-expense-open-button" class="home-content-lead generic-font generic-size button-sub button-padding">Add expense</button>
         </div>
+
+        <!-- Row Template for Expenses -->
+        <template id="expense-row-template">
+            <tr class="table-item-row">
+                <td class="expense-name first-col-element col-element generic-font generic-size"></td>
+                <td class="expense-amount col-element generic-font generic-size"></td>
+                <td class="expense-contributors-filter filter-col-element generic-font generic-size"></td>
+                <td class="col-element member-list-button-col-element"><button class="generic-font generic-size button-sub button-edit-table-padding expense-member-list-button" title="View selected members">Member list</button></td>
+                <td><button class="expense-edit-button generic-font generic-size button-sub button-edit-table-padding" title="Edit expense">Edit</button></td>
+                <td><button class="expense-delete-button member-last-column-element generic-font generic-size button-delete x-button" title="Delete expense">X</button></td>
+            </tr>
+        </template>
 
         <!-- Modal to Add Expense -->
         <div id="add-expense-modal-wrapper" class="modal-wrapper">

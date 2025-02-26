@@ -6,7 +6,7 @@
 import { openAddMemberModal } from "./modal-add-member.js";
 import { openEditMemberModal } from "./modal-edit-member.js";
 import { itemManager } from "./classes/ItemManager.js";
-import { getMemberData } from "./reusable-functions.js";
+import { getMemberData, getExpenseData, capitalizeFirstletter } from "./reusable-functions.js";
 import { MEMBER_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
 import { currentExpenseInfo, originalExpenseInfo } from "./classes/ExpenseInfo.js";
@@ -36,6 +36,7 @@ addMemberOpenButton.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
     console.log("in DOMload")
     displayMembers();
+    displayExpenses();
 })
 
 // =================================
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 export function displayMembers() {
     console.log("displayMembers called!");
 
-    // Get the existing data of member list or create it if inexistent
+    // Get the existing data of member list
     const memberData = getMemberData();
 
     // Display if there is any
@@ -153,3 +154,97 @@ addExpenseOpenButton.addEventListener("click", () => {
 
     openAddExpenseModal(originalExpenseInfo);
 });
+
+// =================================
+/**
+ * Function to reload and display expenses on a table
+*/
+// =================================
+export function displayExpenses() {
+    // Get the data on expenses
+    let expenseData = getExpenseData();
+
+    // Display if there is any
+    let expenseCount = Object.keys(expenseData.expenses).length;
+    console.log(`EXPENSE COUNT: ${expenseCount}`);
+
+    // Prepare the elements to be accessed
+    const expenseTable = document.getElementById("expense-table");
+    const expenseTotalCountString = document.getElementById("expense-total-count-string");
+    const expenseTotalCount = document.getElementById("expense-total-count");
+
+    // Clean the table
+    let expenseTableBody = expenseTable.getElementsByTagName("tbody")[0];
+    expenseTableBody.innerHTML = "";
+
+    if (expenseCount > 0) {    
+        // Display the table
+        expenseTable.classList.add("table-header-visible");
+
+        // Display the total count
+        expenseTotalCountString.classList.add("total-visible");
+        expenseTotalCount.textContent = String(expenseCount);
+
+        // Update the table to display the expenses
+        let expenseNames = Object.keys(expenseData.expenses)
+        expenseNames.forEach(updateExpenseTableRow)
+
+        function updateExpenseTableRow(expenseName) {
+            console.log(`expense Name: ${expenseName}`);
+
+            let expenseAmount = expenseData.expenses[expenseName]["amount"];
+            let expenseFilter = expenseData.expenses[expenseName]["filter"];
+            let expenseMembers = expenseData.expenses[expenseName]["members"];
+
+            // Clone the template
+            let expenseRowTemplate = document.getElementById("expense-row-template");
+            let newExpenseRow = expenseRowTemplate.content.cloneNode(true);
+
+            // Populate our new row with the current expense data
+            newExpenseRow.querySelector(".expense-name").textContent = expenseName;
+            newExpenseRow.querySelector(".expense-amount").textContent = String(expenseAmount);
+            newExpenseRow.querySelector(".expense-contributors-filter").textContent = capitalizeFirstletter(expenseFilter.replace("-", " "));
+
+            // Update visibility and availability status of Member list button accordingly
+            let expenseMemberListButton = newExpenseRow.querySelector(".expense-member-list-button");
+            if (expenseFilter === "all") {
+                expenseMemberListButton.style.visibility = "hidden";
+            }
+            else {
+                expenseMemberListButton.style.visibility = "visible";
+
+                // Disable this button if there are no selected members
+                if (expenseMembers.length > 0) {
+                    expenseMemberListButton.disabled = false;
+                    expenseMemberListButton.title = "";
+                }
+                else {
+                    expenseMemberListButton.disabled = true;
+                    expenseMemberListButton.title = "No members selected. You may add members for this expense using the Edit feature."
+                }
+            }
+
+            // Add event listeners for this row's buttons
+            expenseMemberListButton.addEventListener("click", () => {
+                console.log(`Member List button clicked for ${expenseName}!`);
+            });
+
+            newExpenseRow.querySelector(".expense-edit-button").addEventListener("click", () => {
+                console.log(`Edit expense button clicked for ${expenseName}!`);
+            });
+
+            newExpenseRow.querySelector(".expense-delete-button").addEventListener("click", () => {
+                console.log(`Delete expense button clicked for ${expenseName}!`);
+            });
+
+            // Add this to the table
+            expenseTableBody.appendChild(newExpenseRow);
+        }
+    }
+    else {
+        // Ensure that the table and other related elements are not displayed
+        expenseTable.classList.remove("table-header-visible");
+        expenseTotalCountString.classList.remove("total-visible");
+        expenseTotalCount.textContent = String(expenseTotalCount);
+    }
+} 
