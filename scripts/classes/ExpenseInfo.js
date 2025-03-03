@@ -48,12 +48,15 @@ export class ExpenseInfo {
         console.log(`Comparing to ${otherExpenseInfo}...`);
 
         if (otherExpenseInfo.getExpenseName() !== this.expenseName){
+            console.log(`Not the same: ${this.expenseName} and ${otherExpenseInfo.getExpenseName()}`);
             return false;
         }
         if (otherExpenseInfo.getExpenseAmount() !== this.expenseAmount) {
+            console.log(`Not the same: ${this.expenseAmount} and ${otherExpenseInfo.getExpenseAmount()}`);
             return false;
         }
         if (otherExpenseInfo.getExpenseFilter() !== this.expenseFilter) {
+            console.log(`Not the same: ${this.expenseFilter} and ${otherExpenseInfo.getExpenseFilter()}`);
             return false;
         }
 

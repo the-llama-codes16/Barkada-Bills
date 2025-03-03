@@ -5,7 +5,7 @@ import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, h
 import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
-import { addExpenseOpenButton, displayExpenses } from "./main.js";
+import { addExpenseOpenButton, displayExpenses, addExpenseModalHeaderInstruction, newExpenseModalHeaderInstruction } from "./main.js";
 
 // =================================
 /**
@@ -35,6 +35,9 @@ export function openAddExpenseModal(expenseInfo) {
     addExpenseModalTextField.value = expenseInfo.getExpenseName();
     addExpenseModalAmountNumField.value = expenseInfo.getExpenseAmount();
     addExpenseModalPayorsFilter.value = expenseInfo.getExpenseFilter();
+
+    // Add the members for record
+    currentExpenseInfo.setExpenseMembers(expenseInfo.getExpenseMembers());
 
     // Enable Member List button if there is at least one member
     enableDisableAddMemberListButton();
@@ -158,9 +161,14 @@ function closeAddExpenseModal() {
     recordInputAddExpenseModal();
 
     // Selected members must be set when closing MODIFY PAYORS modal
+    console.log("original expense:");
+    console.log(originalExpenseInfo);
+    console.log("current expense:");
+    console.log(currentExpenseInfo);
 
     // Check original info for changes
     let isEqual = originalExpenseInfo.isEqual(currentExpenseInfo);
+    console.log(`Equal: ${isEqual}`);
 
     // Close this modal
     closeModal(addExpenseModalWrapper);
@@ -193,7 +201,7 @@ addExpenseModalForm.addEventListener("submit", (event) => {
 
 // =================================
 /**
- * Function to submit ADD EXPENSE modal
+ * Function to submit ADD EXPENSE modal- Used for both adding and editing expenses
 */
 // =================================
 function submitAddExpenseModal(event) {
@@ -207,66 +215,123 @@ function submitAddExpenseModal(event) {
     let expenseData = getExpenseData();
     let expenseNames = Object.keys(expenseData.expenses);
 
-    // Check if expense name is not just whitespace
+    // Get the data of the current expense
     let expenseName = currentExpenseInfo.getExpenseName();
-    if (expenseName) {
-        // Check if name already exists, case insensitive
-        if (hasNameCaseInsensitive(expenseNames, expenseName)) {
-            console.log(`Expense name already exists: ${expenseName}`);
-            addExpenseModalErrorMsg.textContent = "Expense name already exists.";
+    let expenseAmount = currentExpenseInfo.getExpenseAmount();
+    let expenseMembers = currentExpenseInfo.getExpenseMembers();
+    let expenseFilter = currentExpenseInfo.getExpenseFilter();
+
+    // Check if this is Add Expense or Edit Expense functionality
+    if (!originalExpenseInfo.getExpenseName()) {
+        // Add Expense functionality
+        // Check if expense name is not just whitespace
+        if (expenseName) {
+            // Check if name already exists, case insensitive
+            if (hasNameCaseInsensitive(expenseNames, expenseName)) {
+                console.log(`Expense name already exists: ${expenseName}`);
+                addExpenseModalErrorMsg.textContent = "Expense name already exists.";
+                addExpenseModalErrorMsg.classList.add("error-visible");
+
+                // Set focus back to name field
+                addExpenseModalTextField.focus();
+                return;
+            }
+        }
+        else {
+            // Raise error
+            addExpenseModalErrorMsg.textContent = "Name must be at least 1 character.";
             addExpenseModalErrorMsg.classList.add("error-visible");
 
-            // Set focus back to name field
+            // Set focus back again to the Name field 
             addExpenseModalTextField.focus();
             return;
         }
+
+        // Check if expense amount is not just whitespace or zero
+        if ((expenseAmount && Number(expenseAmount) == 0) || !expenseAmount) {
+            // Raise error
+            console.log(`Amount: ${expenseAmount}`);
+            addExpenseModalErrorMsg.textContent = "Amount must be greater than 0.";
+            addExpenseModalErrorMsg.classList.add("error-visible");
+
+            // Set focus back again to the Amount field 
+            addExpenseModalAmountNumField.focus();
+            return;
+        }
+
+        // If we made it here, add the expense
+        expenseData.expenses[expenseName] = { "amount": expenseAmount, "filter": expenseFilter, "members": expenseMembers};
+        console.log("Updated expenseData variable:");
+        console.log(expenseData);
+        setExpenseData(expenseData);
+        console.log(getExpenseData());
     }
     else {
-        // Raise error
-        addExpenseModalErrorMsg.textContent = "Name must be at least 1 character.";
-        addExpenseModalErrorMsg.classList.add("error-visible");
+        // Edit Expense functionality
 
-        // Set focus back again to the Name field 
-        addExpenseModalTextField.focus();
-        return;
+        // If there are no changes from the original, we can exit
+        if (originalExpenseInfo.isEqual(currentExpenseInfo)) {
+            // Close the modal
+            closeModal(addExpenseModalWrapper);
+            document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
+            return;
+        }
+
+        // Check if expense name is not just whitespace
+        let expenseName = currentExpenseInfo.getExpenseName();
+        if (expenseName) {
+            // Check if name already exists if it's different from the original
+            if (expenseName !== originalExpenseInfo.getExpenseName()) {
+                // Check if name already exists, case insensitive
+                if (hasNameCaseInsensitive(expenseNames, expenseName)) {
+                    console.log(`Expense name already exists: ${expenseName}`);
+                    addExpenseModalErrorMsg.textContent = "Expense name already exists.";
+                    addExpenseModalErrorMsg.classList.add("error-visible");
+
+                    // Set focus back to name field
+                    addExpenseModalTextField.focus();
+                    return;
+                }
+            }            
+        }
+        else {
+            // Raise error
+            addExpenseModalErrorMsg.textContent = "Name must be at least 1 character.";
+            addExpenseModalErrorMsg.classList.add("error-visible");
+
+            // Set focus back again to the Name field 
+            addExpenseModalTextField.focus();
+            return;
+        }
+
+        // Check if expense amount is not just whitespace or zero
+        let expenseAmount = currentExpenseInfo.getExpenseAmount();
+        if ((expenseAmount && Number(expenseAmount) == 0) || !expenseAmount) {
+            // Raise error
+            console.log(`Amount: ${expenseAmount}`);
+            addExpenseModalErrorMsg.textContent = "Amount must be greater than 0.";
+            addExpenseModalErrorMsg.classList.add("error-visible");
+
+            // Set focus back again to the Amount field 
+            addExpenseModalAmountNumField.focus();
+            return;
+        }
+
+        // If we made it here, update the expense
+        const expenses = Object.entries(expenseData.expenses);
+        for (let i = 0; i < expenses.length; i++) {
+            if (expenses[i][0] === originalExpenseInfo.getExpenseName()) {
+                console.log(`Modifying ${originalExpenseInfo.getExpenseName()}...`);
+                expenses[i] = [expenseName, { "amount": Number(expenseAmount), "filter": expenseFilter, "members": expenseMembers }];
+            }
+        }
+        expenseData.expenses = Object.fromEntries(expenses);
+        console.log(expenseData);
+        setExpenseData(expenseData);
+        console.log(getExpenseData());
     }
 
-    // Check if expense amount is not just whitespace or zero
-    let expenseAmount = currentExpenseInfo.getExpenseAmount();
-    if ((expenseAmount && Number(expenseAmount) == 0) || !expenseAmount) {
-        // Raise error
-        console.log(`Amount: ${expenseAmount}`);
-        addExpenseModalErrorMsg.textContent = "Amount must be greater than 0.";
-        addExpenseModalErrorMsg.classList.add("error-visible");
-
-        // Set focus back again to the Amount field 
-        addExpenseModalAmountNumField.focus();
-        return;
-    }
-
-    // Check for appropriate member count for the filter
-    // NOTE: Removing this validation check since user can create an expense and delete all members from Step 1 anyway
-    let expenseMembers = currentExpenseInfo.getExpenseMembers();
-    // let expenseMemberCount = expenseMembers.length;
-    let expenseFilter = currentExpenseInfo.getExpenseFilter();
-    // if (expenseFilter != "all" && expenseMemberCount === 0) {
-    //     // Raise error
-    //     console.log(`${expenseFilter}: ${expenseMemberCount}`);
-    //     addExpenseModalErrorMsg.textContent = "Select at least one member.";
-    //     addExpenseModalErrorMsg.classList.add("error-visible");
-
-    //     // Set focus back again to the Member list button
-    //     addExpenseModalMemberListButton.focus();
-    //     return;
-    // }
-
-    // If we made it here, add the expense
-    expenseData.expenses[expenseName] = { "amount": Number(expenseAmount), "filter": expenseFilter, "members": expenseMembers};
-    console.log("Updated expenseData variable:");
-    console.log(expenseData);
-    setExpenseData(expenseData);
-    console.log(getExpenseData());
-
+    
     // Close the modal
     closeModal(addExpenseModalWrapper);
     document.removeEventListener("keydown", initAddExpenseModalTrapFocus);
@@ -303,6 +368,14 @@ addExpenseModalMemberListButton.addEventListener("click", () => {
 // =================================
 let modifyPayorsModalWrapper = document.getElementById("modify-payors-modal-wrapper");
 function openModifyPayorsModal(expenseInfo) {
+    // Update the instruction header for this modal
+    if (addExpenseModalHeaderInstruction.innerHTML.contains("Edit")) {
+        newExpenseModalHeaderInstruction.innerHTML = "Expense edited";
+    }
+    else {
+        newExpenseModalHeaderInstruction.innerHTML = "Expense added";
+    }
+
     // Open the MODIFY PAYORS modal
     modifyPayorsModalWrapper.style.display = "block";
     document.addEventListener("keydown", initModifyPayorsModalTrapFocus);

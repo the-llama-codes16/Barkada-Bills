@@ -9,7 +9,8 @@ import { itemManager } from "./classes/ItemManager.js";
 import { getMemberData, getExpenseData, capitalizeFirstletter, trapFocus, closeModal } from "./reusable-functions.js";
 import { MEMBER_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
-import { currentExpenseInfo, originalExpenseInfo } from "./classes/ExpenseInfo.js";
+import { currentExpenseInfo, originalExpenseInfo, ExpenseInfo } from "./classes/ExpenseInfo.js";
+// import { openEditExpenseModal } from "./modal-edit-expense-test.js";
 // =================================
 /**
  * DOM Queries
@@ -147,10 +148,16 @@ function deleteMember(memberRow) {
  * Button to open ADD EXPENSE modal
 */
 // =================================
+export var addExpenseModalHeaderInstruction = document.getElementById("add-expense-modal-header-instruction");
+export var newExpenseModalHeaderInstruction = document.getElementById("new-expense-modal-instruction");
 addExpenseOpenButton.addEventListener("click", () => {
     // Provide a clean slate to the Add Expense modal
     originalExpenseInfo.clearExpenseInfo();
     currentExpenseInfo.clearExpenseInfo();
+
+    // Update header instructions
+    // addExpenseModalHeaderInstruction.innerHTML = "Add expense";
+    // newExpenseModalHeaderInstruction.innerHTML = "Expense added"
 
     openAddExpenseModal(originalExpenseInfo);
 });
@@ -232,6 +239,7 @@ export function displayExpenses() {
 
             newExpenseRow.querySelector(".expense-edit-button").addEventListener("click", () => {
                 console.log(`Edit expense button clicked for ${expenseName}!`);
+                openEditExpenseModal(expenseName, expenseAmount, expenseFilter, expenseMembers);
             });
 
             newExpenseRow.querySelector(".expense-delete-button").addEventListener("click", () => {
@@ -305,6 +313,27 @@ function closeExpensePayorsModal() {
     closeModal(expensePayorsModalWrapper);
     document.removeEventListener("keydown", initExpensePayorsModalTrapFocus);
 }
+
+// =================================
+/**
+ * Function to display modal to EDIT EXPENSE
+*/
+// =================================
+function openEditExpenseModal(expenseName, expenseAmount, expenseFilter, expenseMembers) {
+    // Reuse the modals for ADD NEW EXPENSE by plugging in the info as a new ExpenseInfo object
+    originalExpenseInfo.setExpenseName(expenseName);
+    originalExpenseInfo.setExpenseFilter(expenseFilter);
+    originalExpenseInfo.setExpenseAmount(String(expenseAmount));
+    originalExpenseInfo.setExpenseMembers(expenseMembers);
+
+    // Rename the modal headers accordingly
+    addExpenseModalHeaderInstruction.innerHTML = "Edit expense";
+    newExpenseModalHeaderInstruction.innerHTML = "Expense edited";
+
+    // Open the expense info modal
+    currentExpenseInfo.clearExpenseInfo();
+    openAddExpenseModal(originalExpenseInfo);
+}   
 
 // =================================
 /**
