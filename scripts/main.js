@@ -6,7 +6,7 @@
 import { openAddMemberModal } from "./modal-add-member.js";
 import { openEditMemberModal } from "./modal-edit-member.js";
 import { itemManager } from "./classes/ItemManager.js";
-import { getMemberData, getExpenseData, capitalizeFirstletter } from "./reusable-functions.js";
+import { getMemberData, getExpenseData, capitalizeFirstletter, trapFocus, closeModal } from "./reusable-functions.js";
 import { MEMBER_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
 import { currentExpenseInfo, originalExpenseInfo } from "./classes/ExpenseInfo.js";
@@ -227,6 +227,7 @@ export function displayExpenses() {
             // Add event listeners for this row's buttons
             expenseMemberListButton.addEventListener("click", () => {
                 console.log(`Member List button clicked for ${expenseName}!`);
+                openExpensePayorsModal(expenseName, expenseAmount, expenseFilter, expenseMembers);
             });
 
             newExpenseRow.querySelector(".expense-edit-button").addEventListener("click", () => {
@@ -248,3 +249,68 @@ export function displayExpenses() {
         expenseTotalCount.textContent = String(expenseTotalCount);
     }
 } 
+
+// =================================
+/**
+ * Function to display modal to VIEW EXPENSE PAYORS
+*/
+// =================================
+let expensePayorsModalWrapper = document.getElementById("expense-payors-modal-wrapper");
+function openExpensePayorsModal(expenseName, expenseAmount, expenseFilter, expenseMembers) {
+    // Get the list and clean it
+    let expensePayorsList = document.getElementById("expense-payor-list");
+    expensePayorsList.innerHTML = "";
+
+    // Get the template for payors
+    let expensePayorItemTemplate = document.getElementById("new-expense-payor-template");
+
+    // Populate the list with the official payors
+    console.log("Payors:");
+    console.log(expenseMembers);
+    expenseMembers.forEach(addExpensePayor);
+    function addExpensePayor(payorName){
+        let expensePayorItem = expensePayorItemTemplate.content.cloneNode(true);
+        let expensePayorListItem = expensePayorItem.querySelector(".new-expense-payor");
+        expensePayorListItem.textContent = payorName;
+        expensePayorsList.appendChild(expensePayorItem);
+    }
+
+    // Update the missing entries, use default placeholders for missing entries
+    document.getElementById("expense-payors-modal-expense-amount").textContent = expenseAmount || "0";
+    document.getElementById("expense-payors-modal-expense-name").textContent = expenseName;
+    document.getElementById("expense-payors-modal-expense-filter").textContent = expenseFilter.replace("-", " ");
+    
+    // Open this modal
+    expensePayorsModalWrapper.style.display = "block";
+    document.addEventListener("keydown", initExpensePayorsModalTrapFocus);
+}
+
+// =================================
+/**
+ * Button to close modal to VIEW EXPENSE PAYORS
+*/
+// =================================
+var expensePayorsModalOKButton = document.getElementById("expense-payors-modal-ok-button");
+expensePayorsModalOKButton.addEventListener("click", () => {
+    closeExpensePayorsModal();
+});
+
+// =================================
+/**
+ * Function to close modal to VIEW EXPENSE PAYORS
+*/
+// =================================
+function closeExpensePayorsModal() {
+    // Close this modal
+    closeModal(expensePayorsModalWrapper);
+    document.removeEventListener("keydown", initExpensePayorsModalTrapFocus);
+}
+
+// =================================
+/**
+ * Function to wrap trapFocus to view EXPENSE PAYORS modal
+*/
+// =================================
+function initExpensePayorsModalTrapFocus(event) {
+    trapFocus(event, expensePayorsModalWrapper);
+}

@@ -315,11 +315,23 @@
             </div>
         </div>
 
-        <!-- Template for Payors for New Expense Added -->
+        <!-- Template to view Payors for Expense -->
         <template id="new-expense-payor-template">
             <li class="generic-font generic-size new-expense-payor"></li>
         </template>
 
+        <!-- Modal for payors for Member List button in Table -->
+        <div id="expense-payors-modal-wrapper" class="modal-wrapper">
+            <div id="expense-payors-modal-content" class="modal-content member-list-modal-size">
+                <p id="expense-payors-modal-header" class="generic-font generic-size payor-list-header">$<span id="expense-payors-modal-expense-amount" class="table-header-weight"></span> expense for <span id="expense-payors-modal-expense-name" class="table-header-weight"></span> to be paid by <span id="expense-payors-modal-expense-filter" class="table-header-weight"></span>:</p>
+                <div class="">
+                    <ul id="expense-payor-list"></ul>
+                </div>
+                <div class="modal-button-container">
+                    <button id="expense-payors-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Results -->
         <div class="steps-container">

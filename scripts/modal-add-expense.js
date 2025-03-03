@@ -748,8 +748,3 @@ function initNewExpenseModalTrapFocus(event) {
 function initNewExpensePayorsModalTrapFocus(event) {
     trapFocus(event, newExpensePayorsModalWrapper);
 }
-
-
-// ISSUE: Modal to confirm payors not enough bottom padding on OK button
-// If user selects "selected-members" but selects all members, option must change to all, but if new member is added, option must revert to selected members
-// Maybe save members and compare?
