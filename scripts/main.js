@@ -149,15 +149,16 @@ function deleteMember(memberRow) {
 */
 // =================================
 export var addExpenseModalHeaderInstruction = document.getElementById("add-expense-modal-header-instruction");
-export var newExpenseModalHeaderInstruction = document.getElementById("new-expense-modal-instruction");
+export var newExpenseModalHeaderInstruction = document.getElementById("new-expense-modal-header-instruction");
+
 addExpenseOpenButton.addEventListener("click", () => {
     // Provide a clean slate to the Add Expense modal
     originalExpenseInfo.clearExpenseInfo();
     currentExpenseInfo.clearExpenseInfo();
 
     // Update header instructions
-    // addExpenseModalHeaderInstruction.innerHTML = "Add expense";
-    // newExpenseModalHeaderInstruction.innerHTML = "Expense added"
+    addExpenseModalHeaderInstruction.innerHTML = "Add expense";
+    newExpenseModalHeaderInstruction.innerHTML = "Expense added"
 
     openAddExpenseModal(originalExpenseInfo);
 });

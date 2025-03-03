@@ -368,14 +368,6 @@ addExpenseModalMemberListButton.addEventListener("click", () => {
 // =================================
 let modifyPayorsModalWrapper = document.getElementById("modify-payors-modal-wrapper");
 function openModifyPayorsModal(expenseInfo) {
-    // Update the instruction header for this modal
-    if (addExpenseModalHeaderInstruction.innerHTML.contains("Edit")) {
-        newExpenseModalHeaderInstruction.innerHTML = "Expense edited";
-    }
-    else {
-        newExpenseModalHeaderInstruction.innerHTML = "Expense added";
-    }
-
     // Open the MODIFY PAYORS modal
     modifyPayorsModalWrapper.style.display = "block";
     document.addEventListener("keydown", initModifyPayorsModalTrapFocus);
