@@ -3,8 +3,8 @@
 // Import da goods
 import { setMemberData, trapFocus, closeModal } from "./reusable-functions.js";
 import { itemManager } from "./classes/ItemManager.js";
-import { getMemberData } from "./reusable-functions.js";
-import { displayMembers } from "./main.js";
+import { getMemberData, getExpenseData, setExpenseData } from "./reusable-functions.js";
+import { displayMembers, displayExpenses } from "./main.js";
 
 // =================================
 /**
@@ -79,8 +79,9 @@ deleteItemModalYesButton.addEventListener("click", () => {
     closeModal(deleteItemModalWrapper);
     document.removeEventListener("keydown", initDeleteItemModalTrapFocus);
 
-    // Display members
+    // Reload members and expenses
     displayMembers();
+    displayExpenses();
 
     // Open the delete confirmation modal
     openDeletedItemModal();
@@ -124,10 +125,6 @@ deletedItemModalOKButton.addEventListener("click", () => {
 
     // Stop listening for tab key presses
     document.removeEventListener("keydown", initDeletedItemModalTrapFocus);
-    
-    // Display members
-    displayMembers();
-
 });
 
 // =================================
@@ -144,11 +141,37 @@ function deleteMember(memberName) {
     memberData.members.splice(memberLoc, 1);
     setMemberData(memberData);
 
+    // Update all relevant expenses to remove this member
+    removeMemberFromExpenses(memberName);
+
     console.log("After deletion");
     console.log(memberData);
-
-    // TODO: Delete the member from the expenses
 }
+
+// =================================
+/**
+ * Function to remove deleted member from expenses
+*/
+// =================================
+function removeMemberFromExpenses(memberName) {
+    let expenseData = getExpenseData();
+
+    // Iterate through the expense data and remove the deleted member
+    let expenseNames = Object.keys(expenseData.expenses)
+    expenseNames.forEach(removeMemberFromExpense)
+
+    function removeMemberFromExpense(expenseName) {
+        if (expenseData.expenses[expenseName]["members"].includes(memberName)) {
+            console.log(`${memberName} found in ${expenseName}`);
+            let memberLoc = expenseData.expenses[expenseName]["members"].indexOf(memberName);
+            expenseData.expenses[expenseName]["members"].splice(memberLoc, 1);
+        }
+    }
+
+    // Save!    
+    setExpenseData(expenseData);
+}
+
 
 // =================================
 /**
@@ -156,7 +179,17 @@ function deleteMember(memberName) {
 */
 // =================================
 function deleteExpense(expenseName) {
-    console.log(`deleteExpense called for ${expenseName}`);
+    // Get the latest expenses record
+    let expenseData = getExpenseData();
+
+    // Delete the expense
+    delete expenseData.expenses[expenseName];
+
+    // Save!
+    setExpenseData(expenseData);
+
+    console.log("After deletion:");
+    console.log(expenseData);
 }
 
 // =================================

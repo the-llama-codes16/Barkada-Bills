@@ -7,7 +7,7 @@ import { openAddMemberModal } from "./modal-add-member.js";
 import { openEditMemberModal } from "./modal-edit-member.js";
 import { itemManager } from "./classes/ItemManager.js";
 import { getMemberData, getExpenseData, capitalizeFirstletter, trapFocus, closeModal } from "./reusable-functions.js";
-import { MEMBER_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
+import { MEMBER_CATEGORY, EXPENSE_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
 import { currentExpenseInfo, originalExpenseInfo, ExpenseInfo } from "./classes/ExpenseInfo.js";
 // import { openEditExpenseModal } from "./modal-edit-expense-test.js";
@@ -235,16 +235,17 @@ export function displayExpenses() {
             // Add event listeners for this row's buttons
             expenseMemberListButton.addEventListener("click", () => {
                 console.log(`Member List button clicked for ${expenseName}!`);
-                openExpensePayorsModal(expenseName, expenseAmount, expenseFilter, expenseMembers);
+                viewExpensePayors(expenseName, expenseAmount, expenseFilter, expenseMembers);
             });
 
             newExpenseRow.querySelector(".expense-edit-button").addEventListener("click", () => {
                 console.log(`Edit expense button clicked for ${expenseName}!`);
-                openEditExpenseModal(expenseName, expenseAmount, expenseFilter, expenseMembers);
+                editExpense(expenseName, expenseAmount, expenseFilter, expenseMembers);
             });
 
             newExpenseRow.querySelector(".expense-delete-button").addEventListener("click", () => {
                 console.log(`Delete expense button clicked for ${expenseName}!`);
+                deleteExpense(expenseName);
             });
 
             // Add this to the table
@@ -265,7 +266,7 @@ export function displayExpenses() {
 */
 // =================================
 let expensePayorsModalWrapper = document.getElementById("expense-payors-modal-wrapper");
-function openExpensePayorsModal(expenseName, expenseAmount, expenseFilter, expenseMembers) {
+function viewExpensePayors(expenseName, expenseAmount, expenseFilter, expenseMembers) {
     // Get the list and clean it
     let expensePayorsList = document.getElementById("expense-payor-list");
     expensePayorsList.innerHTML = "";
@@ -320,7 +321,7 @@ function closeExpensePayorsModal() {
  * Function to display modal to EDIT EXPENSE
 */
 // =================================
-function openEditExpenseModal(expenseName, expenseAmount, expenseFilter, expenseMembers) {
+function editExpense(expenseName, expenseAmount, expenseFilter, expenseMembers) {
     // Reuse the modals for ADD NEW EXPENSE by plugging in the info as a new ExpenseInfo object
     originalExpenseInfo.setExpenseName(expenseName);
     originalExpenseInfo.setExpenseFilter(expenseFilter);
@@ -334,7 +335,23 @@ function openEditExpenseModal(expenseName, expenseAmount, expenseFilter, expense
     // Open the expense info modal
     currentExpenseInfo.clearExpenseInfo();
     openAddExpenseModal(originalExpenseInfo);
-}   
+}
+
+// =================================
+/**
+ * Function to delete an expense
+*/
+// =================================
+function deleteExpense(expenseName) {
+    console.log(`Delete Expense button clicked for ${expenseName}!`);
+
+    // Save the expense data
+    itemManager.setItemName(expenseName);
+    itemManager.setItemCategory(EXPENSE_CATEGORY);
+
+    // Open Delete Member modal
+    openDeleteItemModal();
+}
 
 // =================================
 /**

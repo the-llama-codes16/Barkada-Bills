@@ -601,10 +601,10 @@ function submitModifyPayorsModal() {
     closeModal(modifyPayorsModalWrapper);
     document.removeEventListener("keydown", initModifyPayorsModalTrapFocus);
 
-    // Open the Add Expense dialog
+    // Open the Add Expense dialog and set focus on the button
     addExpenseModalWrapper.style.display = "block";
+    addExpenseModalMemberListButton.focus();
     document.addEventListener("keydown", initAddExpenseModalTrapFocus);
-    // ISSUE: Not working!
 }
 
 // =================================
