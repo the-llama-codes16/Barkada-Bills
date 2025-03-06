@@ -3,31 +3,31 @@
 // Import da goods
 import { setMemberData, trapFocus, closeModal } from "./reusable-functions.js";
 import { itemManager } from "./classes/ItemManager.js";
-import { getMemberData } from "./reusable-functions.js";
-import { displayMembers } from "./main.js";
+import { getMemberData, getExpenseData, setExpenseData } from "./reusable-functions.js";
+import { displayMembers, displayExpenses } from "./main.js";
 
 // =================================
-// 
-// DOM Queries 
-//
-// ================================= 
+/**
+ * DOM Queries 
+*/
+// =================================
 const deleteItemModalWrapper = document.getElementById("delete-item-modal-wrapper");
 const deleteItemModalCancelButton = document.getElementById("delete-item-modal-cancel-button");
 const deleteItemCategory = document.getElementById("delete-item-category");
 const deleteItemName = document.getElementById("delete-item-name");
 
 // =================================
-// 
-// Category names
-//
-// ================================= 
+/**
+ * Category names 
+*/
+// =================================
 export const MEMBER_CATEGORY = "member";
 export const EXPENSE_CATEGORY = "expense";
 
 // =================================
-// 
-// Function to display DELETE ITEM modal
-//
+/**
+ * Function to display DELETE ITEM modal
+*/
 // =================================
 export function openDeleteItemModal() {
     console.log("opening Delete Item Modal...");
@@ -45,9 +45,9 @@ export function openDeleteItemModal() {
 }
 
 // =================================
-//
-// Button to cancel DELETE ITEM modal
-//
+/**
+ * Button to cancel DELETE ITEM modal
+*/
 // =================================
 deleteItemModalCancelButton.addEventListener("click", () => {
     // Close this modal
@@ -59,9 +59,9 @@ deleteItemModalCancelButton.addEventListener("click", () => {
 });
 
 // =================================
-//
-// Button to confirm DELETE ITEM modal
-//
+/**
+ * Button to confirm DELETE ITEM modal
+*/
 // =================================
 const deleteItemModalYesButton = document.getElementById("delete-item-modal-yes-button");
 deleteItemModalYesButton.addEventListener("click", () => {
@@ -79,17 +79,18 @@ deleteItemModalYesButton.addEventListener("click", () => {
     closeModal(deleteItemModalWrapper);
     document.removeEventListener("keydown", initDeleteItemModalTrapFocus);
 
-    // Display members
+    // Reload members and expenses
     displayMembers();
+    displayExpenses();
 
     // Open the delete confirmation modal
     openDeletedItemModal();
 });
 
 // =================================
-//
-// Function to display DELETED ITEM modal
-//
+/**
+ * Function to display DELETED ITEM modal
+*/
 // =================================
 const deletedItemModalWrapper = document.getElementById("deleted-item-modal-wrapper");
 const deletedItemModalOKButton = document.getElementById("deleted-item-modal-ok-button");
@@ -114,9 +115,9 @@ function openDeletedItemModal() {
 }
 
 // =================================
-//
-// Button to close DELETED ITEM modal
-//
+/**
+ * Button to close DELETED ITEM modal
+*/
 // =================================
 deletedItemModalOKButton.addEventListener("click", () => {
     // Close the modal
@@ -124,16 +125,12 @@ deletedItemModalOKButton.addEventListener("click", () => {
 
     // Stop listening for tab key presses
     document.removeEventListener("keydown", initDeletedItemModalTrapFocus);
-    
-    // Display members
-    displayMembers();
-
 });
 
 // =================================
-// 
-// Function to delete member and its existence from expenses
-//
+/**
+ * Function to delete member and its existence from expenses
+*/
 // =================================
 function deleteMember(memberName) {
     // Get the latest member names
@@ -144,34 +141,70 @@ function deleteMember(memberName) {
     memberData.members.splice(memberLoc, 1);
     setMemberData(memberData);
 
+    // Update all relevant expenses to remove this member
+    removeMemberFromExpenses(memberName);
+
     console.log("After deletion");
     console.log(memberData);
-
-    // TODO: Delete the member from the expenses
 }
 
 // =================================
-// 
-// Function to delete expenses 
-//
+/**
+ * Function to remove deleted member from expenses
+*/
+// =================================
+function removeMemberFromExpenses(memberName) {
+    let expenseData = getExpenseData();
+
+    // Iterate through the expense data and remove the deleted member
+    let expenseNames = Object.keys(expenseData.expenses)
+    expenseNames.forEach(removeMemberFromExpense)
+
+    function removeMemberFromExpense(expenseName) {
+        if (expenseData.expenses[expenseName]["members"].includes(memberName)) {
+            console.log(`${memberName} found in ${expenseName}`);
+            let memberLoc = expenseData.expenses[expenseName]["members"].indexOf(memberName);
+            expenseData.expenses[expenseName]["members"].splice(memberLoc, 1);
+        }
+    }
+
+    // Save!    
+    setExpenseData(expenseData);
+}
+
+
+// =================================
+/**
+ * Function to delete expenses 
+*/
 // =================================
 function deleteExpense(expenseName) {
-    console.log(`deleteExpense called for ${expenseName}`);
+    // Get the latest expenses record
+    let expenseData = getExpenseData();
+
+    // Delete the expense
+    delete expenseData.expenses[expenseName];
+
+    // Save!
+    setExpenseData(expenseData);
+
+    console.log("After deletion:");
+    console.log(expenseData);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for DELETE ITEM modal
-//
+/**
+ * Function to wrap trapFocus for DELETE ITEM modal
+*/
 // =================================
 function initDeleteItemModalTrapFocus(event) {
     trapFocus(event, deleteItemModalWrapper);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for DELETED ITEM modal
-//
+/**
+ * Function to wrap trapFocus for DELETED ITEM modal
+*/
 // =================================
 function initDeletedItemModalTrapFocus(event) {
     trapFocus(event, deletedItemModalWrapper);

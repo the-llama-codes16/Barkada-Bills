@@ -1,9 +1,9 @@
 // Reusable Functions
 
 // =================================
-// 
-// Function to close modal
-//
+/**
+ * Function to close modal
+*/
 // =================================
 export function closeModal(targetModal) {
   console.log("closing...")
@@ -11,16 +11,17 @@ export function closeModal(targetModal) {
 }
 
 // =================================
-// 
-// Function to check if a member name already exists, case insensitive
-//
+/**
+ * Function to check if a member or expense name already exists, case insensitive
+*/
 // =================================
-export function hasMemberNameCaseInsensitive(memberList, nameToCheck) {
+export function hasNameCaseInsensitive(itemList, nameToCheck) {
   console.log(`Checking if ${nameToCheck} already exists...`);
   const nameToCheckLower = nameToCheck.toLowerCase();
   console.log(`Using ${nameToCheckLower}...`);
-  for (let i = 0; i < memberList.length; i++) {
-    let name = memberList[i];
+  console.log(itemList);
+  for (let i = 0; i < itemList.length; i++) {
+    let name = itemList[i];
     console.log(`Checking ${name}...`);
     if (name.toLowerCase() === nameToCheckLower) {
       return true;
@@ -30,27 +31,45 @@ export function hasMemberNameCaseInsensitive(memberList, nameToCheck) {
 }
 
 // =================================
-// 
-// Function to get member data from sessionStorage or create it if inexistent
-//
+/**
+ * Function to get member data from sessionStorage or create it if inexistent
+*/
 // =================================
 export function getMemberData() {
   return JSON.parse(sessionStorage.getItem("memberData")) || { "members": [] };
 }
 
 // =================================
-// 
-// Function to store member data to sessionStorage
-//
+/**
+ * Function to store member data to sessionStorage
+*/
 // =================================
 export function setMemberData(memberData) {
   sessionStorage.setItem("memberData", JSON.stringify(memberData));
 }
 
 // =================================
-// 
-// Function to trap focus in a given modal
-//
+/**
+ * Function to get expenses data from sessionStorage or create it if inexistent
+*/
+// =================================
+export function getExpenseData() {
+  return JSON.parse(sessionStorage.getItem("expenseData")) || { "expenses": {} };
+}
+
+// =================================
+/**
+ * Function to store member data to sessionStorage
+*/
+// =================================
+export function setExpenseData(expenseData) {
+  sessionStorage.setItem("expenseData", JSON.stringify(expenseData));
+}
+
+// =================================
+/**
+ * Function to trap focus in a given modal
+*/
 // =================================
 export function trapFocus(event, modal) {
   console.log("trapfocus called!")
@@ -82,4 +101,14 @@ export function trapFocus(event, modal) {
       firstFocusableElement.focus();
       event.preventDefault();
   }
+}
+
+// =================================
+/**
+ * Function to capitalize the first letter of the input string
+ * @returns A new string with the first letter capitalized
+*/
+// =================================
+export function capitalizeFirstletter(word) {
+  return word[0].toUpperCase() + word.slice(1);
 }

@@ -7,6 +7,16 @@
     text-decoration: none;
 }
 
+.button-sub:disabled {
+    background-color: #E6E6E6; 
+    color: #A0A0A0; 
+    border: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
 .button-main {
     background-color: #000000;
     color: #ffffff;
@@ -53,13 +63,18 @@
 }
 
 .modal-content {
+    background-color: #ffffff;
+    margin: 15% auto;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 2px;
+    border-radius: 0.5rem;
+}
+
+.modal-content-flex {
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
-    width: 26rem;
-    min-width: 26rem;
-    height: 14.5rem;
-    min-height: 14.5rem;
     margin: 15% auto;
     border-style: solid;
     border-color: #000000;
@@ -68,15 +83,63 @@
     overflow: auto;
 }
 
+.small-modal-size {
+    width: 26rem;
+    min-width: 26rem;
+    height: 14.5rem;
+    min-height: 14.5rem;
+}
+
+.big-modal-size {
+    width: 30.5rem;
+    min-width: 30.5rem;
+    height: 24rem;
+    min-height: 24rem;
+}
+
+.member-list-modal-size {
+    width: auto;
+    min-width: 30.5rem;
+    max-width: max-content;
+    height: auto;
+    min-height: 13rem;
+    max-height: max-content;   
+    padding: 1rem; 
+}
+
+.payor-list-header {
+    text-align: center;
+}
+
 .modal-header {
     padding-left: 2rem;
     padding-top: 0rem;
 }
 
+.modal-header-big-modal {
+    padding-left: 2rem;
+    margin-bottom: 0rem;
+}
+
+#modify-payors-modal-header {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+
 .modal-form-wrapper {
+    padding-top: 0.5rem;
+    flex-direction: column;
+}
+
+.modal-form-wrapper-flex {
     padding-top: 0.5rem;
     display: flex;
     flex-direction: column;
+}
+
+.modal-form-item {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .input-space {
@@ -85,6 +148,38 @@
     outline: none;
     width: 17.5rem;
     border-bottom: 2px solid #000000;
+}
+
+.input-space-big-modal-name {
+    margin-left: 5rem;
+}
+
+.input-space-big-modal-amount {
+    margin-left: 4.05rem;
+}
+
+.input-space-big-modal-filter {
+    margin-left: 1.65rem;
+}
+
+.input-space-dropdown-list {
+    margin-left: 1.65rem;
+    width: 17.75rem;
+    height: 2rem;
+}
+
+.new-expense-info-fields {
+    display: inline;
+}
+
+.new-expense-item {
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+}
+
+.new-expense-payor {
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 .modal-button-padding {
@@ -98,6 +193,7 @@
     margin-left: 2rem;
     margin-right: 2rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .modal-button-container{
@@ -107,6 +203,19 @@
     margin-left: 2rem;
     margin-right: 2rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.modal-members-button {
+    margin-left: 10.35rem;
+}
+
+#new-expense-modal-ok-button {
+    margin-top: 2rem;
+}
+
+#new-expense-modal-member-list-button {
+    margin-top: 0rem;
 }
 
 .error-message {
@@ -125,8 +234,37 @@
     text-align: center;
     margin-bottom: 2rem;
 }
-/* END of Modals */
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="checkbox"] {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-right: 0.75rem;
+}
+
+.checkbox-label-pair {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.select-all-checkbox-label-pair {
+    padding-left: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.payors-checkbox-label-pair {
+    padding-left: 4.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* END of Modals */
 
 /* Main Page - Tables */
 .data-table {
@@ -141,12 +279,14 @@
 
 .first-col-element {
     padding-left: 2rem;
-    padding-right: 8rem;
 }
 
 .first-col-header {
     padding-left: 2rem;
-    text-align: left;
+}
+
+.member-last-column-element {
+    padding-right: 2rem;
 }
 
 th, td {
@@ -157,3 +297,19 @@ th, td {
 .item-total-string {
     margin-bottom: 1rem;
 }
+
+.col-element {
+    text-align: left;
+    padding-right: 8.5rem;
+}
+
+.filter-col-element {
+    text-align: left;
+    padding-right: 0.75rem;
+}
+
+.member-list-button-col-element {
+    padding-left: 0;
+}
+
+/* END OF Main Page - Tables */

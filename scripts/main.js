@@ -6,21 +6,23 @@
 import { openAddMemberModal } from "./modal-add-member.js";
 import { openEditMemberModal } from "./modal-edit-member.js";
 import { itemManager } from "./classes/ItemManager.js";
-import { getMemberData } from "./reusable-functions.js";
-import { MEMBER_CATEGORY } from "./modal-delete-item.js";
-import { openDeleteItemModal } from "./modal-delete-item.js";
-
+import { getMemberData, getExpenseData, capitalizeFirstletter, trapFocus, closeModal } from "./reusable-functions.js";
+import { MEMBER_CATEGORY, EXPENSE_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
+import { openAddExpenseModal } from "./modal-add-expense.js";
+import { currentExpenseInfo, originalExpenseInfo, ExpenseInfo } from "./classes/ExpenseInfo.js";
+// import { openEditExpenseModal } from "./modal-edit-expense-test.js";
 // =================================
-// 
-// DOM Queries 
-//
-// ================================= 
+/**
+ * DOM Queries
+*/
+// =================================
 export var addMemberOpenButton = document.getElementById("add-member-open-button");
+export var addExpenseOpenButton = document.getElementById("add-expense-open-button");
 
 // =================================
-// 
-// Button to open ADD MEMBER modal
-//
+/**
+ * Button to open ADD MEMBER modal
+*/
 // =================================
 addMemberOpenButton.addEventListener("click", () => {
     // Open the modal
@@ -28,24 +30,25 @@ addMemberOpenButton.addEventListener("click", () => {
 })
 
 // =================================
-// 
-// Load the data on the tables as soon as this page is loaded
-//
+/**
+ * Load the data on the tables as soon as this page is loaded
+*/
 // =================================
 document.addEventListener("DOMContentLoaded", () => {
     console.log("in DOMload")
     displayMembers();
+    displayExpenses();
 })
 
 // =================================
-// 
-// Function to reload and display members on a table
-//
+/**
+ * Function to reload and display members on a table
+*/
 // =================================
 export function displayMembers() {
     console.log("displayMembers called!");
 
-    // Get the existing data of member list or create it if inexistent
+    // Get the existing data of member list
     const memberData = getMemberData();
 
     // Display if there is any
@@ -105,9 +108,14 @@ export function displayMembers() {
         memberTotalCountString.classList.remove("total-visible");
         memberTotalCount.textContent = String(memberCount);
     }
-  }
-  
-  function editMember(memberRow) {
+}
+
+// =================================
+/**
+ * Function to edit a member name
+*/
+// =================================
+function editMember(memberRow) {
     let memberName = memberRow.querySelector(".member-name").textContent;
     console.log(`Edit Member button clicked for ${memberName}!`);
 
@@ -115,10 +123,15 @@ export function displayMembers() {
     itemManager.setItemName(memberName);
 
     // Open Edit Member modal
-    openEditMemberModal(memberName);
-  }
-  
-  function deleteMember(memberRow) {
+    openEditMemberModal([memberName]);
+}
+
+// =================================
+/**
+ * Function to delete a member
+*/
+// =================================
+function deleteMember(memberRow) {
     let memberName = memberRow.querySelector(".member-name").textContent;
     console.log(`Delete Member button clicked for ${memberName}!`);
 
@@ -128,4 +141,223 @@ export function displayMembers() {
 
     // Open Delete Member modal
     openDeleteItemModal();
-  }
+}
+
+// =================================
+/**
+ * Button to open ADD EXPENSE modal
+*/
+// =================================
+export var addExpenseModalHeaderInstruction = document.getElementById("add-expense-modal-header-instruction");
+export var newExpenseModalHeaderInstruction = document.getElementById("new-expense-modal-header-instruction");
+
+addExpenseOpenButton.addEventListener("click", () => {
+    // Provide a clean slate to the Add Expense modal
+    originalExpenseInfo.clearExpenseInfo();
+    currentExpenseInfo.clearExpenseInfo();
+
+    // Update header instructions
+    addExpenseModalHeaderInstruction.innerHTML = "Add expense";
+    newExpenseModalHeaderInstruction.innerHTML = "Expense added"
+
+    openAddExpenseModal(originalExpenseInfo);
+});
+
+// =================================
+/**
+ * Function to reload and display expenses on a table
+*/
+// =================================
+export function displayExpenses() {
+    // Get the data on expenses
+    let expenseData = getExpenseData();
+
+    // Display if there is any
+    let expenseCount = Object.keys(expenseData.expenses).length;
+    console.log(`EXPENSE COUNT: ${expenseCount}`);
+
+    // Prepare the elements to be accessed
+    const expenseTable = document.getElementById("expense-table");
+    const expenseTotalCountString = document.getElementById("expense-total-count-string");
+    const expenseTotalCount = document.getElementById("expense-total-count");
+
+    // Clean the table
+    let expenseTableBody = expenseTable.getElementsByTagName("tbody")[0];
+    expenseTableBody.innerHTML = "";
+
+    if (expenseCount > 0) {    
+        // Display the table
+        expenseTable.classList.add("table-header-visible");
+
+        // Display the total count
+        expenseTotalCountString.classList.add("total-visible");
+        expenseTotalCount.textContent = String(expenseCount);
+
+        // Update the table to display the expenses
+        let expenseNames = Object.keys(expenseData.expenses)
+        expenseNames.forEach(updateExpenseTableRow)
+
+        function updateExpenseTableRow(expenseName) {
+            console.log(`expense Name: ${expenseName}`);
+
+            let expenseAmount = expenseData.expenses[expenseName]["amount"];
+            let expenseFilter = expenseData.expenses[expenseName]["filter"];
+            let expenseMembers = expenseData.expenses[expenseName]["members"];
+
+            // Clone the template
+            let expenseRowTemplate = document.getElementById("expense-row-template");
+            let newExpenseRow = expenseRowTemplate.content.cloneNode(true);
+
+            // Populate our new row with the current expense data
+            newExpenseRow.querySelector(".expense-name").textContent = expenseName;
+            newExpenseRow.querySelector(".expense-amount").textContent = String(expenseAmount);
+            newExpenseRow.querySelector(".expense-contributors-filter").textContent = capitalizeFirstletter(expenseFilter.replace("-", " "));
+
+            // Update visibility and availability status of Member list button accordingly
+            let expenseMemberListButton = newExpenseRow.querySelector(".expense-member-list-button");
+            if (expenseFilter === "all") {
+                expenseMemberListButton.style.visibility = "hidden";
+            }
+            else {
+                expenseMemberListButton.style.visibility = "visible";
+
+                // Disable this button if there are no selected members
+                if (expenseMembers.length > 0) {
+                    expenseMemberListButton.disabled = false;
+                    expenseMemberListButton.title = "";
+                }
+                else {
+                    expenseMemberListButton.disabled = true;
+                    expenseMemberListButton.title = "No members selected. You may add members for this expense using the Edit feature."
+                }
+            }
+
+            // Add event listeners for this row's buttons
+            expenseMemberListButton.addEventListener("click", () => {
+                console.log(`Member List button clicked for ${expenseName}!`);
+                viewExpensePayors(expenseName, expenseAmount, expenseFilter, expenseMembers);
+            });
+
+            newExpenseRow.querySelector(".expense-edit-button").addEventListener("click", () => {
+                console.log(`Edit expense button clicked for ${expenseName}!`);
+                editExpense(expenseName, expenseAmount, expenseFilter, expenseMembers);
+            });
+
+            newExpenseRow.querySelector(".expense-delete-button").addEventListener("click", () => {
+                console.log(`Delete expense button clicked for ${expenseName}!`);
+                deleteExpense(expenseName);
+            });
+
+            // Add this to the table
+            expenseTableBody.appendChild(newExpenseRow);
+        }
+    }
+    else {
+        // Ensure that the table and other related elements are not displayed
+        expenseTable.classList.remove("table-header-visible");
+        expenseTotalCountString.classList.remove("total-visible");
+        expenseTotalCount.textContent = String(expenseTotalCount);
+    }
+} 
+
+// =================================
+/**
+ * Function to display modal to VIEW EXPENSE PAYORS
+*/
+// =================================
+let expensePayorsModalWrapper = document.getElementById("expense-payors-modal-wrapper");
+function viewExpensePayors(expenseName, expenseAmount, expenseFilter, expenseMembers) {
+    // Get the list and clean it
+    let expensePayorsList = document.getElementById("expense-payor-list");
+    expensePayorsList.innerHTML = "";
+
+    // Get the template for payors
+    let expensePayorItemTemplate = document.getElementById("new-expense-payor-template");
+
+    // Populate the list with the official payors
+    console.log("Payors:");
+    console.log(expenseMembers);
+    expenseMembers.forEach(addExpensePayor);
+    function addExpensePayor(payorName){
+        let expensePayorItem = expensePayorItemTemplate.content.cloneNode(true);
+        let expensePayorListItem = expensePayorItem.querySelector(".new-expense-payor");
+        expensePayorListItem.textContent = payorName;
+        expensePayorsList.appendChild(expensePayorItem);
+    }
+
+    // Update the missing entries, use default placeholders for missing entries
+    document.getElementById("expense-payors-modal-expense-amount").textContent = expenseAmount || "0";
+    document.getElementById("expense-payors-modal-expense-name").textContent = expenseName;
+    document.getElementById("expense-payors-modal-expense-filter").textContent = expenseFilter.replace("-", " ");
+    
+    // Open this modal
+    expensePayorsModalWrapper.style.display = "block";
+    document.addEventListener("keydown", initExpensePayorsModalTrapFocus);
+}
+
+// =================================
+/**
+ * Button to close modal to VIEW EXPENSE PAYORS
+*/
+// =================================
+var expensePayorsModalOKButton = document.getElementById("expense-payors-modal-ok-button");
+expensePayorsModalOKButton.addEventListener("click", () => {
+    closeExpensePayorsModal();
+});
+
+// =================================
+/**
+ * Function to close modal to VIEW EXPENSE PAYORS
+*/
+// =================================
+function closeExpensePayorsModal() {
+    // Close this modal
+    closeModal(expensePayorsModalWrapper);
+    document.removeEventListener("keydown", initExpensePayorsModalTrapFocus);
+}
+
+// =================================
+/**
+ * Function to display modal to EDIT EXPENSE
+*/
+// =================================
+function editExpense(expenseName, expenseAmount, expenseFilter, expenseMembers) {
+    // Reuse the modals for ADD NEW EXPENSE by plugging in the info as a new ExpenseInfo object
+    originalExpenseInfo.setExpenseName(expenseName);
+    originalExpenseInfo.setExpenseFilter(expenseFilter);
+    originalExpenseInfo.setExpenseAmount(String(expenseAmount));
+    originalExpenseInfo.setExpenseMembers(expenseMembers);
+
+    // Rename the modal headers accordingly
+    addExpenseModalHeaderInstruction.innerHTML = "Edit expense";
+    newExpenseModalHeaderInstruction.innerHTML = "Expense edited";
+
+    // Open the expense info modal
+    currentExpenseInfo.clearExpenseInfo();
+    openAddExpenseModal(originalExpenseInfo);
+}
+
+// =================================
+/**
+ * Function to delete an expense
+*/
+// =================================
+function deleteExpense(expenseName) {
+    console.log(`Delete Expense button clicked for ${expenseName}!`);
+
+    // Save the expense data
+    itemManager.setItemName(expenseName);
+    itemManager.setItemCategory(EXPENSE_CATEGORY);
+
+    // Open Delete Member modal
+    openDeleteItemModal();
+}
+
+// =================================
+/**
+ * Function to wrap trapFocus to view EXPENSE PAYORS modal
+*/
+// =================================
+function initExpensePayorsModalTrapFocus(event) {
+    trapFocus(event, expensePayorsModalWrapper);
+}

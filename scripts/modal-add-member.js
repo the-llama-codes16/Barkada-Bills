@@ -1,31 +1,36 @@
 // Script for Add Member modal, New Member Added modal
 
 // Import da goods
-import { trapFocus, closeModal, hasMemberNameCaseInsensitive, getMemberData, setMemberData } from "./reusable-functions.js";
+import { trapFocus, closeModal, hasNameCaseInsensitive, getMemberData, setMemberData } from "./reusable-functions.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
 import { displayMembers, addMemberOpenButton } from "./main.js";
 
 // =================================
-// 
-// DOM Queries 
-//
-// ================================= 
+/**
+ * DOM Queries 
+*/
+// =================================
 var addMemberModalTextField = document.getElementById("add-member-modal-text-field");
 var addMemberModalWrapper = document.getElementById("add-member-modal-wrapper");
 var addMemberErrorMsg = document.getElementById("add-member-modal-error-message");
 
 // =================================
-// 
-// Function to display ADD MEMBER modal
-//
+/**
+ * Function to display ADD MEMBER modal
+*/
 // =================================
-export function openAddMemberModal(memberName = "") {
+export function openAddMemberModal(memberName = []) {
     console.log("opening Add Member Modal...");
     addMemberModalWrapper.style.display = "block";
 
     // Set focus on the text field and ensure that the entry, if there is any, is displayed
-    addMemberModalTextField.value = memberName;
+    if (memberName.length > 0) {
+        addMemberModalTextField.value = memberName[0];
+    }
+    else {
+        addMemberModalTextField.value = "";
+    }
     addMemberModalTextField.focus();
 
     // Clear the error message placeholder and adjust buttons
@@ -36,9 +41,9 @@ export function openAddMemberModal(memberName = "") {
 }
 
 // =================================
-// 
-// Button to close ADD MEMBER modal
-//
+/**
+ * Button to close ADD MEMBER modal
+*/
 // =================================
 var addMemberModalCloseButton = document.getElementById("add-member-modal-close-button");
 addMemberModalCloseButton.addEventListener("click", () => {
@@ -52,7 +57,7 @@ addMemberModalCloseButton.addEventListener("click", () => {
     if (name !== "") {
         // Set this as the current active modal
         console.log("Setting modal...")
-        modalManager.setActiveModalInfo(openAddMemberModal, name);
+        modalManager.setActiveModalInfo(openAddMemberModal, [name]);
 
         // Open confirm cancel modal
         openDoYouWantToCancelModal();
@@ -64,9 +69,9 @@ addMemberModalCloseButton.addEventListener("click", () => {
 })
 
 // =================================
-// 
-// Submit ADD MEMBER modal
-//
+/**
+ * Submit ADD MEMBER modal
+*/
 // =================================
 var addMemberModalForm = document.getElementById("add-member-modal-form");
 addMemberModalForm.addEventListener("submit", (event) => {
@@ -83,7 +88,7 @@ addMemberModalForm.addEventListener("submit", (event) => {
     // Check if input is not just whitespace
     if (/\S/.test(name)) {
         // Check if name already exists, case insensitive
-        if (hasMemberNameCaseInsensitive(memberData.members, name)) {
+        if (hasNameCaseInsensitive(memberData.members, name)) {
             console.log(`Member name already exists: ${name}`);
             addMemberErrorMsg.textContent = "Member name already exists.";
             addMemberErrorMsg.classList.add("error-visible");
@@ -113,13 +118,12 @@ addMemberModalForm.addEventListener("submit", (event) => {
         // Set focus back again to the text field 
         addMemberModalTextField.focus();
     }    
-})
-
+});
 
 // =================================
-//
-// Function to display modal to confirm NEW MEMBER ADDED
-//
+/**
+ * Function to display modal to confirm NEW MEMBER ADDED
+*/
 // =================================
 var newMemberModalWrapper = document.getElementById("new-member-modal-wrapper");
 function openConfirmNewMemberModal(name) {
@@ -138,9 +142,9 @@ function openConfirmNewMemberModal(name) {
 }
 
 // =================================
-//
-// Button to close NEW MEMBER ADDED modal
-//
+/**
+ * Button to close NEW MEMBER ADDED modal
+*/
 // =================================
 var newMemberModalOKButton = document.getElementById("new-member-modal-ok-button");
 newMemberModalOKButton.addEventListener("click", () => {
@@ -160,18 +164,18 @@ newMemberModalOKButton.addEventListener("click", () => {
 })
 
 // =================================
-// 
-// Function to wrap trapFocus for ADD NEW MEMBER modal
-//
+/**
+ * Function to wrap trapFocus for ADD NEW MEMBER modal
+*/
 // =================================
 function initAddMemberModalTrapFocus(event) {
     trapFocus(event, addMemberModalWrapper);
 }
 
 // =================================
-// 
-// Function to wrap trapFocus for NEW MEMBER ADDED modal
-//
+/**
+ * Function to wrap trapFocus for NEW MEMBER ADDED modal
+*/
 // =================================
 function initNewMemberAddedModalTrapFocus(event) {
     trapFocus(event, newMemberModalWrapper);
