@@ -289,6 +289,14 @@ input[type="checkbox"] {
     padding-right: 2rem;
 }
 
+.member-last-column-element-contrib {
+    padding-right: 0.5rem;
+}
+
+.member-contrib-placeholder {
+    visibility: hidden;
+}
+
 th, td {
     border-bottom: 1px solid #000000;
     padding: 0.1rem;

@@ -10,7 +10,7 @@ import { getMemberData, getExpenseData, capitalizeFirstletter, trapFocus, closeM
 import { MEMBER_CATEGORY, EXPENSE_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
 import { currentExpenseInfo, originalExpenseInfo, ExpenseInfo } from "./classes/ExpenseInfo.js";
-// import { openEditExpenseModal } from "./modal-edit-expense-test.js";
+
 // =================================
 /**
  * DOM Queries
@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("in DOMload")
     displayMembers();
     displayExpenses();
+    displayMemberContribInfo();
 })
 
 // =================================
@@ -352,6 +353,201 @@ function deleteExpense(expenseName) {
     // Open Delete Member modal
     openDeleteItemModal();
 }
+
+// =================================
+/**
+ * Function to prepare member contribution information
+*/
+// =================================
+function prepareMemberContribs() {
+    // Get the existing members
+    let memberList = getMemberData().members;
+    console.log("MEMBER LIST:");
+    console.log(memberList);
+
+    // Get the existing expenses
+    let expenseData = getExpenseData();
+    console.log("EXPENSE DATA:");
+    console.log(expenseData);
+    let expenses = Object.keys(expenseData.expenses);
+    console.log("EXPENSES:");
+    console.log(expenses);
+
+    // Prepare the member contribution data
+    let memberContribData = {};
+    memberList.forEach(prepareMemberKey);
+    function prepareMemberKey(memberName) {
+        memberContribData[memberName] = {};
+    }
+
+    // Iterate through each expense!
+    expenses.forEach(expenseToMemberData);
+    function expenseToMemberData(expenseName) {
+        let expenseAmount = expenseData.expenses[expenseName]["amount"];
+        let expenseMembers = expenseData.expenses[expenseName]["members"];
+
+        // Divide according to the expense filter
+        let expenseFilter = expenseData.expenses[expenseName]["filter"];
+        switch(expenseFilter) {
+            case "all":
+                delegateExpenseToAll(expenseName, expenseAmount, memberList, memberContribData);
+                break;
+            case "all-except":
+                delegateExpenseToAllExcept(expenseName, expenseAmount, expenseMembers, memberList, memberContribData);
+                break;
+            case "selected-members":
+                delegateExpenseToSelectedMembers(expenseName, expenseAmount, expenseMembers, memberList, memberContribData);
+                break;
+        }
+    }
+
+    console.log("CONTRIB DATA:");
+    console.log(memberContribData);
+    return memberContribData;
+}
+
+// =================================
+/**
+ * Function to delegate expense contribution to applicable members: ALL filter
+*/
+// =================================
+function delegateExpenseToAll(expenseName, expenseAmount, memberList, memberContribData) {
+    // No need to proceed if there are no members
+    if (memberList.length < 1) {
+        return;
+    }
+
+    // Divide the amount!
+    let individualContrib = expenseAmount / memberList.length;
+    memberList.forEach(updateMemberContribData);
+    function updateMemberContribData(memberName) {
+        memberContribData[memberName][expenseName] = String(+individualContrib.toFixed(2));
+    }
+}
+
+// =================================
+/**
+ * Function to delegate expense contribution to applicable members: ALL-EXCEPT filter
+*/
+// =================================
+function delegateExpenseToAllExcept(expenseName, expenseAmount, expenseMemberList, memberList, memberContribData) {
+    // No need to proceed if there are no members
+    if (memberList.length < 1) {
+        return;
+    }
+
+    // Divide the amount!
+    let individualContrib = expenseAmount / (memberList.length - expenseMemberList.length);
+    memberList.forEach(updateMemberContribData);
+    function updateMemberContribData(memberName) {
+        if (!expenseMemberList.includes(memberName)) {
+            memberContribData[memberName][expenseName] = String(+individualContrib.toFixed(2));
+        }
+    }
+}
+
+// =================================
+/**
+ * Function to delegate expense contribution to applicable members: SELECTED-MEMBERS filter
+*/
+// =================================
+function delegateExpenseToSelectedMembers(expenseName, expenseAmount, expenseMemberList, memberList, memberContribData) {
+    // No need to proceed if there are no members or any selected member
+    if (memberList.length < 1) {
+        return;
+    }
+
+    if (expenseMemberList.length < 1) {
+        return;
+    }
+
+    // Divide the amount!
+    let individualContrib = expenseAmount / expenseMemberList.length;
+    expenseMemberList.forEach(updateMemberContribData);
+    function updateMemberContribData(memberName) {
+        memberContribData[memberName][expenseName] = String(+individualContrib.toFixed(2));
+    }
+}
+
+// =================================
+/**
+ * Function to display member contribution information
+*/
+// =================================
+export function displayMemberContribInfo() {
+    let memberContribData = prepareMemberContribs();
+
+    // Prepare the elements to be accessed
+    const memberContribTable = document.getElementById("member-contrib-table");
+    const memberContribDesc = document.getElementById("member-contrib-desc");
+
+    // Clean the table
+    let memberContribBody = memberContribTable.getElementsByTagName("tbody")[0];
+    memberContribBody.innerHTML = "";
+
+    // Only display if there is at least one member and at least one expense
+    let memberData = getMemberData();
+    let expenseCount = Object.keys(getExpenseData().expenses).length;
+
+    if (memberData.members.length > 0 && expenseCount > 0) {    
+        // Display the table and set appropriate description
+        memberContribTable.classList.add("table-header-visible");
+        memberContribDesc.textContent = "Total contributions for each member, with detailed breakdown.";
+
+        // Update the table to display the member contributions info
+        memberData.members.forEach(displayMemberContrib);
+        function displayMemberContrib(memberName) {
+            console.log(`Member Contrib info for ${memberName}`);
+
+            // Calculate the total contribution amount
+            let totalContrib = 0;
+            let contribItems = Object.keys(memberContribData[memberName]);
+            contribItems.forEach(calcTotalContrib);
+            function calcTotalContrib(contribItem){
+                totalContrib += Number(memberContribData[memberName][contribItem]);
+            }
+
+            // Prepare the partial expense items to display
+            let contribExpense = "";
+            if (contribItems.length < 1) {
+                contribExpense = "None";
+            }
+            else {
+                contribExpense = `${contribItems[0]}`;
+                if (contribItems[1]) {
+                    contribExpense += `, ${contribItems[1]}`;
+                    if (contribItems[2]) {
+                        contribExpense += "...";
+                    }
+                }
+            }
+
+            // Clone the template
+            let memberContribRowTemplate = document.getElementById("member-contrib-row-template");
+            let newMemberContribRow = memberContribRowTemplate.content.cloneNode(true);
+
+            // Populate our new row with the current expense data
+            newMemberContribRow.querySelector(".member-contrib-name").textContent = memberName;
+            newMemberContribRow.querySelector(".member-contrib-amount").textContent = String(+totalContrib.toFixed(2));
+            newMemberContribRow.querySelector(".member-contrib-expense").textContent = contribExpense
+
+            // Add event listeners for this row's button
+            newMemberContribRow.querySelector(".member-contrib-view-button").addEventListener("click", () => {
+                console.log(`View button clicked for ${memberName}`);
+            });
+
+            // Add this to the table
+            memberContribBody.appendChild(newMemberContribRow);
+
+        }
+    }
+    else {
+        // Ensure that the table and other related elements are not displayed
+        memberContribTable.classList.remove("table-header-visible");
+        memberContribDesc.textContent = "Each member's contribution will display here as you add members and expenses."
+    }
+} 
+
 
 // =================================
 /**

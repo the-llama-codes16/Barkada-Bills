@@ -336,8 +336,35 @@
         <!-- Results -->
         <div class="steps-container">
             <h1 class="home-content-lead generic-font subheaders-size step-header">Member Contributions</h1>
-            <h3 class="home-content-lead generic-font generic-size step-description">Each member's contribution will display here as you add members and expenses.</h3>
+            <h3 id="member-contrib-desc" class="home-content-lead generic-font generic-size step-description">Each member's contribution will display here as you add members and expenses.</h3>
+            <!-- Dynamic Table for Member Contribution Data -->
+            <table id="member-contrib-table" class="data-table home-content-lead">
+                <thead>
+                    <tr>
+                        <th class="first-col-header col-element generic-font generic-size table-header-weight">Name</th>
+                        <th class="col-element generic-font generic-size table-header-weight">Total Contribution</th>
+                        <th class="col-element generic-font generic-size table-header-weight">Contributes to</th>
+                        <th></th>
+                        <th class="member-last-column-element-contrib"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
+
+        <!-- Row Template for Member Contribution Data -->
+        <template id="member-contrib-row-template">
+            <tr class="table-item-row">
+                <td class="member-contrib-name first-col-element col-element generic-font generic-size"></td>
+                <td class="member-contrib-amount col-element generic-font generic-size"></td>
+                <td class="member-contrib-expense col-element generic-font generic-size"></td>
+                <td><button class="member-contrib-view-button generic-font generic-size button-sub button-edit-table-padding" title="View contribution info">View</button></td>
+                <!-- This delete button is added to maintain the same row height, but this will not be visible -->
+                <td><button class="member-contrib-placeholder member-last-column-element-contrib generic-font generic-size button-delete x-button" title="Delete expense">X</button></td>
+            </tr>
+        </template>
+
     </body>
 
     <!-- Javascript -->
