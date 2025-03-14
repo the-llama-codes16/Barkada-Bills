@@ -117,9 +117,11 @@ editMemberModalForm.addEventListener("submit", (event) => {
 
                 // Clear original member data
                 itemManager.clearItemInfo();
-
-                // Reload the displayed members
+                
+                // Redisplay everything
                 displayMembers();
+                displayExpenses();
+                displayMemberContribInfo();
 
                 // Close this modal
                 closeModal(editMemberModalWrapper);

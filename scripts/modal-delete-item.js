@@ -4,7 +4,7 @@
 import { setMemberData, trapFocus, closeModal } from "./reusable-functions.js";
 import { itemManager } from "./classes/ItemManager.js";
 import { getMemberData, getExpenseData, setExpenseData } from "./reusable-functions.js";
-import { displayMembers, displayExpenses } from "./main.js";
+import { displayMembers, displayExpenses, displayMemberContribInfo } from "./main.js";
 
 // =================================
 /**
@@ -79,9 +79,10 @@ deleteItemModalYesButton.addEventListener("click", () => {
     closeModal(deleteItemModalWrapper);
     document.removeEventListener("keydown", initDeleteItemModalTrapFocus);
 
-    // Reload members and expenses
+    // Redisplay everything
     displayMembers();
     displayExpenses();
+    displayMemberContribInfo();
 
     // Open the delete confirmation modal
     openDeletedItemModal();

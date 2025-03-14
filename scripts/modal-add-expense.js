@@ -5,7 +5,7 @@ import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, h
 import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
-import { addExpenseOpenButton, displayExpenses, addExpenseModalHeaderInstruction, newExpenseModalHeaderInstruction } from "./main.js";
+import { addExpenseOpenButton, displayExpenses, displayMemberContribInfo } from "./main.js";
 
 // =================================
 /**
@@ -197,6 +197,7 @@ let addExpenseModalForm = document.getElementById("add-expense-modal-form");
 addExpenseModalForm.addEventListener("submit", (event) => {
     submitAddExpenseModal(event);
     displayExpenses();
+    displayMemberContribInfo();
 });
 
 // =================================

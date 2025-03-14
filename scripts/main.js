@@ -125,6 +125,7 @@ function editMember(memberRow) {
 
     // Open Edit Member modal
     openEditMemberModal([memberName]);
+    
 }
 
 // =================================
@@ -336,6 +337,11 @@ function editExpense(expenseName, expenseAmount, expenseFilter, expenseMembers) 
     // Open the expense info modal
     currentExpenseInfo.clearExpenseInfo();
     openAddExpenseModal(originalExpenseInfo);
+
+    // Redisplay everything
+    displayMembers();
+    displayExpenses();
+    displayMemberContribInfo();
 }
 
 // =================================
@@ -475,6 +481,8 @@ function delegateExpenseToSelectedMembers(expenseName, expenseAmount, expenseMem
 */
 // =================================
 export function displayMemberContribInfo() {
+    console.log("Displaying Member contrib info!");
+
     let memberContribData = prepareMemberContribs();
 
     // Prepare the elements to be accessed

@@ -4,7 +4,7 @@
 import { trapFocus, closeModal, hasNameCaseInsensitive, getMemberData, setMemberData } from "./reusable-functions.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
-import { displayMembers, addMemberOpenButton } from "./main.js";
+import { displayMembers, addMemberOpenButton, displayExpenses, displayMemberContribInfo } from "./main.js";
 
 // =================================
 /**
@@ -75,6 +75,17 @@ addMemberModalCloseButton.addEventListener("click", () => {
 // =================================
 var addMemberModalForm = document.getElementById("add-member-modal-form");
 addMemberModalForm.addEventListener("submit", (event) => {
+    submitAddMemberModal(event);
+    displayExpenses();
+    displayMemberContribInfo();
+});
+
+// =================================
+/**
+ * Function to submit ADD MEMBER modal
+*/
+// =================================
+function submitAddMemberModal(event) {
     // Prevent refresh
     event.preventDefault();
 
@@ -118,7 +129,7 @@ addMemberModalForm.addEventListener("submit", (event) => {
         // Set focus back again to the text field 
         addMemberModalTextField.focus();
     }    
-});
+}
 
 // =================================
 /**
