@@ -10,6 +10,8 @@ import { getMemberData, getExpenseData, capitalizeFirstletter, trapFocus, closeM
 import { MEMBER_CATEGORY, EXPENSE_CATEGORY, openDeleteItemModal } from "./modal-delete-item.js";
 import { openAddExpenseModal } from "./modal-add-expense.js";
 import { currentExpenseInfo, originalExpenseInfo, ExpenseInfo } from "./classes/ExpenseInfo.js";
+import { contribInfo } from "./classes/ContribInfo.js";
+import { openContribInfoModal } from "./modal-contrib-info.js";
 
 // =================================
 /**
@@ -187,13 +189,12 @@ export function displayExpenses() {
     let expenseTableBody = expenseTable.getElementsByTagName("tbody")[0];
     expenseTableBody.innerHTML = "";
 
+    // Prepare the starting data
+    let expenseTotal = 0;
+
     if (expenseCount > 0) {    
         // Display the table
         expenseTable.classList.add("table-header-visible");
-
-        // Display the total count
-        expenseTotalCountString.classList.add("total-visible");
-        expenseTotalCount.textContent = String(expenseCount);
 
         // Update the table to display the expenses
         let expenseNames = Object.keys(expenseData.expenses)
@@ -205,6 +206,9 @@ export function displayExpenses() {
             let expenseAmount = expenseData.expenses[expenseName]["amount"];
             let expenseFilter = expenseData.expenses[expenseName]["filter"];
             let expenseMembers = expenseData.expenses[expenseName]["members"];
+
+            // Add this to the total
+            expenseTotal += Number(expenseAmount);
 
             // Clone the template
             let expenseRowTemplate = document.getElementById("expense-row-template");
@@ -253,12 +257,15 @@ export function displayExpenses() {
             // Add this to the table
             expenseTableBody.appendChild(newExpenseRow);
         }
+
+        // Display the total expenses
+        expenseTotalCountString.classList.add("total-visible");
+        expenseTotalCount.textContent = String(+expenseTotal.toFixed(2));
     }
     else {
         // Ensure that the table and other related elements are not displayed
         expenseTable.classList.remove("table-header-visible");
         expenseTotalCountString.classList.remove("total-visible");
-        expenseTotalCount.textContent = String(expenseTotalCount);
     }
 } 
 
@@ -407,9 +414,10 @@ function prepareMemberContribs() {
         }
     }
 
+    // Save the Member Contribution Data
     console.log("CONTRIB DATA:");
     console.log(memberContribData);
-    return memberContribData;
+    contribInfo.setContribInfo(memberContribData);
 }
 
 // =================================
@@ -482,8 +490,8 @@ function delegateExpenseToSelectedMembers(expenseName, expenseAmount, expenseMem
 // =================================
 export function displayMemberContribInfo() {
     console.log("Displaying Member contrib info!");
-
-    let memberContribData = prepareMemberContribs();
+    prepareMemberContribs();
+    let memberContribData = contribInfo.getContribInfo();
 
     // Prepare the elements to be accessed
     const memberContribTable = document.getElementById("member-contrib-table");
@@ -542,6 +550,7 @@ export function displayMemberContribInfo() {
             // Add event listeners for this row's button
             newMemberContribRow.querySelector(".member-contrib-view-button").addEventListener("click", () => {
                 console.log(`View button clicked for ${memberName}`);
+                openContribInfoModal(memberName, String(+totalContrib.toFixed(2)));
             });
 
             // Add this to the table

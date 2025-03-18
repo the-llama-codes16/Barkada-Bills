@@ -104,7 +104,7 @@
     height: auto;
     min-height: 13rem;
     max-height: max-content;   
-    padding: 1rem; 
+    padding: 1.5rem; 
 }
 
 .payor-list-header {
@@ -318,6 +318,25 @@ th, td {
 
 .member-list-button-col-element {
     padding-left: 0;
+}
+
+.contrib-info-table {
+    display: none;
+}
+
+.contrib-info-table td,
+.contrib-info-table th {
+    border-style: none;
+    padding-left: 4rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+}
+
+.contrib-info-table th {
+    padding-left: 6rem;
+    padding-top: 1rem;
+    padding-bottom: 0.125rem;
 }
 
 /* END OF Main Page - Tables */
