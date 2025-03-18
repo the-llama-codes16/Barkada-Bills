@@ -2,7 +2,7 @@
 
 // Import da goods
 import { contribInfo } from "./classes/ContribInfo.js";
-import { closeModal } from "./reusable-functions.js";
+import { closeModal, trapFocus } from "./reusable-functions.js";
 
 // =================================
 /**
@@ -52,6 +52,9 @@ export function openContribInfoModal(memberName, totalAmount) {
             // Add this to the table!
             contribBreakdownTableBody.appendChild(newContribInfoRow);
         }
+    }
+    else {
+        contribBreakdownTable.style.display = "none";
     }
 
     contribInfoModalWrapper.style.display = "block";

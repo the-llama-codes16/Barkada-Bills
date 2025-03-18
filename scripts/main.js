@@ -230,7 +230,6 @@ export function displayExpenses() {
                 // Disable this button if there are no selected members
                 if (expenseMembers.length > 0) {
                     expenseMemberListButton.disabled = false;
-                    expenseMemberListButton.title = "";
                 }
                 else {
                     expenseMemberListButton.disabled = true;

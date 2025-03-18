@@ -80,7 +80,7 @@ function restrictNumCharInput(event) {
     }
 
     // Do not allow if input is invalid
-    if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== "." && event.key !== "Tab") {
+    if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== "." && event.key !== "Tab" && event.key !== "Enter") {
         event.preventDefault();
         console.log(`Skipped ${event.key}`);
     }

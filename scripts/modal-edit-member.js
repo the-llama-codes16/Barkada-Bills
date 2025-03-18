@@ -5,7 +5,7 @@ import { trapFocus, closeModal, getMemberData, setMemberData, hasNameCaseInsensi
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
 import { itemManager } from "./classes/ItemManager.js";
-import { displayMembers } from "./main.js";
+import { displayMembers, displayExpenses, displayMemberContribInfo } from "./main.js";
 
 // =================================
 /**
