@@ -5,7 +5,7 @@ import { getMemberData, trapFocus, closeModal, getExpenseData, setExpenseData, h
 import { originalExpenseInfo, currentExpenseInfo, temporaryExpenseInfo } from "./classes/ExpenseInfo.js";
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
-import { addExpenseOpenButton, displayExpenses, addExpenseModalHeaderInstruction, newExpenseModalHeaderInstruction } from "./main.js";
+import { addExpenseOpenButton, displayExpenses, displayMemberContribInfo } from "./main.js";
 
 // =================================
 /**
@@ -80,7 +80,7 @@ function restrictNumCharInput(event) {
     }
 
     // Do not allow if input is invalid
-    if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== "." && event.key !== "Tab") {
+    if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== "." && event.key !== "Tab" && event.key !== "Enter") {
         event.preventDefault();
         console.log(`Skipped ${event.key}`);
     }
@@ -197,6 +197,7 @@ let addExpenseModalForm = document.getElementById("add-expense-modal-form");
 addExpenseModalForm.addEventListener("submit", (event) => {
     submitAddExpenseModal(event);
     displayExpenses();
+    displayMemberContribInfo();
 });
 
 // =================================
@@ -367,6 +368,7 @@ addExpenseModalMemberListButton.addEventListener("click", () => {
 */
 // =================================
 let modifyPayorsModalWrapper = document.getElementById("modify-payors-modal-wrapper");
+let modifyPayorsModalOKButton = document.getElementById("modify-payors-modal-ok-button");
 function openModifyPayorsModal(expenseInfo) {
     // Open the MODIFY PAYORS modal
     modifyPayorsModalWrapper.style.display = "block";
@@ -385,6 +387,9 @@ function openModifyPayorsModal(expenseInfo) {
 
     // Get a copy of the selected payors at this point
     temporaryExpenseInfo.setExpenseMembers(expenseInfo.getExpenseMembers());
+
+    // Set focus on the OK button
+    modifyPayorsModalOKButton.focus();
 }
 
 // =================================
@@ -578,7 +583,6 @@ function closeModifyPayorsModal() {
  * Submit MODIFY PAYORS modal
 */
 // =================================
-var modifyPayorsModalOKButton = document.getElementById("modify-payors-modal-ok-button");
 modifyPayorsModalOKButton.addEventListener("click", () => {
     submitModifyPayorsModal();
 });
@@ -601,10 +605,8 @@ function submitModifyPayorsModal() {
     closeModal(modifyPayorsModalWrapper);
     document.removeEventListener("keydown", initModifyPayorsModalTrapFocus);
 
-    // Open the Add Expense dialog and set focus on the button
-    addExpenseModalWrapper.style.display = "block";
-    addExpenseModalMemberListButton.focus();
-    document.addEventListener("keydown", initAddExpenseModalTrapFocus);
+    // Open the Add Expense dialog
+    openAddExpenseModal(currentExpenseInfo);
 }
 
 // =================================
@@ -636,6 +638,7 @@ function getSelectedPayors() {
 */
 // =================================
 let newExpenseModalWrapper = document.getElementById("new-expense-modal-wrapper");
+let newExpenseModalOKButton = document.getElementById("new-expense-modal-ok-button");
 function openConfirmNewExpenseModal() {
     // Set the information to be displayed
     let newExpenseName = document.getElementById("new-expense-name");
@@ -651,6 +654,9 @@ function openConfirmNewExpenseModal() {
 
     // Disable/enable the Member list
     enableDisableViewMemberListButton();
+
+    // Set focus on OK button
+    newExpenseModalOKButton.focus();
 }
 
 // =================================
@@ -684,7 +690,6 @@ function enableDisableViewMemberListButton() {
  * Button to close modal to confirm NEW EXPENSE ADDED
 */
 // =================================
-var newExpenseModalOKButton = document.getElementById("new-expense-modal-ok-button");
 newExpenseModalOKButton.addEventListener("click", () => {
     closeNewExpenseModal();
 });
@@ -720,6 +725,7 @@ newExpenseModalMemberListButton.addEventListener("click", () => {
 */
 // =================================
 let newExpensePayorsModalWrapper = document.getElementById("new-expense-payors-modal-wrapper");
+let newExpensePayorsModalOKButton = document.getElementById("new-expense-payors-modal-ok-button");
 function openNewExpensePayorsModal() {
     // Close the previous modal
     closeModal(newExpenseModalWrapper);
@@ -752,6 +758,9 @@ function openNewExpensePayorsModal() {
     // Open this modal
     newExpensePayorsModalWrapper.style.display = "block";
     document.addEventListener("keydown", initNewExpensePayorsModalTrapFocus);
+
+    // Set focus on OK Button
+    newExpensePayorsModalOKButton.focus();
 }
 
 // =================================
@@ -759,7 +768,6 @@ function openNewExpensePayorsModal() {
  * Button to close modal to confirm payors for NEW EXPENSE ADDED
 */
 // =================================
-var newExpensePayorsModalOKButton = document.getElementById("new-expense-payors-modal-ok-button");
 newExpensePayorsModalOKButton.addEventListener("click", () => {
     closeNewExpensePayorsModal();
 });

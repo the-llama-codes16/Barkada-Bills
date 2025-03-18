@@ -104,7 +104,16 @@
     height: auto;
     min-height: 13rem;
     max-height: max-content;   
-    padding: 1rem; 
+    padding: 1.5rem; 
+}
+
+.contrib-info-modal-size {
+    width: auto;
+    min-width: 25rem;
+    max-width: max-content;
+    height: auto;
+    min-height: 13rem;
+    max-height: max-content;   
 }
 
 .payor-list-header {
@@ -124,6 +133,13 @@
 #modify-payors-modal-header {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
+}
+
+.contrib-info-modal-header {
+    margin-top: 1.5rem;
+    margin-left: 2rem;
+    margin-bottom: 0.75rem;
+    
 }
 
 .modal-form-wrapper {
@@ -289,6 +305,14 @@ input[type="checkbox"] {
     padding-right: 2rem;
 }
 
+.member-last-column-element-contrib {
+    padding-right: 0.5rem;
+}
+
+.member-contrib-placeholder {
+    visibility: hidden;
+}
+
 th, td {
     border-bottom: 1px solid #000000;
     padding: 0.1rem;
@@ -310,6 +334,29 @@ th, td {
 
 .member-list-button-col-element {
     padding-left: 0;
+}
+
+.contrib-info-table {
+    display: none;
+    padding-left: 2rem;
+}
+
+.contrib-info-table td,
+.contrib-info-table th {
+    border-style: none;
+    padding-left: 2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+}
+
+.contrib-info-table th {
+    padding-top: 1rem;
+    padding-bottom: 0.125rem;
+}
+
+#contrib-breakdown-div {
+    padding-top: 1rem;
 }
 
 /* END OF Main Page - Tables */

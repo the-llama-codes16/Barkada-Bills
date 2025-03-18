@@ -5,7 +5,7 @@ import { trapFocus, closeModal, getMemberData, setMemberData, hasNameCaseInsensi
 import { openDoYouWantToCancelModal } from "./modal-confirm-cancel.js";
 import { modalManager } from "./classes/ModalManager.js";
 import { itemManager } from "./classes/ItemManager.js";
-import { displayMembers } from "./main.js";
+import { displayMembers, displayExpenses, displayMemberContribInfo } from "./main.js";
 
 // =================================
 /**
@@ -117,9 +117,11 @@ editMemberModalForm.addEventListener("submit", (event) => {
 
                 // Clear original member data
                 itemManager.clearItemInfo();
-
-                // Reload the displayed members
+                
+                // Redisplay everything
                 displayMembers();
+                displayExpenses();
+                displayMemberContribInfo();
 
                 // Close this modal
                 closeModal(editMemberModalWrapper);

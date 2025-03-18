@@ -197,7 +197,7 @@
                 <tbody>
                 </tbody>
             </table>
-            <p id="expense-total-count-string" class="item-total-string generic-font generic-size home-content-lead">Total expense items:<span id="expense-total-count" class="item-total-count table-header-weight"></span></p>
+            <p id="expense-total-count-string" class="item-total-string generic-font generic-size home-content-lead">Total expenses:<span id="expense-total-count" class="item-total-count table-header-weight"></span></p>
             <button id="add-expense-open-button" class="home-content-lead generic-font generic-size button-sub button-padding">Add expense</button>
         </div>
 
@@ -336,8 +336,77 @@
         <!-- Results -->
         <div class="steps-container">
             <h1 class="home-content-lead generic-font subheaders-size step-header">Member Contributions</h1>
-            <h3 class="home-content-lead generic-font generic-size step-description">Each member's contribution will display here as you add members and expenses.</h3>
+            <h3 id="member-contrib-desc" class="home-content-lead generic-font generic-size step-description">Each member's contribution will display here as you add members and expenses.</h3>
+            <!-- Dynamic Table for Member Contribution Data -->
+            <table id="member-contrib-table" class="data-table home-content-lead">
+                <thead>
+                    <tr>
+                        <th class="first-col-header col-element generic-font generic-size table-header-weight">Name</th>
+                        <th class="col-element generic-font generic-size table-header-weight">Total Contribution</th>
+                        <th class="col-element generic-font generic-size table-header-weight">Contributes to</th>
+                        <th></th>
+                        <th class="member-last-column-element-contrib"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
+
+        <!-- Row Template for Member Contribution Data -->
+        <template id="member-contrib-row-template">
+            <tr class="table-item-row">
+                <td class="member-contrib-name first-col-element col-element generic-font generic-size"></td>
+                <td class="member-contrib-amount col-element generic-font generic-size"></td>
+                <td class="member-contrib-expense col-element generic-font generic-size"></td>
+                <td><button class="member-contrib-view-button generic-font generic-size button-sub button-edit-table-padding" title="View contribution info">View</button></td>
+                <!-- This delete button is added to maintain the same row height, but this will not be visible -->
+                <td><button class="member-contrib-placeholder member-last-column-element-contrib generic-font generic-size button-delete x-button" title="Delete expense">X</button></td>
+            </tr>
+        </template>
+
+        <!-- Modal for Contribution Info -->
+        <div id="contrib-info-modal-wrapper" class="modal-wrapper">
+            <div id="contrib-info-modal-content" class="modal-content contrib-info-modal-size">
+                <h3 id="contrib-info-modal-header-instruction" class="generic-font subheaders-size contrib-info-modal-header">View Contributor</h3>
+                <div>
+                    <table id="contrib-info-basic" class="contrib-info-table">
+                        <tbody>
+                            <tr>
+                                <td class="generic-font generic-size">Name:</td>
+                                <td id="contrib-info-name" class="generic-font generic-size"></td>
+                            </tr>
+                            <tr>
+                                <td class="generic-font generic-size">Amount:</td>
+                                <td id="contrib-info-amount" class="generic-font generic-size"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="contrib-breakdown-div">
+                    <table id="contrib-breakdown-table" class="contrib-info-table">
+                        <thead>
+                            <tr>
+                                <th id="contrib-info-breakdown-header" class="generic-font generic-size table-header-weight" colspan="2">Contribution Breakdown</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-button-container">
+                    <button id="contrib-info-modal-ok-button" class="generic-font generic-size button-main modal-button-padding ok-button-modal" type="button">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Template for Contribution Breakdown Items -->
+        <template id="contrib-info-row-template">
+            <tr class="contrib-info-row">
+                <td class="contrib-info-expense-name generic-font generic-size"></td>
+                <td class="contrib-info-expense-amount generic-font generic-size"></td>
+            </tr>
+        </template>
     </body>
 
     <!-- Javascript -->
@@ -347,4 +416,5 @@
     <script type="module" src="../scripts/classes/ModalManager.js"></script>
     <script type="module" src="../scripts/reusable-functions.js"></script>
     <script type="module" src="../scripts/modal-add-expense.js"></script>
+    <script type="module" src="../scripts/modal-contrib-info.js"></script>
 </html>
